@@ -39,18 +39,28 @@
     flex-wrap: wrap;
 }
 
-.dataTables_wrapper .dt-paging .btn {
+.dataTables_wrapper .dt-paging .dt-paging-button {
+    margin-right: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    color: #212529;
     border-radius: 0.25rem;
 }
 
-.dataTables_wrapper .dt-paging .btn-primary {
+.dataTables_wrapper .dt-paging .dt-paging-button.current {
     background-color: #0073aa;
     border-color: #0073aa;
+    color: #fff;
 }
 
-.dataTables_wrapper .dt-paging .btn-primary:hover {
-    background-color: #006799;
-    border-color: #006799;
+.dataTables_wrapper .dt-paging .dt-paging-button:not(.disabled):hover {
+    background-color: #e9ecef;
+}
+
+.dataTables_wrapper .dt-paging .dt-paging-button.disabled {
+    opacity: 0.65;
+    cursor: default;
 }
 
 /* Payment modal styling */

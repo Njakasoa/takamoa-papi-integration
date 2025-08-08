@@ -8,11 +8,6 @@ jQuery(document).ready(function($) {
             lengthMenu: '_MENU_',
             search: '',
             searchPlaceholder: 'Search…'
-        },
-        drawCallback: function() {
-            var paginate = $('#takamoa-payments-table_wrapper .dt-paging');
-            paginate.find('button').addClass('btn btn-sm btn-light me-1');
-            paginate.find('button.current').removeClass('btn-light').addClass('btn-primary text-white');
         }
     });
 
