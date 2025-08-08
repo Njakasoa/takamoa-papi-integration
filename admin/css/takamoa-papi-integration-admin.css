@@ -76,3 +76,18 @@
     width: 40%;
     white-space: nowrap;
 }
+
+#paymentModal .table-responsive {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+#paymentModal .table td {
+    word-break: break-word;
+}
+
+#paymentModal pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 0.875rem;
+}

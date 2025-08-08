@@ -27,8 +27,33 @@ jQuery(document).ready(function($) {
         $('#modal-method').text(row.data('method'));
         $('#modal-date').text(row.data('date'));
         $('#modal-description').text(row.data('description') || '—');
+        $('#modal-id').text(row.data('id'));
+        $('#modal-provider').text(row.data('provider') || '—');
+        $('#modal-success-url').text(row.data('successUrl') || '—');
+        $('#modal-failure-url').text(row.data('failureUrl') || '—');
+        $('#modal-notification-url').text(row.data('notificationUrl') || '—');
+        $('#modal-link-creation').text(row.data('linkCreation') || '—');
+        $('#modal-link-expiration').text(row.data('linkExpiration') || '—');
+        $('#modal-payment-link').text(row.data('paymentLink') || '—');
+        $('#modal-currency').text(row.data('currency') || '—');
+        $('#modal-fee').text(row.data('fee') || '—');
+        $('#modal-notification-token').text(row.data('notificationToken') || '—');
+        $('#modal-test-mode').text(row.data('isTestMode') ? 'Yes' : 'No');
+        $('#modal-test-reason').text(row.data('testReason') || '—');
+        $('#modal-raw-request').text(row.data('rawRequest') || '—');
+        $('#modal-raw-response').text(row.data('rawResponse') || '—');
+        $('#modal-raw-notification').text(row.data('rawNotification') || '—');
+        $('#modal-updated-at').text(row.data('updatedAt') || '—');
+
+        $('#modal-extra-info').addClass('d-none');
+        $('#toggle-more-info').text('Show more');
 
         var modal = new bootstrap.Modal(document.getElementById('paymentModal'));
         modal.show();
+    });
+
+    $('#toggle-more-info').on('click', function() {
+        $('#modal-extra-info').toggleClass('d-none');
+        $(this).text($('#modal-extra-info').hasClass('d-none') ? 'Show more' : 'Show less');
     });
 });

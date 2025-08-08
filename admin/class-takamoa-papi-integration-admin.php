@@ -239,7 +239,24 @@ class Takamoa_Papi_Integration_Admin
                         data-status="<?= esc_attr($row->payment_status) ?>"
                         data-method="<?= esc_attr($row->payment_method ?: '—') ?>"
                         data-date="<?= esc_attr($row->created_at) ?>"
-                        data-description="<?= esc_attr($row->description) ?>">
+                        data-description="<?= esc_attr($row->description) ?>"
+                        data-provider="<?= esc_attr($row->provider) ?>"
+                        data-success-url="<?= esc_attr($row->success_url) ?>"
+                        data-failure-url="<?= esc_attr($row->failure_url) ?>"
+                        data-notification-url="<?= esc_attr($row->notification_url) ?>"
+                        data-link-creation="<?= esc_attr($row->link_creation) ?>"
+                        data-link-expiration="<?= esc_attr($row->link_expiration) ?>"
+                        data-payment-link="<?= esc_attr($row->payment_link) ?>"
+                        data-currency="<?= esc_attr($row->currency) ?>"
+                        data-fee="<?= esc_attr($row->fee) ?>"
+                        data-notification-token="<?= esc_attr($row->notification_token) ?>"
+                        data-is-test-mode="<?= esc_attr($row->is_test_mode) ?>"
+                        data-test-reason="<?= esc_attr($row->test_reason) ?>"
+                        data-raw-request="<?= esc_attr($row->raw_request) ?>"
+                        data-raw-response="<?= esc_attr($row->raw_response) ?>"
+                        data-raw-notification="<?= esc_attr($row->raw_notification) ?>"
+                        data-updated-at="<?= esc_attr($row->updated_at) ?>"
+                        data-id="<?= esc_attr($row->id) ?>">
                         <td><?= esc_html($row->reference) ?></td>
                         <td><?= esc_html($row->client_name) ?></td>
                         <td><?= esc_html($row->payer_email ?: '—') ?></td>
@@ -254,28 +271,50 @@ class Takamoa_Papi_Integration_Admin
             </table>
 
             <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Détails du paiement</h5>
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <table class="table table-striped">
-                                <tbody>
-                                    <tr><th>Référence</th><td id="modal-reference"></td></tr>
-                                    <tr><th>Nom client</th><td id="modal-name"></td></tr>
-                                    <tr><th>Email</th><td id="modal-email"></td></tr>
-                                    <tr><th>Téléphone</th><td id="modal-phone"></td></tr>
-                                    <tr><th>Montant</th><td id="modal-amount"></td></tr>
-                                    <tr><th>Status</th><td id="modal-status"></td></tr>
-                                    <tr><th>Méthode</th><td id="modal-method"></td></tr>
-                                    <tr><th>Date</th><td id="modal-date"></td></tr>
-                                    <tr><th>Description</th><td id="modal-description"></td></tr>
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <tbody id="modal-basic-info">
+                                        <tr><th>ID</th><td id="modal-id"></td></tr>
+                                        <tr><th>Référence</th><td id="modal-reference"></td></tr>
+                                        <tr><th>Nom client</th><td id="modal-name"></td></tr>
+                                        <tr><th>Email</th><td id="modal-email"></td></tr>
+                                        <tr><th>Téléphone</th><td id="modal-phone"></td></tr>
+                                        <tr><th>Montant</th><td id="modal-amount"></td></tr>
+                                        <tr><th>Status</th><td id="modal-status"></td></tr>
+                                        <tr><th>Méthode</th><td id="modal-method"></td></tr>
+                                        <tr><th>Date</th><td id="modal-date"></td></tr>
+                                        <tr><th>Description</th><td id="modal-description"></td></tr>
+                                    </tbody>
+                                    <tbody id="modal-extra-info" class="d-none">
+                                        <tr><th>Provider</th><td id="modal-provider"></td></tr>
+                                        <tr><th>Success URL</th><td id="modal-success-url"></td></tr>
+                                        <tr><th>Failure URL</th><td id="modal-failure-url"></td></tr>
+                                        <tr><th>Notification URL</th><td id="modal-notification-url"></td></tr>
+                                        <tr><th>Link creation</th><td id="modal-link-creation"></td></tr>
+                                        <tr><th>Link expiration</th><td id="modal-link-expiration"></td></tr>
+                                        <tr><th>Payment link</th><td id="modal-payment-link"></td></tr>
+                                        <tr><th>Currency</th><td id="modal-currency"></td></tr>
+                                        <tr><th>Fee</th><td id="modal-fee"></td></tr>
+                                        <tr><th>Notification token</th><td id="modal-notification-token"></td></tr>
+                                        <tr><th>Test mode</th><td id="modal-test-mode"></td></tr>
+                                        <tr><th>Test reason</th><td id="modal-test-reason"></td></tr>
+                                        <tr><th>Raw request</th><td><pre id="modal-raw-request" class="mb-0"></pre></td></tr>
+                                        <tr><th>Raw response</th><td><pre id="modal-raw-response" class="mb-0"></pre></td></tr>
+                                        <tr><th>Raw notification</th><td><pre id="modal-raw-notification" class="mb-0"></pre></td></tr>
+                                        <tr><th>Updated at</th><td id="modal-updated-at"></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-primary" id="toggle-more-info">Show more</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                         </div>
                     </div>
