@@ -26,7 +26,7 @@
 .datatable-header .dataTables_length,
 .datatable-header .dataTables_filter,
 .datatable-footer .dataTables_info,
-.datatable-footer .dataTables_paginate {
+.datatable-footer .dt-paging {
     margin-bottom: 0;
 }
 
@@ -34,16 +34,36 @@
     width: auto;
 }
 
-.dataTables_wrapper .dataTables_paginate .btn {
+.dataTables_wrapper .dt-paging {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dataTables_wrapper .dt-paging .btn {
     border-radius: 0.25rem;
 }
 
-.dataTables_wrapper .dataTables_paginate .btn-primary {
+.dataTables_wrapper .dt-paging .btn-primary {
     background-color: #0073aa;
     border-color: #0073aa;
 }
 
-.dataTables_wrapper .dataTables_paginate .btn-primary:hover {
+.dataTables_wrapper .dt-paging .btn-primary:hover {
     background-color: #006799;
     border-color: #006799;
+}
+
+/* Payment modal styling */
+#paymentModal .modal-header {
+    background-color: #0073aa;
+    color: #fff;
+}
+
+#paymentModal .modal-header .btn-close {
+    filter: invert(1);
+}
+
+#paymentModal .table th {
+    width: 40%;
+    white-space: nowrap;
 }

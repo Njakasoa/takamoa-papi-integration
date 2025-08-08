@@ -254,14 +254,14 @@ class Takamoa_Papi_Integration_Admin
             </table>
 
             <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Détails du paiement</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <table class="table table-borderless">
+                            <table class="table table-striped">
                                 <tbody>
                                     <tr><th>Référence</th><td id="modal-reference"></td></tr>
                                     <tr><th>Nom client</th><td id="modal-name"></td></tr>
@@ -274,6 +274,9 @@ class Takamoa_Papi_Integration_Admin
                                     <tr><th>Description</th><td id="modal-description"></td></tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                         </div>
                     </div>
                 </div>
