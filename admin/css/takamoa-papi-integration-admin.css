@@ -21,3 +21,29 @@
 .payment-row {
     cursor: pointer;
 }
+
+/* DataTables custom styling */
+.datatable-header .dataTables_length,
+.datatable-header .dataTables_filter,
+.datatable-footer .dataTables_info,
+.datatable-footer .dataTables_paginate {
+    margin-bottom: 0;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    width: auto;
+}
+
+.dataTables_wrapper .dataTables_paginate .btn {
+    border-radius: 0.25rem;
+}
+
+.dataTables_wrapper .dataTables_paginate .btn-primary {
+    background-color: #0073aa;
+    border-color: #0073aa;
+}
+
+.dataTables_wrapper .dataTables_paginate .btn-primary:hover {
+    background-color: #006799;
+    border-color: #006799;
+}

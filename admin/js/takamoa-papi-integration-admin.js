@@ -1,5 +1,24 @@
 jQuery(document).ready(function($) {
-    var table = $('#takamoa-payments-table').DataTable();
+    var table = $('#takamoa-payments-table').DataTable({
+        pageLength: 10,
+        lengthMenu: [5, 10, 25, 50],
+        dom: '<"datatable-header d-flex justify-content-between align-items-center mb-3"lf>rt<"datatable-footer d-flex justify-content-between align-items-center mt-3"ip>',
+        language: {
+            lengthMenu: '_MENU_',
+            search: '',
+            searchPlaceholder: 'Search…'
+        },
+        drawCallback: function() {
+            var paginate = $('#takamoa-payments-table_wrapper .dataTables_paginate');
+            paginate.find('a').addClass('btn btn-sm btn-light me-1');
+            paginate.find('a.current').removeClass('btn-light').addClass('btn-primary text-white');
+        }
+    });
+
+    var wrapper = $('#takamoa-payments-table_wrapper');
+    wrapper.find('.dataTables_length select').addClass('form-select form-select-sm');
+    wrapper.find('.dataTables_filter input').addClass('form-control form-control-sm').attr('placeholder', 'Search…');
+    wrapper.find('.dataTables_length label, .dataTables_filter label').addClass('d-flex align-items-center gap-2 mb-0');
 
     $('#takamoa-payments-table tbody').on('click', 'tr.payment-row', function() {
         var row = $(this);
