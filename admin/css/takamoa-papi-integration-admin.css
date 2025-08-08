@@ -1,0 +1,18 @@
+/* General Styles for the Admin Page */
+.wrap {
+    padding: 0;
+    background-color: transparent;
+}
+
+/* Title Responsive */
+@media (max-width: 768px) {
+    .wrap h1 {
+        font-size: 1.5rem;
+        text-align: center;
+        width: 100%;
+    }
+    .wrap .add-button-container {
+        text-align: center;
+        width: 100%;
+    }
+}

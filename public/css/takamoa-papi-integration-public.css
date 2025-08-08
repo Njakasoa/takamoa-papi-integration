@@ -1,0 +1,93 @@
+.takamoa-papi-form {
+	text-align: center;
+    position: relative;
+}
+
+.takamoa-papi-form-box {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	margin: 0 auto;
+}
+
+.takamoa-papi-input {
+	background: white;
+	color: black;
+	font-size: 16px;
+	padding: 30px;
+	margin-bottom: 10px;
+	border: none;
+	outline: none;
+	width: 100%;
+}
+
+.takamoa-papi-button {
+	background-color: #a14db3;
+	color: white;
+	border: none;
+	padding: 15px;
+	cursor: pointer;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 16px;
+	transition: background-color 0.3s;
+}
+
+.takamoa-papi-button:disabled {
+	opacity: 0.7;
+	cursor: not-allowed;
+}
+
+.takamoa-papi-success,
+.takamoa-papi-error {
+	background: white;
+	padding: 10px;
+	margin-top: 15px;
+	font-weight: bold;
+}
+
+.takamoa-papi-success {
+	color: green;
+}
+
+.takamoa-papi-error {
+	color: red;
+}
+
+.takamoa-papi-loading-overlay {
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+	background-color: rgba(255, 255, 255, 0.85);
+	backdrop-filter: blur(3px);
+	z-index: 10;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	padding: 2rem;
+}
+
+.takamoa-papi-message {
+	margin-top: 1rem;
+	font-size: 16px;
+}
+
+.takamoa-papi-link {
+	color: #0073aa;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.spinner {
+	width: 30px;
+	height: 30px;
+	border: 4px solid #ccc;
+	border-top: 4px solid #007cba;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	to { transform: rotate(360deg); }
+}
