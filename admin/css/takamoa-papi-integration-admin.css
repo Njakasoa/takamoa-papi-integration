@@ -16,3 +16,63 @@
         width: 100%;
     }
 }
+
+/* Payments table */
+.payment-row {
+    cursor: pointer;
+}
+
+/* DataTables custom styling */
+.datatable-header .dataTables_length,
+.datatable-header .dataTables_filter,
+.datatable-footer .dataTables_info,
+.datatable-footer .dt-paging {
+    margin-bottom: 0;
+}
+
+.dataTables_filter input {
+    width: auto;
+}
+
+.dt-paging {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dt-paging .dt-paging-button {
+    margin-right: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    color: #212529;
+    border-radius: 0.25rem;
+}
+
+.dt-paging .dt-paging-button.current {
+    background-color: #0073aa;
+    border-color: #0073aa;
+    color: #fff;
+}
+.dt-paging .dt-paging-button:not(.disabled):hover {
+    background-color: #e9ecef;
+}
+
+.dt-paging .dt-paging-button.disabled {
+    opacity: 0.65;
+    cursor: default;
+}
+
+/* Payment modal styling */
+#paymentModal .modal-header {
+    background-color: #0073aa;
+    color: #fff;
+}
+
+#paymentModal .modal-header .btn-close {
+    filter: invert(1);
+}
+
+#paymentModal .table th {
+    width: 40%;
+    white-space: nowrap;
+}
