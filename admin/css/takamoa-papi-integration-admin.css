@@ -16,3 +16,8 @@
         width: 100%;
     }
 }
+
+/* Payments table */
+.payment-row {
+    cursor: pointer;
+}

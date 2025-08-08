@@ -215,11 +215,13 @@ class Takamoa_Papi_Integration_Admin
         ?>
         <div class="wrap">
             <h1>Historique des paiements</h1>
-            <table class="widefat striped">
+            <table id="takamoa-payments-table" class="widefat striped">
                 <thead>
                     <tr>
                         <th>Référence</th>
                         <th>Nom client</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
                         <th>Montant</th>
                         <th>Status</th>
                         <th>Méthode</th>
@@ -228,9 +230,20 @@ class Takamoa_Papi_Integration_Admin
                 </thead>
                 <tbody>
                 <?php foreach ($results as $row): ?>
-                    <tr>
+                    <tr class="payment-row"
+                        data-reference="<?= esc_attr($row->reference) ?>"
+                        data-client="<?= esc_attr($row->client_name) ?>"
+                        data-email="<?= esc_attr($row->payer_email) ?>"
+                        data-phone="<?= esc_attr($row->payer_phone) ?>"
+                        data-amount="<?= esc_attr(number_format($row->amount, 0, '', ' ') . ' MGA') ?>"
+                        data-status="<?= esc_attr($row->payment_status) ?>"
+                        data-method="<?= esc_attr($row->payment_method ?: '—') ?>"
+                        data-date="<?= esc_attr($row->created_at) ?>"
+                        data-description="<?= esc_attr($row->description) ?>">
                         <td><?= esc_html($row->reference) ?></td>
                         <td><?= esc_html($row->client_name) ?></td>
+                        <td><?= esc_html($row->payer_email ?: '—') ?></td>
+                        <td><?= esc_html($row->payer_phone ?: '—') ?></td>
                         <td><?= number_format($row->amount, 0, '', ' ') ?> MGA</td>
                         <td><?= esc_html($row->payment_status) ?></td>
                         <td><?= esc_html($row->payment_method ?: '—') ?></td>
@@ -239,6 +252,32 @@ class Takamoa_Papi_Integration_Admin
                 <?php endforeach; ?>
                 </tbody>
             </table>
+
+            <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Détails du paiement</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr><th>Référence</th><td id="modal-reference"></td></tr>
+                                    <tr><th>Nom client</th><td id="modal-name"></td></tr>
+                                    <tr><th>Email</th><td id="modal-email"></td></tr>
+                                    <tr><th>Téléphone</th><td id="modal-phone"></td></tr>
+                                    <tr><th>Montant</th><td id="modal-amount"></td></tr>
+                                    <tr><th>Status</th><td id="modal-status"></td></tr>
+                                    <tr><th>Méthode</th><td id="modal-method"></td></tr>
+                                    <tr><th>Date</th><td id="modal-date"></td></tr>
+                                    <tr><th>Description</th><td id="modal-description"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <?php
     }
