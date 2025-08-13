@@ -105,7 +105,7 @@ class Takamoa_Papi_Integration_Functions {
 		global $wpdb;
 		$table = $wpdb->prefix . 'takamoa_papi_payments';
 
-		$reference = sanitize_text_field($body['merchantPaymentReference']);
+		$reference = sanitize_text_field($body['paymentReference']);
 		$token = sanitize_text_field($body['notificationToken']);
 
 		$payment = $wpdb->get_row($wpdb->prepare(
