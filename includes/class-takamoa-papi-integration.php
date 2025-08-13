@@ -34,7 +34,7 @@ class Takamoa_Papi_Integration {
 	 * @access   protected
 	 * @var      Takamoa_Papi_Integration_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
-    protected $loader;
+	protected $loader;
 
 	/**
 	 * The unique identifier of this plugin.
@@ -43,7 +43,7 @@ class Takamoa_Papi_Integration {
 	 * @access   protected
 	 * @var      string    $plugin_name    The string used to uniquely identify this plugin.
 	 */
-    protected $plugin_name;
+	protected $plugin_name;
 
 	/**
 	 * The current version of the plugin.
@@ -53,7 +53,7 @@ class Takamoa_Papi_Integration {
 	 * @var      string    $version    The current version of the plugin.
 	 */
 
-    protected $version;
+	protected $version;
 
 	/**
 	 * Functions of the plugin.
@@ -63,7 +63,7 @@ class Takamoa_Papi_Integration {
 	 * @var      Takamoa_Papi_Integration_Functions    $functions
 	 */
 	 
-    protected $functions;
+	protected $functions;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -107,18 +107,18 @@ class Takamoa_Papi_Integration {
 	 * @access   private
 	 */
 
-    private function load_dependencies() {
+	private function load_dependencies() {
 		/**
 		 * The class responsible for providing functions of the
 		 * core plugin.
 		*/	
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-takamoa-papi-integration-functions.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-takamoa-papi-integration-functions.php';
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		*/		
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-takamoa-papi-integration-loader.php';
-        
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-takamoa-papi-integration-loader.php';
+		
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
@@ -128,17 +128,17 @@ class Takamoa_Papi_Integration {
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-takamoa-papi-integration-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-takamoa-papi-integration-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */		
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-takamoa-papi-integration-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-takamoa-papi-integration-public.php';
 
-        $this->loader = new Takamoa_Papi_Integration_Loader();
-        $this->functions = new Takamoa_Papi_Integration_Functions();
-    }
+		$this->loader = new Takamoa_Papi_Integration_Loader();
+		$this->functions = new Takamoa_Papi_Integration_Functions();
+	}
 
 	/**
 	 * Define the locale for this plugin for internationalization.
@@ -173,7 +173,8 @@ class Takamoa_Papi_Integration {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action('admin_menu', $plugin_admin, 'add_menu');
 		$this->loader->add_action('admin_init', $plugin_admin, 'register_settings');
-	}
+		$this->loader->add_action('wp_ajax_takamoa_resend_payment_email', $this->functions, 'handle_resend_payment_email_ajax');
+		}
 
 	/**
 	 * Register all of the hooks related to the public-facing functionality
@@ -182,7 +183,7 @@ class Takamoa_Papi_Integration {
 	 * @since    0.0.1
 	 * @access   private
 	 */	
-    private function define_public_hooks() {
+	private function define_public_hooks() {
 
 		$plugin_public = new Takamoa_Papi_Integration_Public( $this->get_plugin_name(), $this->get_version(), $this->get_functions() );
 
@@ -204,9 +205,9 @@ class Takamoa_Papi_Integration {
 	 */
 	public function run() {
 		$this->loader->run();
-        
+		
 	}
-    
+	
 
 	/**
 	 * The name of the plugin used to uniquely identify it within the context of

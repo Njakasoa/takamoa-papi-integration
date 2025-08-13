@@ -56,4 +56,22 @@ jQuery(document).ready(function($) {
         $('#modal-extra-info').toggleClass('d-none');
         $(this).text($('#modal-extra-info').hasClass('d-none') ? 'Show more' : 'Show less');
     });
+
+    $(document).on('click', '.takamoa-notify', function(e) {
+        e.stopPropagation();
+        var btn = $(this);
+        var row = btn.closest('tr');
+        btn.prop('disabled', true);
+        $.post(takamoaAjax.ajaxurl, {
+            action: 'takamoa_resend_payment_email',
+            nonce: takamoaAjax.nonce,
+            reference: row.data('reference')
+        }).done(function(res) {
+            alert(res.data && res.data.message ? res.data.message : 'Notification envoyée');
+        }).fail(function() {
+            alert('Erreur lors de l\'envoi de la notification');
+        }).always(function(){
+            btn.prop('disabled', false);
+        });
+    });
 });
