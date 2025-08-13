@@ -41,11 +41,14 @@ class Takamoa_Papi_Integration_Admin
 		if (strpos(get_current_screen()->id, $this->plugin_name) !== false) {
 			wp_enqueue_script('datatables-script', 'https://cdn.datatables.net/2.0.8/js/dataTables.min.js', array('jquery'), null, true);
 			wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array('jquery'), null, true);
-			wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/takamoa-papi-integration-admin.js', array('jquery', 'datatables-script'), $this->version, true);
-			wp_localize_script($this->plugin_name, 'takamoaAjax', array('ajaxurl' => admin_url('admin-ajax.php')));
-			wp_enqueue_media();
-		}
-	}
+                        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/takamoa-papi-integration-admin.js', array('jquery', 'datatables-script'), $this->version, true);
+                        wp_localize_script($this->plugin_name, 'takamoaAjax', array(
+                                'ajaxurl' => admin_url('admin-ajax.php'),
+                                'nonce'   => wp_create_nonce('takamoa_papi_nonce'),
+                        ));
+                        wp_enqueue_media();
+                }
+        }
 
 	/**
 	 * Add admin menu.
@@ -226,6 +229,7 @@ class Takamoa_Papi_Integration_Admin
                         <th>Status</th>
                         <th>Méthode</th>
                         <th>Date</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -265,6 +269,7 @@ class Takamoa_Papi_Integration_Admin
                         <td><?= esc_html($row->payment_status) ?></td>
                         <td><?= esc_html($row->payment_method ?: '—') ?></td>
                         <td><?= esc_html($row->created_at) ?></td>
+                        <td><button type="button" class="button takamoa-notify">Notifier</button></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

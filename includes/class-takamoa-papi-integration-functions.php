@@ -21,6 +21,48 @@
  */
 class Takamoa_Papi_Integration_Functions {
 
+        private function send_registration_email($email, $name, $link) {
+                if (empty($email)) {
+                        return;
+                }
+
+                $subject = "Confirmation d'inscription et modalités de paiement";
+
+                $message  = '<p>Bonjour ' . esc_html($name) . ',</p>';
+                $message .= '<p>Nous vous confirmons que votre inscription a bien été enregistrée.</p>';
+                $message .= '<p>Pour réserver définitivement votre place et finaliser votre paiement, veuillez cliquer sur le bouton ci-dessous :</p>';
+                $message .= '<p><a href="' . esc_url($link) . '" style="display:inline-block;padding:10px 20px;background:#0073aa;color:#fff;text-decoration:none;">Réserver et payer</a></p>';
+                $message .= '<p>Pour toute question ou précision, notre équipe logistique se tient à votre disposition au 034 04 105 06.</p>';
+                $message .= '<p>Bien cordialement,<br>L’équipe logistique</p>';
+                $logo = get_site_icon_url();
+                if ($logo) {
+                        $message .= '<p><img src="' . esc_url($logo) . '" alt="Logo" style="max-width:150px;height:auto;"></p>';
+                }
+
+                $headers = ['Content-Type: text/html; charset=UTF-8'];
+                wp_mail($email, $subject, $message, $headers);
+        }
+
+        private function send_payment_success_email($email, $name) {
+                if (empty($email)) {
+                        return;
+                }
+
+                $subject = 'Confirmation de paiement';
+
+                $message  = '<p>Bonjour ' . esc_html($name) . ',</p>';
+                $message .= '<p>Nous vous confirmons que votre paiement a bien été reçu. Merci pour votre inscription.</p>';
+                $message .= '<p>Pour toute question ou précision, notre équipe logistique se tient à votre disposition au 034 04 105 06.</p>';
+                $message .= '<p>Bien cordialement,<br>L’équipe logistique</p>';
+                $logo = get_site_icon_url();
+                if ($logo) {
+                        $message .= '<p><img src="' . esc_url($logo) . '" alt="Logo" style="max-width:150px;height:auto;"></p>';
+                }
+
+                $headers = ['Content-Type: text/html; charset=UTF-8'];
+                wp_mail($email, $subject, $message, $headers);
+        }
+
 	public function register_endpoints() {
 		add_rewrite_endpoint('paiementreussi', EP_ROOT);
 		add_rewrite_endpoint('paiementechoue', EP_ROOT);
@@ -77,18 +119,24 @@ class Takamoa_Papi_Integration_Functions {
 			return;
 		}
 
-		$wpdb->update($table, [
-			'payment_status'   => sanitize_text_field($body['paymentStatus']),
-			'payment_method'   => sanitize_text_field($body['paymentMethod']),
-			'currency'         => sanitize_text_field($body['currency']),
-			'fee'              => floatval($body['fee']),
-			'raw_notification' => json_encode($body),
-			'updated_at'       => current_time('mysql')
-		], ['id' => $payment->id]);
+                $status = sanitize_text_field($body['paymentStatus']);
 
-		status_header(200);
-		echo json_encode(['success' => true]);
-	}
+                $wpdb->update($table, [
+                        'payment_status'   => $status,
+                        'payment_method'   => sanitize_text_field($body['paymentMethod']),
+                        'currency'         => sanitize_text_field($body['currency']),
+                        'fee'              => floatval($body['fee']),
+                        'raw_notification' => json_encode($body),
+                        'updated_at'       => current_time('mysql')
+                ], ['id' => $payment->id]);
+
+                if ($status === 'SUCCESS') {
+                        $this->send_payment_success_email($payment->payer_email, $payment->client_name);
+                }
+
+                status_header(200);
+                echo json_encode(['success' => true]);
+        }
 
     public function handle_create_payment_ajax() {
         check_ajax_referer('takamoa_papi_nonce');
@@ -184,7 +232,11 @@ class Takamoa_Papi_Integration_Functions {
             'raw_request'        => json_encode($request),
             'raw_response'       => json_encode($body),
         ]);
-    
+
+        if ($payerEmail) {
+            $this->send_registration_email($payerEmail, $clientName, $link);
+        }
+
         wp_send_json_success(['link' => $link]);
     }
 
@@ -207,6 +259,31 @@ class Takamoa_Papi_Integration_Functions {
         }
     
         wp_send_json_success(['status' => $status]);
+    }
+
+    public function handle_resend_payment_email_ajax() {
+        check_ajax_referer('takamoa_papi_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(['message' => 'Unauthorized'], 403);
+        }
+
+        $reference = sanitize_text_field($_POST['reference'] ?? '');
+        if (!$reference) {
+            wp_send_json_error(['message' => 'Référence manquante.']);
+        }
+
+        global $wpdb;
+        $table = $wpdb->prefix . 'takamoa_papi_payments';
+        $payment = $wpdb->get_row($wpdb->prepare("SELECT client_name, payer_email, payment_link FROM $table WHERE reference = %s LIMIT 1", $reference));
+
+        if (!$payment || empty($payment->payer_email)) {
+            wp_send_json_error(['message' => 'Paiement introuvable.']);
+        }
+
+        $this->send_registration_email($payment->payer_email, $payment->client_name, $payment->payment_link);
+
+        wp_send_json_success(['message' => 'Notification envoyée.']);
     }
     
 }
