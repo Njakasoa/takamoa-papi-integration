@@ -36,6 +36,7 @@ class Takamoa_Papi_Integration_Functions {
 				$message .= '<p>Bien cordialement,<br>L’équipe logistique</p>';
 				$logo = get_site_icon_url();
 				if ($logo) {
+						$logo = set_url_scheme($logo, 'https');
 						$message .= '<p><img src="' . esc_url($logo) . '" alt="Logo" style="max-width:150px;height:auto;"></p>';
 				}
 
@@ -56,6 +57,7 @@ class Takamoa_Papi_Integration_Functions {
 				$message .= '<p>Bien cordialement,<br>L’équipe logistique</p>';
 				$logo = get_site_icon_url();
 				if ($logo) {
+						$logo = set_url_scheme($logo, 'https');
 						$message .= '<p><img src="' . esc_url($logo) . '" alt="Logo" style="max-width:150px;height:auto;"></p>';
 				}
 
