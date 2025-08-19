@@ -92,7 +92,30 @@ jQuery(document).ready(function($) {
 
 		var twrapper = $('#takamoa-tickets-table_wrapper');
 		twrapper.find('.dataTables_length select').addClass('form-select form-select-sm');
-		twrapper.find('.dataTables_filter input').addClass('form-control form-control-sm').attr('placeholder', 'Search…');
-		twrapper.find('.dataTables_length label, .dataTables_filter label').addClass('d-flex align-items-center gap-2 mb-0');
-	}
+twrapper.find('.dataTables_filter input').addClass('form-control form-control-sm').attr('placeholder', 'Search…');
+twrapper.find('.dataTables_length label, .dataTables_filter label').addClass('d-flex align-items-center gap-2 mb-0');
+}
+
+if ($('#select_design_image').length) {
+var frame;
+$('#select_design_image').on('click', function(e) {
+e.preventDefault();
+if (frame) {
+frame.open();
+return;
+}
+frame = wp.media({
+title: 'Choisir une image',
+button: { text: 'Utiliser cette image' },
+multiple: false
+});
+frame.on('select', function() {
+var att = frame.state().get('selection').first().toJSON();
+$('#design_image').val(att.url);
+$('#ticket_width').val(att.width);
+$('#ticket_height').val(att.height);
+});
+frame.open();
+});
+}
 });
