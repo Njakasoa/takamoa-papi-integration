@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -47,8 +48,8 @@ class Takamoa_Papi_Integration_Admin
 								'nonce'   => wp_create_nonce('takamoa_papi_nonce'),
 						));
 						wp_enqueue_media();
-				}
 		}
+	}
 
 	/**
 	 * Add admin menu.
@@ -64,24 +65,33 @@ class Takamoa_Papi_Integration_Admin
 			'dashicons-admin-generic',
 			6
 		);
-	
-		add_submenu_page(
-			$this->plugin_name,
-			'Historique des paiements',
-			'Paiements',
-			'manage_options',
-			$this->plugin_name . '-payments',
-			array($this, 'display_payments_page')
-		);
-	
-		add_submenu_page(
-			$this->plugin_name,
-			'Options avancées',
-			'Options',
-			'manage_options',
-			$this->plugin_name . '-settings',
-			array($this, 'display_options_page')
-		);
+
+				add_submenu_page(
+					$this->plugin_name,
+					'Historique des paiements',
+					'Paiements',
+					'manage_options',
+					$this->plugin_name . '-payments',
+					array($this, 'display_payments_page')
+				);
+
+				add_submenu_page(
+					$this->plugin_name,
+					'Billets',
+					'Billets',
+					'manage_options',
+					$this->plugin_name . '-tickets',
+					array($this, 'display_tickets_page')
+				);
+
+				add_submenu_page(
+					$this->plugin_name,
+					'Options avancées',
+					'Options',
+					'manage_options',
+					$this->plugin_name . '-settings',
+					array($this, 'display_options_page')
+				);
 	}
 
 	/**
@@ -90,7 +100,7 @@ class Takamoa_Papi_Integration_Admin
 	public function register_settings()
 	{
 		register_setting('takamoa_papi_key_group', 'takamoa_papi_api_key');
-				
+
 		// URLs
 		register_setting('takamoa_papi_settings_group', 'takamoa_papi_success_url');
 		register_setting('takamoa_papi_settings_group', 'takamoa_papi_failure_url');
@@ -134,7 +144,7 @@ class Takamoa_Papi_Integration_Admin
 			null,
 			$this->plugin_name . '-settings'
 		);
-		
+
 		// Champs de redirection
 		add_settings_field('takamoa_papi_success_url', 'URL après succès', function () {
 			$default = home_url('/paiementreussi');
@@ -184,7 +194,6 @@ class Takamoa_Papi_Integration_Admin
 		add_settings_field('takamoa_papi_test_reason', 'Raison du test', function () {
 			echo '<input type="text" name="takamoa_papi_test_reason" value="' . esc_attr(get_option('takamoa_papi_test_reason')) . '" style="width: 400px;">';
 		}, $this->plugin_name . '-settings', 'takamoa_papi_extra_section');
-		
 	}
 
 	/**
@@ -206,15 +215,16 @@ class Takamoa_Papi_Integration_Admin
 		<?php
 	}
 
-	public function init_admin_route() {
+	public function init_admin_route()
+	{
 		// Optionnel : peut être utilisé plus tard pour des routes personnalisées
 	}
 
 	public function display_payments_page()
 	{
-		global $wpdb;
-		$table = $wpdb->prefix . 'takamoa_papi_payments';
-		$results = $wpdb->get_results("SELECT * FROM $table ORDER BY created_at DESC LIMIT 100");
+			global $wpdb;
+			$table = $wpdb->prefix . 'takamoa_papi_payments';
+			$results = $wpdb->get_results("SELECT * FROM $table ORDER BY created_at DESC LIMIT 100");
 		?>
 		<div class="wrap">
 			<h1>Historique des paiements</h1>
@@ -233,7 +243,7 @@ class Takamoa_Papi_Integration_Admin
 					</tr>
 				</thead>
 				<tbody>
-				<?php foreach ($results as $row): ?>
+			<?php foreach ($results as $row) : ?>
 					<tr class="payment-row"
 						data-reference="<?= esc_attr($row->reference) ?>"
 						data-client="<?= esc_attr($row->client_name) ?>"
@@ -271,7 +281,7 @@ class Takamoa_Papi_Integration_Admin
 						<td><?= esc_html($row->created_at) ?></td>
 						<td><button type="button" class="button takamoa-notify">Notifier</button></td>
 					</tr>
-				<?php endforeach; ?>
+			<?php endforeach; ?>
 				</tbody>
 			</table>
 
@@ -326,24 +336,58 @@ class Takamoa_Papi_Integration_Admin
 				</div>
 			</div>
 		</div>
-		<?php
+			<?php
+	}
+
+	public function display_tickets_page()
+	{
+			global $wpdb;
+			$table = $wpdb->prefix . 'takamoa_papi_tickets';
+			$results = $wpdb->get_results("SELECT * FROM $table ORDER BY created_at DESC LIMIT 100");
+		?>
+				<div class="wrap">
+						<h1>Billets</h1>
+						<table id="takamoa-tickets-table" class="widefat striped">
+								<thead>
+										<tr>
+												<th>Référence</th>
+												<th>Description</th>
+												<th>QR Code</th>
+												<th>Date création</th>
+												<th>Status</th>
+												<th>Dernière notification</th>
+										</tr>
+								</thead>
+								<tbody>
+							<?php foreach ($results as $row) : ?>
+										<tr>
+												<td><?= esc_html($row->reference) ?></td>
+												<td><?= esc_html($row->description ?: '—') ?></td>
+												<td><?= $row->qrcode_link ? '<a href="' . esc_url($row->qrcode_link) . '" target="_blank">Voir</a>' : '—'; ?></td>
+												<td><?= esc_html($row->created_at) ?></td>
+												<td><?= esc_html($row->status) ?></td>
+												<td><?= esc_html($row->last_notification ?: '—') ?></td>
+										</tr>
+							<?php endforeach; ?>
+								</tbody>
+						</table>
+				</div>
+				<?php
 	}
 
 	public function display_options_page()
 	{
 		?>
-		<div class="wrap">
-			<h1>Options avancées</h1>
+				<div class="wrap">
+						<h1>Options avancées</h1>
 			<form method="post" action="options.php">
-				<?php
-				settings_fields('takamoa_papi_settings_group');
-				do_settings_sections($this->plugin_name . '-settings');
-				submit_button();
-				?>
+			<?php
+			settings_fields('takamoa_papi_settings_group');
+			do_settings_sections($this->plugin_name . '-settings');
+			submit_button();
+			?>
 			</form>
 		</div>
 		<?php
 	}
-
-
 }

@@ -1,25 +1,25 @@
 /* General Styles for the Admin Page */
 .wrap {
-    padding: 0;
-    background-color: transparent;
+	padding: 0;
+	background-color: transparent;
 }
 
 /* Title Responsive */
 @media (max-width: 768px) {
-    .wrap h1 {
-        font-size: 1.5rem;
-        text-align: center;
-        width: 100%;
-    }
-    .wrap .add-button-container {
-        text-align: center;
-        width: 100%;
-    }
+	.wrap h1 {
+		font-size: 1.5rem;
+		text-align: center;
+		width: 100%;
+	}
+	.wrap .add-button-container {
+		text-align: center;
+		width: 100%;
+	}
 }
 
 /* Payments table */
 .payment-row {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 /* DataTables custom styling */
@@ -27,67 +27,67 @@
 .datatable-header .dataTables_filter,
 .datatable-footer .dataTables_info,
 .datatable-footer .dt-paging {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 .dataTables_filter input {
-    width: auto;
+	width: auto;
 }
 
 .dt-paging {
-    display: flex;
-    flex-wrap: wrap;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .dt-paging .dt-paging-button {
-    margin-right: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    border: 1px solid #dee2e6;
-    background-color: #f8f9fa;
-    color: #212529;
-    border-radius: 0.25rem;
+	margin-right: 0.25rem;
+	padding: 0.25rem 0.5rem;
+	border: 1px solid #dee2e6;
+	background-color: #f8f9fa;
+	color: #212529;
+	border-radius: 0.25rem;
 }
 
 .dt-paging .dt-paging-button.current {
-    background-color: #0073aa;
-    border-color: #0073aa;
-    color: #fff;
+	background-color: #0073aa;
+	border-color: #0073aa;
+	color: #fff;
 }
 .dt-paging .dt-paging-button:not(.disabled):hover {
-    background-color: #e9ecef;
+	background-color: #e9ecef;
 }
 
 .dt-paging .dt-paging-button.disabled {
-    opacity: 0.65;
-    cursor: default;
+	opacity: 0.65;
+	cursor: default;
 }
 
 /* Payment modal styling */
 #paymentModal .modal-header {
-    background-color: #0073aa;
-    color: #fff;
+	background-color: #0073aa;
+	color: #fff;
 }
 
 #paymentModal .modal-header .btn-close {
-    filter: invert(1);
+	filter: invert(1);
 }
 
 #paymentModal .table th {
-    width: 40%;
-    white-space: nowrap;
+	width: 40%;
+	white-space: nowrap;
 }
 
 #paymentModal .table-responsive {
-    max-height: 70vh;
-    overflow-y: auto;
+	max-height: 70vh;
+	overflow-y: auto;
 }
 
 #paymentModal .table td {
-    word-break: break-word;
+	word-break: break-word;
 }
 
 #paymentModal pre {
-    white-space: pre-wrap;
-    word-break: break-word;
-    font-size: 0.875rem;
+	white-space: pre-wrap;
+	word-break: break-word;
+	font-size: 0.875rem;
 }

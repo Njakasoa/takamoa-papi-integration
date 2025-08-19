@@ -101,15 +101,15 @@ class Takamoa_Papi_Integration_Public {
 	/**
 	 * Shortcode qui affiche le conteneur Vue.js
 	 */
-        public function render_vue_form_shortcode($atts) {
-                $atts = shortcode_atts([
-                        'amount' => '',
-                        'reference' => '',
-                        'payment' => 'yes'
-                ], $atts);
+		public function render_vue_form_shortcode($atts) {
+				$atts = shortcode_atts([
+						'amount' => '',
+						'reference' => '',
+						'payment' => 'yes'
+				], $atts);
 
-                // Assure que le paramètre payment n'accepte que 'yes' ou 'no'
-                $atts['payment'] = in_array($atts['payment'], ['yes', 'no'], true) ? $atts['payment'] : 'yes';
+				// Assure que le paramètre payment n'accepte que 'yes' ou 'no'
+				$atts['payment'] = in_array($atts['payment'], ['yes', 'no'], true) ? $atts['payment'] : 'yes';
 	
 		$timestamp = time();
 	
@@ -128,12 +128,12 @@ class Takamoa_Papi_Integration_Public {
 	
 		ob_start();
 		?>
-                <div id="<?php echo esc_attr($uid); ?>"
-                         class="takamoa-papi-app"
-                         data-amount="<?php echo esc_attr($atts['amount']); ?>"
-                         data-reference="<?php echo esc_attr($atts['reference']); ?>"
-                         data-payment="<?php echo esc_attr($atts['payment']); ?>">
-                </div>
+				<div id="<?php echo esc_attr($uid); ?>"
+						 class="takamoa-papi-app"
+						 data-amount="<?php echo esc_attr($atts['amount']); ?>"
+						 data-reference="<?php echo esc_attr($atts['reference']); ?>"
+						 data-payment="<?php echo esc_attr($atts['payment']); ?>">
+				</div>
 		<?php
 		return ob_get_clean();
 	}

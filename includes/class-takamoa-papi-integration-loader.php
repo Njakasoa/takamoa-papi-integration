@@ -107,7 +107,7 @@ class Takamoa_Papi_Integration_Loader{
 
 	}
 
-    	/**
+		/**
 	 * Register the filters and actions with WordPress.
 	 *
 	 * @since    0.0.1
