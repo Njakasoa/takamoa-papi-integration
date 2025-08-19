@@ -1,24 +1,25 @@
 const appRoot = document.getElementById('takamoa-papi-app');
 
 document.querySelectorAll('.takamoa-papi-app').forEach((el, index) => {
-	new Vue({
-		el,
-		data: {
+        new Vue({
+                el,
+                data: {
             clientFirstName: '',
-	        clientLastName: '',
-			amount: el.dataset.amount || '',
-			reference: el.dataset.reference || '',
-			payerEmail: '',
-			payerPhone: '',
-			description: '',
-			provider: '',
-			loading: false,
-			link: '',
-			status: '',
-			error: '',
-			success: '',
-			polling: null
-		},
+                clientLastName: '',
+                        amount: el.dataset.amount || '',
+                        reference: el.dataset.reference || '',
+                        payment: el.dataset.payment === 'no' ? 'no' : 'yes',
+                        payerEmail: '',
+                        payerPhone: '',
+                        description: '',
+                        provider: '',
+                        loading: false,
+                        link: '',
+                        status: '',
+                        error: '',
+                        success: '',
+                        polling: null
+                },
 		computed: {
             clientName() {
                 return `${this.clientFirstName} ${this.clientLastName}`.trim();
@@ -36,49 +37,55 @@ document.querySelectorAll('.takamoa-papi-app').forEach((el, index) => {
 			}
 		},
 		methods: {
-			submitForm() {
-				this.loading = true;
-				this.error = '';
-				this.link = '';
-				this.success = '';
-				this.status = '';
+                        submitForm() {
+                                this.loading = true;
+                                this.error = '';
+                                this.link = '';
+                                this.success = '';
+                                this.status = '';
 
-				const data = {
-					action: 'takamoa_create_payment',
-					_ajax_nonce: TakamoaPapiVars.api_nonce,
-					clientName: this.clientName,
-					amount: this.amount,
-					reference: this.reference,
-					payerEmail: this.payerEmail,
-					payerPhone: this.payerPhone,
-					description: this.description
-				};
+                                if (this.payment === 'no') {
+                                        this.success = 'Merci pour votre inscription.';
+                                        this.loading = false;
+                                        return;
+                                }
+
+                                const data = {
+                                        action: 'takamoa_create_payment',
+                                        _ajax_nonce: TakamoaPapiVars.api_nonce,
+                                        clientName: this.clientName,
+                                        amount: this.amount,
+                                        reference: this.reference,
+                                        payerEmail: this.payerEmail,
+                                        payerPhone: this.payerPhone,
+                                        description: this.description
+                                };
 
                 if (this.provider) {
-					data.provider = this.provider;
-				}
+                                        data.provider = this.provider;
+                                }
 
-				fetch(TakamoaPapiVars.ajax_url, {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-					body: new URLSearchParams(data)
-				})
-				.then(res => res.json())
-				.then(res => {
-					if (res.success && res.data.link) {
-						this.link = res.data.link;
-						window.open(this.link, '_blank');
+                                fetch(TakamoaPapiVars.ajax_url, {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                        body: new URLSearchParams(data)
+                                })
+                                .then(res => res.json())
+                                .then(res => {
+                                        if (res.success && res.data.link) {
+                                                this.link = res.data.link;
+                                                window.open(this.link, '_blank');
                         this.polling = setInterval(this.checkStatus, 2000);
-					} else {
-						this.error = res.data?.message || 'Erreur';
-						this.loading = false;
-					}
-				})
-				.catch(() => {
-					this.loading = false;
-					this.error = 'Erreur réseau. Veuillez réessayer.';
-				});
-			},
+                                        } else {
+                                                this.error = res.data?.message || 'Erreur';
+                                                this.loading = false;
+                                        }
+                                })
+                                .catch(() => {
+                                        this.loading = false;
+                                        this.error = 'Erreur réseau. Veuillez réessayer.';
+                                });
+                        },
 			checkStatus() {
                 if (!this.reference) return;
             
@@ -119,9 +126,9 @@ document.querySelectorAll('.takamoa-papi-app').forEach((el, index) => {
                 });
             }
 		},
-		template: `
+                template: `
             <div class="takamoa-papi-form" :class="{ 'is-loading': loading }">
-				<div class="takamoa-papi-loading-overlay" v-if="loading">
+                                <div class="takamoa-papi-loading-overlay" v-if="loading && payment === 'yes'">
                     <div class="spinner"></div>
                     <p v-if="link" class="takamoa-papi-message">
                         Félicitations ! Vous êtes inscrit.<br>
