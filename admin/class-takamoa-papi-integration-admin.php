@@ -86,6 +86,15 @@ class Takamoa_Papi_Integration_Admin
 
 				add_submenu_page(
 					$this->plugin_name,
+					'Design des billets',
+					'Design',
+					'manage_options',
+					$this->plugin_name . '-design',
+					array($this, 'display_designs_page')
+				);
+
+				add_submenu_page(
+					$this->plugin_name,
 					'Options avancées',
 					'Options',
 					'manage_options',
@@ -373,6 +382,108 @@ class Takamoa_Papi_Integration_Admin
 						</table>
 				</div>
 				<?php
+	}
+
+	public function display_designs_page()
+	{
+			global $wpdb;
+			$table = $wpdb->prefix . 'takamoa_papi_designs';
+			$designs = $wpdb->get_results("SELECT * FROM $table ORDER BY created_at DESC");
+		?>
+				<div class="wrap">
+						<h1>Designs de billets</h1>
+						<form id="takamoa-add-design" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+								<?php wp_nonce_field('takamoa_save_design'); ?>
+								<input type="hidden" name="action" value="takamoa_save_design">
+								<p>
+										<label for="design_image">Image du billet</label><br>
+										<input type="text" id="design_image" name="design_image" style="width: 400px;" />
+										<button type="button" class="button" id="select_design_image">Choisir une image</button>
+								</p>
+								<p>
+										<label>Largeur (px)</label>
+										<input type="number" id="ticket_width" name="ticket_width" min="1">
+										<label>Hauteur (px)</label>
+										<input type="number" id="ticket_height" name="ticket_height" min="1">
+								</p>
+								<p>
+										<label>Taille QR Code (px)</label>
+										<input type="number" id="qrcode_size" name="qrcode_size" min="1">
+										<label>Position top (px)</label>
+										<input type="number" id="qrcode_top" name="qrcode_top" min="0">
+										<label>Position left (px)</label>
+										<input type="number" id="qrcode_left" name="qrcode_left" min="0">
+								</p>
+								<?php submit_button('Ajouter'); ?>
+						</form>
+						<hr>
+						<table class="widefat striped">
+								<thead>
+										<tr>
+												<th>ID</th>
+												<th>Image</th>
+												<th>Billet (px)</th>
+												<th>Taille QR</th>
+												<th>Position QR</th>
+												<th>Date</th>
+										</tr>
+								</thead>
+								<tbody>
+							<?php foreach ($designs as $d) : ?>
+										<tr>
+												<td><?= esc_html($d->id) ?></td>
+												<td><?= $d->image_url ? '<img src="' . esc_url($d->image_url) . '" style="max-width:150px;height:auto;" />' : '—'; ?></td>
+												<td><?= esc_html($d->ticket_width . '×' . $d->ticket_height) ?></td>
+												<td><?= esc_html($d->qrcode_size) ?></td>
+												<td><?= esc_html($d->qrcode_left . ',' . $d->qrcode_top) ?></td>
+												<td><?= esc_html($d->created_at) ?></td>
+										</tr>
+							<?php endforeach; ?>
+								</tbody>
+						</table>
+				</div>
+				<?php
+	}
+
+	public function handle_save_design()
+	{
+			check_admin_referer('takamoa_save_design');
+
+			$image        = esc_url_raw($_POST['design_image'] ?? '');
+			$width        = intval($_POST['ticket_width'] ?? 0);
+			$height       = intval($_POST['ticket_height'] ?? 0);
+			$qrsize       = intval($_POST['qrcode_size'] ?? 0);
+			$qtop         = intval($_POST['qrcode_top'] ?? 0);
+			$qleft        = intval($_POST['qrcode_left'] ?? 0);
+
+			if (!$image || !$width || !$height || !$qrsize) {
+				wp_redirect(add_query_arg('error', 'missing', wp_get_referer()));
+				exit;
+			}
+
+			$attachment_id = attachment_url_to_postid($image);
+			if ($attachment_id) {
+				$meta = wp_get_attachment_metadata($attachment_id);
+				if ($meta && ((int) $meta['width'] !== $width || (int) $meta['height'] !== $height)) {
+					wp_redirect(add_query_arg('error', 'size', wp_get_referer()));
+					exit;
+				}
+			}
+
+			global $wpdb;
+			$table = $wpdb->prefix . 'takamoa_papi_designs';
+			$wpdb->insert($table, [
+				'image_url'    => $image,
+				'ticket_width' => $width,
+				'ticket_height'=> $height,
+				'qrcode_size'  => $qrsize,
+				'qrcode_top'   => $qtop,
+				'qrcode_left'  => $qleft,
+				'created_at'   => current_time('mysql')
+			]);
+
+			wp_redirect(add_query_arg('success', '1', wp_get_referer()));
+			exit;
 	}
 
 	public function display_options_page()
