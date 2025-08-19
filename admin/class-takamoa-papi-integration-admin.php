@@ -46,6 +46,7 @@ class Takamoa_Papi_Integration_Admin
 						wp_localize_script($this->plugin_name, 'takamoaAjax', array(
 								'ajaxurl' => admin_url('admin-ajax.php'),
 								'nonce'   => wp_create_nonce('takamoa_papi_nonce'),
+					'ticketsPage' => admin_url('admin.php?page=' . $this->plugin_name . '-tickets'),
 						));
 						wp_enqueue_media();
 		}
@@ -234,6 +235,8 @@ class Takamoa_Papi_Integration_Admin
 			global $wpdb;
 			$table = $wpdb->prefix . 'takamoa_papi_payments';
 			$results = $wpdb->get_results("SELECT * FROM $table ORDER BY created_at DESC LIMIT 100");
+			$design_table = $wpdb->prefix . 'takamoa_papi_designs';
+			$designs = $wpdb->get_results("SELECT id FROM $design_table ORDER BY created_at DESC");
 		?>
 		<div class="wrap">
 			<h1>Historique des paiements</h1>
@@ -288,7 +291,12 @@ class Takamoa_Papi_Integration_Admin
 						<td><?= esc_html($row->payment_status) ?></td>
 						<td><?= esc_html($row->payment_method ?: '—') ?></td>
 						<td><?= esc_html($row->created_at) ?></td>
-						<td><button type="button" class="button takamoa-notify">Notifier</button></td>
+						<td>
+					<div class="btn-group" role="group">
+						<button type="button" class="button takamoa-notify">Notifier</button>
+						<button type="button" class="button takamoa-generate-ticket">Générer un billet</button>
+					</div>
+				</td>
 					</tr>
 			<?php endforeach; ?>
 				</tbody>
@@ -344,6 +352,26 @@ class Takamoa_Papi_Integration_Admin
 					</div>
 				</div>
 			</div>
+		<div class="modal fade" id="ticketModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Générer un billet</h5>
+						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<select id="ticket-design" class="form-select">
+							<?php foreach ($designs as $d) : ?>
+								<option value="<?= esc_attr($d->id) ?>">Design #<?= esc_html($d->id) ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="generate-ticket-btn" class="button button-primary">Générer</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		</div>
 			<?php
 	}
