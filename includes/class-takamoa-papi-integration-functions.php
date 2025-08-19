@@ -412,15 +412,28 @@ class Takamoa_Papi_Integration_Functions
 		if (!file_exists($dir)) {
 			wp_mkdir_p($dir);
 		}
-			$file = $dir . '/billet-' . $reference . '.pdf';
-		if (!file_exists($file)) {
-			file_put_contents($file, '%PDF-1.4' . PHP_EOL . '%%' . PHP_EOL);
+		
+		require_once plugin_dir_path(__FILE__) . 'lib/fpdf.php';
+		
+		$qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=' . $design->qrcode_size . 'x' . $design->qrcode_size . '&data=' . urlencode($reference);
+		$response = wp_remote_get($qr_url);
+		if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
+			wp_send_json_error(['message' => 'Erreur génération QR code.']);
 		}
-		$url =
-			trailingslashit($upload['baseurl']) .
-			'takamoa/billet-' .
-			$reference .
-			'.pdf';
+		$qr_path = $dir . '/qr-' . $reference . '.png';
+		file_put_contents($qr_path, wp_remote_retrieve_body($response));
+		
+		$design_path = str_replace($upload['baseurl'], $upload['basedir'], $design->image_url);
+		$file = $dir . '/billet-' . $reference . '.pdf';
+		
+		$pdf = new \FPDF('P', 'pt', [$design->ticket_width, $design->ticket_height]);
+		$pdf->AddPage();
+		$pdf->Image($design_path, 0, 0, $design->ticket_width, $design->ticket_height);
+		$pdf->Image($qr_path, $design->qrcode_left, $design->qrcode_top, $design->qrcode_size, $design->qrcode_size);
+		$pdf->Output('F', $file);
+		@unlink($qr_path);
+		
+		$url = trailingslashit($upload['baseurl']) . 'takamoa/billet-' . $reference . '.pdf';
 
 		$tickets_table = $wpdb->prefix . 'takamoa_papi_tickets';
 		$ticket = $wpdb->get_row(
