@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Fired during plugin activation
  *
@@ -19,26 +20,27 @@
  * @subpackage takamoa-papi-integration/includes
  * @author     Nexa by Takamoa <nexa.takamoa@gmail.com>
  */
-class Takamoa_Papi_Integration_Activator {
-
+class Takamoa_Papi_Integration_Activator
+{
 	/**
 	 * Short Description. (use period)
 	 *
 	 * Long Description.
 	 *
 	 * @since    0.0.1
-	 */    
-    public static function activate() {
+	 */
+	public static function activate()
+	{
 		global $wpdb;
-		$table = $wpdb->prefix . 'takamoa_papi_payments';
+				$table = $wpdb->prefix . 'takamoa_papi_payments';
 
-		$charset_collate = $wpdb->get_charset_collate();
+				$charset_collate = $wpdb->get_charset_collate();
 
-		$sql = "CREATE TABLE $table (
-			id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-			reference VARCHAR(100) NOT NULL,
-			client_name VARCHAR(255) NOT NULL,
-			amount DECIMAL(10,2) NOT NULL,
+				$sql = "CREATE TABLE $table (
+						id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+						reference VARCHAR(100) NOT NULL,
+						client_name VARCHAR(255) NOT NULL,
+						amount DECIMAL(10,2) NOT NULL,
 			description VARCHAR(255),
 			payer_email VARCHAR(255),
 			payer_phone VARCHAR(50),
@@ -61,11 +63,27 @@ class Takamoa_Papi_Integration_Activator {
 			raw_notification LONGTEXT,
 			created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 			updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-			UNIQUE KEY unique_reference (reference)
-		) $charset_collate;";
+						UNIQUE KEY unique_reference (reference)
+				) $charset_collate;";
 
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-		dbDelta($sql);
+				require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+				dbDelta($sql);
+
+				// Tickets table
+				$tickets_table = $wpdb->prefix . 'takamoa_papi_tickets';
+
+				$sql_tickets = "CREATE TABLE $tickets_table (
+						id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+						reference VARCHAR(100) NOT NULL,
+						qrcode_link TEXT,
+						description TEXT,
+						created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+						status VARCHAR(50) DEFAULT 'PENDING',
+						last_notification DATETIME NULL,
+						UNIQUE KEY unique_reference (reference)
+				) $charset_collate;";
+
+				dbDelta($sql_tickets);
 
 		// Options par défaut à créer
 		add_option('takamoa_papi_api_key', '');
@@ -84,4 +102,3 @@ class Takamoa_Papi_Integration_Activator {
 		add_option('takamoa_papi_test_reason', '');
 	}
 }
-?>
