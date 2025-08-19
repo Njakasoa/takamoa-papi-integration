@@ -46,6 +46,7 @@ class Takamoa_Papi_Integration_Admin
 						wp_localize_script($this->plugin_name, 'takamoaAjax', array(
 								'ajaxurl' => admin_url('admin-ajax.php'),
 								'nonce'   => wp_create_nonce('takamoa_papi_nonce'),
+					'ticketsPage' => admin_url('admin.php?page=' . $this->plugin_name . '-tickets'),
 						));
 						wp_enqueue_media();
 		}
@@ -141,7 +142,7 @@ class Takamoa_Papi_Integration_Admin
 			'Clé API',
 			function () {
 				$value = esc_attr(get_option('takamoa_papi_api_key', ''));
-				echo '<input type="text" name="takamoa_papi_api_key" value="' . $value . '" style="width: 400px;" />';
+						echo '<input type="text" name="takamoa_papi_api_key" value="' . $value . '" style="width: 400px;" />';
 			},
 			$this->plugin_name,
 			'takamoa_papi_main_section'
@@ -158,20 +159,20 @@ class Takamoa_Papi_Integration_Admin
 		add_settings_field('takamoa_papi_success_url', 'URL après succès', function () {
 			$default = home_url('/paiementreussi');
 			$value = esc_attr(get_option('takamoa_papi_success_url', $default));
-			echo "<input type='url' name='takamoa_papi_success_url' value='$value' style='width: 400px;'>";
-			echo "<p class='description'>Par défaut : <code>$default</code></p>";
+					echo '<input type="url" name="takamoa_papi_success_url" value="' . $value . '" style="width: 400px;">';
+					echo '<p class="description">Par défaut : <code>' . $default . '</code></p>';
 		}, $this->plugin_name . '-settings', 'takamoa_papi_extra_section');
 
 		add_settings_field('takamoa_papi_failure_url', 'URL après échec', function () {
 			$default = home_url('/paiementechoue');
 			$value = esc_attr(get_option('takamoa_papi_failure_url', $default));
-			echo "<input type='url' name='takamoa_papi_failure_url' value='$value' style='width: 400px;'>";
-			echo "<p class='description'>Par défaut : <code>$default</code></p>";
+					echo '<input type="url" name="takamoa_papi_failure_url" value="' . $value . '" style="width: 400px;">';
+					echo '<p class="description">Par défaut : <code>' . $default . '</code></p>';
 		}, $this->plugin_name . '-settings', 'takamoa_papi_extra_section');
 
 		// Durée de validité
 		add_settings_field('takamoa_papi_valid_duration', 'Durée de validité du lien (en minutes)', function () {
-			echo '<input type="number" name="takamoa_papi_valid_duration" value="' . esc_attr(get_option('takamoa_papi_valid_duration', 60)) . '" min="1">';
+					echo '<input type="number" name="takamoa_papi_valid_duration" value="' . esc_attr(get_option('takamoa_papi_valid_duration', 60)) . '" min="1">';
 		}, $this->plugin_name . '-settings', 'takamoa_papi_extra_section');
 
 		// Méthodes de paiement
@@ -180,7 +181,7 @@ class Takamoa_Papi_Integration_Admin
 			$providers = ['MVOLA' => 'MVOLA', 'ORANGE_MONEY' => 'Orange Money', 'AIRTEL_MONEY' => 'Airtel Money', 'BRED' => 'BRED'];
 			foreach ($providers as $key => $label) {
 				$checked = in_array($key, $active) ? 'checked' : '';
-				echo "<label><input type='checkbox' name='takamoa_papi_providers[]' value='$key' $checked> $label</label><br>";
+						echo '<label><input type="checkbox" name="takamoa_papi_providers[]" value="' . $key . '" ' . $checked . '> ' . $label . '</label><br>';
 			}
 		}, $this->plugin_name . '-settings', 'takamoa_papi_extra_section');
 
@@ -190,18 +191,18 @@ class Takamoa_Papi_Integration_Admin
 			$selected = (array) get_option('takamoa_papi_optional_fields', []);
 			foreach ($fields as $key => $label) {
 				$checked = in_array($key, $selected) ? 'checked' : '';
-				echo "<label><input type='checkbox' name='takamoa_papi_optional_fields[]' value='$key' $checked> $label</label><br>";
+						echo '<label><input type="checkbox" name="takamoa_papi_optional_fields[]" value="' . $key . '" ' . $checked . '> ' . $label . '</label><br>';
 			}
 		}, $this->plugin_name . '-settings', 'takamoa_papi_extra_section');
 
 		// Test mode
 		add_settings_field('takamoa_papi_test_mode', 'Mode test (transactions réelles)', function () {
 			$checked = checked(get_option('takamoa_papi_test_mode', false), true, false);
-			echo "<input type='checkbox' name='takamoa_papi_test_mode' value='1' $checked> Activer le test mode";
+					echo '<input type="checkbox" name="takamoa_papi_test_mode" value="1" ' . $checked . '> Activer le test mode';
 		}, $this->plugin_name . '-settings', 'takamoa_papi_extra_section');
 
 		add_settings_field('takamoa_papi_test_reason', 'Raison du test', function () {
-			echo '<input type="text" name="takamoa_papi_test_reason" value="' . esc_attr(get_option('takamoa_papi_test_reason')) . '" style="width: 400px;">';
+					echo '<input type="text" name="takamoa_papi_test_reason" value="' . esc_attr(get_option('takamoa_papi_test_reason')) . '" style="width: 400px;">';
 		}, $this->plugin_name . '-settings', 'takamoa_papi_extra_section');
 	}
 
@@ -233,7 +234,9 @@ class Takamoa_Papi_Integration_Admin
 	{
 			global $wpdb;
 			$table = $wpdb->prefix . 'takamoa_papi_payments';
-			$results = $wpdb->get_results("SELECT * FROM $table ORDER BY created_at DESC LIMIT 100");
+				$results = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC LIMIT 100');
+			$design_table = $wpdb->prefix . 'takamoa_papi_designs';
+				$designs = $wpdb->get_results('SELECT id FROM ' . $design_table . ' ORDER BY created_at DESC');
 		?>
 		<div class="wrap">
 			<h1>Historique des paiements</h1>
@@ -288,7 +291,12 @@ class Takamoa_Papi_Integration_Admin
 						<td><?= esc_html($row->payment_status) ?></td>
 						<td><?= esc_html($row->payment_method ?: '—') ?></td>
 						<td><?= esc_html($row->created_at) ?></td>
-						<td><button type="button" class="button takamoa-notify">Notifier</button></td>
+						<td>
+					<div class="btn-group" role="group">
+						<button type="button" class="button takamoa-notify">Notifier</button>
+						<button type="button" class="button takamoa-generate-ticket">Générer un billet</button>
+					</div>
+				</td>
 					</tr>
 			<?php endforeach; ?>
 				</tbody>
@@ -344,6 +352,26 @@ class Takamoa_Papi_Integration_Admin
 					</div>
 				</div>
 			</div>
+		<div class="modal fade" id="ticketModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Générer un billet</h5>
+						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<select id="ticket-design" class="form-select">
+							<?php foreach ($designs as $d) : ?>
+								<option value="<?= esc_attr($d->id) ?>">Design #<?= esc_html($d->id) ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+					<div class="modal-footer">
+						<button type="button" id="generate-ticket-btn" class="button button-primary">Générer</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		</div>
 			<?php
 	}
@@ -352,7 +380,7 @@ class Takamoa_Papi_Integration_Admin
 	{
 			global $wpdb;
 			$table = $wpdb->prefix . 'takamoa_papi_tickets';
-			$results = $wpdb->get_results("SELECT * FROM $table ORDER BY created_at DESC LIMIT 100");
+				$results = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC LIMIT 100');
 		?>
 				<div class="wrap">
 						<h1>Billets</h1>
@@ -388,7 +416,7 @@ class Takamoa_Papi_Integration_Admin
 	{
 			global $wpdb;
 			$table = $wpdb->prefix . 'takamoa_papi_designs';
-			$designs = $wpdb->get_results("SELECT * FROM $table ORDER BY created_at DESC");
+				$designs = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC');
 		?>
 				<div class="wrap">
 						<h1>Designs de billets</h1>
