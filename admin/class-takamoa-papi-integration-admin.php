@@ -41,8 +41,9 @@ class Takamoa_Papi_Integration_Admin
         {
                 if (strpos(get_current_screen()->id, $this->plugin_name) !== false) {
                         wp_enqueue_script('datatables-script', 'https://cdn.datatables.net/2.0.8/js/dataTables.min.js', array('jquery'), null, true);
+                        wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array('jquery'), null, true);
 
-                        $deps = array('jquery', 'datatables-script');
+                        $deps = array('jquery', 'datatables-script', 'bootstrap-js');
                         if (isset($_GET['page']) && $_GET['page'] === $this->plugin_name . '-scanner') {
                                 wp_enqueue_script('html5-qrcode', 'https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js', array(), null, true);
                                 $deps[] = 'html5-qrcode';
