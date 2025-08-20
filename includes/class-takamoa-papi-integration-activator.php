@@ -90,16 +90,17 @@ class Takamoa_Papi_Integration_Activator
 			// @since 0.0.3
 			$designs_table = $wpdb->prefix . 'takamoa_papi_designs';
 
-			$sql_designs = "CREATE TABLE $designs_table (
-				id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-				image_url TEXT NOT NULL,
-				ticket_width INT NOT NULL,
-				ticket_height INT NOT NULL,
-				qrcode_size INT NOT NULL,
-				qrcode_top INT NOT NULL,
-				qrcode_left INT NOT NULL,
-				created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-			) $charset_collate;";
+                        $sql_designs = "CREATE TABLE $designs_table (
+                                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                                title VARCHAR(255) NOT NULL,
+                                image_url TEXT NOT NULL,
+                                ticket_width INT NOT NULL,
+                                ticket_height INT NOT NULL,
+                                qrcode_size INT NOT NULL,
+                                qrcode_top INT NOT NULL,
+                                qrcode_left INT NOT NULL,
+                                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                        ) $charset_collate;";
 
 			dbDelta($sql_designs);
 
