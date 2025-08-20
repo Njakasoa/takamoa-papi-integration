@@ -419,6 +419,7 @@ class Takamoa_Papi_Integration_Admin
 												<th>Description</th>
 												<th>QR Code</th>
 												<th>Date création</th>
+												<th>Date mise à jour</th>
 												<th>Status</th>
 												<th>Dernière notification</th>
 										</tr>
@@ -430,6 +431,7 @@ class Takamoa_Papi_Integration_Admin
 												<td><?= esc_html($row->description ?: '—') ?></td>
 												<td><?= $row->qrcode_link ? '<a href="' . esc_url($row->qrcode_link) . '" target="_blank">Voir</a>' : '—'; ?></td>
 												<td><?= esc_html($row->created_at) ?></td>
+												<td><?= esc_html($row->updated_at ?: '—') ?></td>
 												<td><?= esc_html($row->status) ?></td>
 												<td><?= esc_html($row->last_notification ?: '—') ?></td>
 										</tr>

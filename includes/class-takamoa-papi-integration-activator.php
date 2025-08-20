@@ -77,8 +77,9 @@ class Takamoa_Papi_Integration_Activator
 						reference VARCHAR(100) NOT NULL,
 						qrcode_link TEXT,
 						description TEXT,
-						created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-						status VARCHAR(50) DEFAULT 'PENDING',
+				created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+				updated_at DATE DEFAULT NULL,
+				status VARCHAR(50) DEFAULT 'PENDING',
 						last_notification DATETIME NULL,
 						UNIQUE KEY unique_reference (reference)
 				) $charset_collate;";
