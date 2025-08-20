@@ -503,25 +503,66 @@ class Takamoa_Papi_Integration_Functions
 			$tickets_table = $wpdb->prefix . 'takamoa_papi_tickets';
 			$payments_table = $wpdb->prefix . 'takamoa_papi_payments';
 
-			$ticket = $wpdb->get_row(
-					$wpdb->prepare(
-					        "SELECT p.client_name, p.payer_email, p.payer_phone, p.description
-					        FROM {$tickets_table} t
-					        JOIN {$payments_table} p ON t.reference = p.reference
-					        WHERE t.reference = %s",
-					        $reference
-					)
-			);
-
-			if ($ticket) {
-					wp_send_json_success([
-					        'name' => $ticket->client_name,
-					        'email' => $ticket->payer_email,
-					        'phone' => $ticket->payer_phone,
-					        'description' => $ticket->description,
-					]);
-			}
-
+		 $ticket = $wpdb->get_row(
+		$wpdb->prepare(
+		"SELECT p.client_name, p.payer_email, p.payer_phone, p.description, t.status
+		FROM {$tickets_table} t
+		JOIN {$payments_table} p ON t.reference = p.reference
+		WHERE t.reference = %s",
+		$reference
+		)
+		);
+		
+		if ($ticket) {
+		wp_send_json_success([
+		'name' => $ticket->client_name,
+		'email' => $ticket->payer_email,
+		'phone' => $ticket->payer_phone,
+		'description' => $ticket->description,
+		'status' => $ticket->status,
+		]);
+		}
+		
+		wp_send_json_error(['message' => 'Billet introuvable.']);
+		}
+	
+	/**
+	 * AJAX handler to validate a ticket.
+	 *
+	 * @since 0.0.6
+	 */
+	public function handle_validate_ticket_ajax()
+	{
+		check_ajax_referer('takamoa_papi_nonce', 'nonce');
+		
+		$reference = sanitize_text_field($_POST['reference'] ?? '');
+		if (!$reference) {
+			wp_send_json_error(['message' => 'Référence manquante.']);
+		}
+		
+		global $wpdb;
+		$tickets_table = $wpdb->prefix . 'takamoa_papi_tickets';
+		
+		$ticket = $wpdb->get_row(
+		$wpdb->prepare(
+		"SELECT status FROM {$tickets_table} WHERE reference = %s",
+		$reference
+		)
+		);
+		
+		if (!$ticket) {
 			wp_send_json_error(['message' => 'Billet introuvable.']);
+		}
+		
+		if ($ticket->status === 'VALIDATED') {
+			wp_send_json_error(['message' => 'Billet déjà validé.']);
+		}
+		
+		$updated = $wpdb->update($tickets_table, ['status' => 'VALIDATED'], ['reference' => $reference]);
+		if ($updated !== false) {
+			wp_send_json_success(['status' => 'VALIDATED']);
+		}
+		
+		wp_send_json_error(['message' => 'Erreur lors de la mise à jour.']);
 	}
 }

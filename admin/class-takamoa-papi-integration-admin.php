@@ -531,11 +531,12 @@ class Takamoa_Papi_Integration_Admin
                         <div class="wrap text-center">
                                         <a href="<?= esc_url(admin_url()); ?>" class="button button-secondary" id="takamoa-scanner-home">Home</a>
                                         <h1>Scanner billets</h1>
-                                        <div id="qr-reader"></div>
-                                        <div id="scan-result" class="mt-3"></div>
-                        </div>
-                        <?php
-        }
+					<div id="qr-reader"></div>
+					<div id="scan-result" class="mt-3"></div>
+					<button id="rescan-btn" class="button button-primary mt-3">Re-scan</button>
+				</div>
+<?php
+}
 
 	/**
 	* Handle saving a ticket design.
