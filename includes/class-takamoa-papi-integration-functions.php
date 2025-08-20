@@ -485,11 +485,13 @@ class Takamoa_Papi_Integration_Functions
 
 		wp_send_json_success(['url' => $url]);
 	}
-	/**
-	 * AJAX handler to verify a ticket reference and return ticket info.
-	 */
-	public function handle_scan_ticket_ajax()
-	{
+       /**
+         * AJAX handler to verify a ticket reference and return ticket info.
+         *
+         * @since 0.0.5
+         */
+        public function handle_scan_ticket_ajax()
+        {
 			check_ajax_referer('takamoa_papi_nonce', 'nonce');
 
 			$reference = sanitize_text_field($_POST['reference'] ?? '');

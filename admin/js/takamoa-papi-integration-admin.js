@@ -198,8 +198,9 @@ jQuery(document).ready(function ($) {
 			frame.open();
 		});
 	}
-	if ($('#qr-reader').length) {
-		var scanResult = $('#scan-result');
+       if ($('#qr-reader').length) {
+               // QR code scanning feature @since 0.0.5
+               var scanResult = $('#scan-result');
 		var scanner = new Html5Qrcode('qr-reader');
 		var processing = false;
 		scanner.start(
