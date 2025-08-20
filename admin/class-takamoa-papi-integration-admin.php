@@ -502,16 +502,35 @@ class Takamoa_Papi_Integration_Admin
 	/**
 	* Display the ticket scanner page.
 	*/
-	public function display_scanner_page()
-	{
-			?>
-			<div class="wrap text-center">
-					<h1>Scanner billets</h1>
-					<div id="qr-reader"></div>
-					<div id="scan-result" class="mt-3"></div>
-			</div>
-			<?php
-	}
+        public function display_scanner_page()
+        {
+                        ?>
+                        <style>
+                        #wpadminbar,
+                        #adminmenumain,
+                        #adminmenuback,
+                        #adminmenuwrap {
+                                        display: none;
+                        }
+                        #wpcontent,
+                        #wpfooter {
+                                        margin-left: 0;
+                        }
+                        #takamoa-scanner-home {
+                                        position: fixed;
+                                        top: 20px;
+                                        left: 20px;
+                                        z-index: 999;
+                        }
+                        </style>
+                        <div class="wrap text-center">
+                                        <a href="<?= esc_url(admin_url()); ?>" class="button button-secondary" id="takamoa-scanner-home">Home</a>
+                                        <h1>Scanner billets</h1>
+                                        <div id="qr-reader"></div>
+                                        <div id="scan-result" class="mt-3"></div>
+                        </div>
+                        <?php
+        }
 
 	/**
 	* Handle saving a ticket design.
