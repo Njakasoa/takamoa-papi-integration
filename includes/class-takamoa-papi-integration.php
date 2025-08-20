@@ -168,7 +168,7 @@ class Takamoa_Papi_Integration {
 	private function define_admin_hooks() {
 
 		$plugin_admin = new Takamoa_Papi_Integration_Admin( $this->get_plugin_name(), $this->get_version(), $this->get_functions() );
-
+		
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action('admin_menu', $plugin_admin, 'add_menu');
@@ -176,8 +176,9 @@ class Takamoa_Papi_Integration {
 		$this->loader->add_action('admin_post_takamoa_save_design', $plugin_admin, 'handle_save_design');
 		$this->loader->add_action('wp_ajax_takamoa_resend_payment_email', $this->functions, 'handle_resend_payment_email_ajax');
 		$this->loader->add_action('wp_ajax_takamoa_generate_ticket', $this->functions, 'handle_generate_ticket_ajax');
-               $this->loader->add_action('wp_ajax_takamoa_scan_ticket', $this->functions, 'handle_scan_ticket_ajax'); // @since 0.0.5
-		}
+		$this->loader->add_action('wp_ajax_takamoa_scan_ticket', $this->functions, 'handle_scan_ticket_ajax'); // @since 0.0.5
+		$this->loader->add_action('wp_ajax_takamoa_validate_ticket', $this->functions, 'handle_validate_ticket_ajax'); // @since 0.0.6
+	}
 
 	/**
 	 * Register all of the hooks related to the public-facing functionality
