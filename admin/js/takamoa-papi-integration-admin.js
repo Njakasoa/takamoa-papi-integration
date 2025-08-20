@@ -201,32 +201,26 @@ jQuery(document).ready(function ($) {
 	if ($('#qr-reader').length) {
 		var scanResult = $('#scan-result');
 		var scanner = new Html5Qrcode('qr-reader');
-		function startScanner() {
-			scanResult.empty();
-			scanner.start(
-				{ facingMode: 'environment' },
-				{ fps: 10, qrbox: 250 },
-				function (decodedText) {
-					scanner.stop().then(function () {
-						$.post(takamoaAjax.ajaxurl, {
-							action: 'takamoa_scan_ticket',
-							nonce: takamoaAjax.nonce,
-							reference: decodedText
-						}).done(function (res) {
-							if (res.success) {
-								scanResult.html('<div class="card"><div class="card-body"><h5>' + res.data.name + '</h5><p>Email: ' + (res.data.email || '—') + '<br>Téléphone: ' + (res.data.phone || '—') + '<br>Entreprise: ' + (res.data.description || '—') + '</p></div></div>');
-							} else {
-								scanResult.html('<div class="alert alert-danger">' + (res.data && res.data.message ? res.data.message : 'Billet introuvable') + '</div>');
-							}
-							startScanner();
-						}).fail(function () {
-							scanResult.html('<div class="alert alert-danger">Erreur de connexion</div>');
-							startScanner();
-						});
-					});
-				}
-			);
-		}
-		startScanner();
+		scanner.start(
+			{ facingMode: 'environment' },
+			{ fps: 10, qrbox: 250 },
+			function (decodedText) {
+				scanner.stop().catch(function () {});
+				$('#qr-reader').hide();
+				$.post(takamoaAjax.ajaxurl, {
+					action: 'takamoa_scan_ticket',
+					nonce: takamoaAjax.nonce,
+					reference: decodedText
+				}).done(function (res) {
+					if (res.success) {
+						scanResult.html('<div class="card"><div class="card-body"><h5>' + res.data.name + '</h5><p>Email: ' + (res.data.email || '—') + '<br>Téléphone: ' + (res.data.phone || '—') + '<br>Entreprise: ' + (res.data.description || '—') + '</p></div></div>');
+					} else {
+						scanResult.html('<div class="alert alert-danger">' + (res.data && res.data.message ? res.data.message : 'Billet introuvable') + '</div>');
+					}
+				}).fail(function () {
+					scanResult.html('<div class="alert alert-danger">Erreur de connexion</div>');
+				});
+			}
+		);
 	}
 });

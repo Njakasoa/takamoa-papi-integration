@@ -41,7 +41,7 @@ class Takamoa_Papi_Integration_Admin
 	{
 		if (strpos(get_current_screen()->id, $this->plugin_name) !== false) {
 			wp_enqueue_script('datatables-script', 'https://cdn.datatables.net/2.0.8/js/dataTables.min.js', array('jquery'), null, true);
-                       wp_enqueue_script('html5-qrcode', plugin_dir_url(__FILE__) . 'js/html5-qrcode.min.js', array(), '2.3.8', true);
+		       wp_enqueue_script('html5-qrcode', plugin_dir_url(__FILE__) . 'js/html5-qrcode.min.js', array(), '2.3.8', true);
 						wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/takamoa-papi-integration-admin.js', array('jquery', 'datatables-script', 'html5-qrcode'), $this->version, true);
 						wp_localize_script($this->plugin_name, 'takamoaAjax', array(
 								'ajaxurl' => admin_url('admin-ajax.php'),
@@ -504,13 +504,33 @@ class Takamoa_Papi_Integration_Admin
 	*/
 	public function display_scanner_page()
 	{
-			?>
-			<div class="wrap text-center">
-					<h1>Scanner billets</h1>
-					<div id="qr-reader"></div>
-					<div id="scan-result" class="mt-3"></div>
-			</div>
-			<?php
+	?>
+	<style>
+	#wpadminbar,
+	#adminmenumain,
+	#adminmenuback,
+	#adminmenuwrap,
+	.notice {
+	display: none;
+	}
+	#wpcontent,
+	#wpfooter {
+	margin-left: 0;
+	}
+	#takamoa-scanner-home {
+	position: fixed;
+	top: 20px;
+	left: 20px;
+	z-index: 999;
+	}
+	</style>
+	<div class="wrap text-center">
+	<a href="<?= esc_url(admin_url()); ?>" class="button button-secondary" id="takamoa-scanner-home">Home</a>
+	<h1>Scanner billets</h1>
+	<div id="qr-reader"></div>
+	<div id="scan-result" class="mt-3"></div>
+	</div>
+	<?php
 	}
 
 	/**
