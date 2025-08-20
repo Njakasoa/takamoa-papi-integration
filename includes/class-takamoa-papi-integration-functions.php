@@ -501,6 +501,7 @@ class Takamoa_Papi_Integration_Functions
 				[
 					'qrcode_link' => $url,
 					'status' => 'GENERATED',
+					'updated_at' => current_time('mysql'),
 				],
 				['id' => $ticket->id],
 			);
@@ -510,6 +511,7 @@ class Takamoa_Papi_Integration_Functions
 				'qrcode_link' => $url,
 				'status' => 'GENERATED',
 				'created_at' => current_time('mysql'),
+				'updated_at' => current_time('mysql'),
 			]);
 		}
 
