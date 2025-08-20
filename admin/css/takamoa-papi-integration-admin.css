@@ -104,5 +104,21 @@
 	margin: 1rem auto;
 }
 #rescan-btn {
-	display: none;
+        display: none;
 }
+
+/* Add design form tweaks */
+#takamoa-add-design input[type="number"].small-input {
+        width: auto;
+        max-width: 120px;
+        display: inline-block;
+        margin-right: 0.5rem;
+}
+
+#takamoa-add-design p.flex-fields {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+}
+
