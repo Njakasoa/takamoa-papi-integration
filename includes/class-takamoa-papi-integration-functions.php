@@ -420,7 +420,8 @@ class Takamoa_Papi_Integration_Functions
 		
 		require_once plugin_dir_path(__FILE__) . 'lib/fpdf.php';
 		
-		$qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=' . $design->qrcode_size . 'x' . $design->qrcode_size . '&data=' . urlencode($reference);
+		$qr_px = (int) $design->qrcode_size;
+		$qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=' . $qr_px . 'x' . $qr_px . '&data=' . urlencode($reference);
 		$response = wp_remote_get($qr_url);
 		if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
 			wp_send_json_error(['message' => 'Erreur génération QR code.']);
@@ -431,16 +432,27 @@ class Takamoa_Papi_Integration_Functions
 		$design_path = str_replace($upload['baseurl'], $upload['basedir'], $design->image_url);
 		$file = $dir . '/billet-' . $reference . '.pdf';
 		
-		$factor = 72 / 96;
-		$width = $design->ticket_width * $factor;
-		$height = $design->ticket_height * $factor;
-		$qrSize = $design->qrcode_size * $factor;
-		$qrTop = $design->qrcode_top * $factor;
-		$qrLeft = $design->qrcode_left * $factor;
-		$pdf = new \FPDF('P', 'pt', [$width, $height]);
-		$pdf->AddPage();
-		$pdf->Image($design_path, 0, 0, $width, $height);
-		$pdf->Image($qr_path, $qrLeft, $qrTop, $qrSize, $qrSize);
+		$px_to_mm = static function($px, $dpi = 300) {
+		return ($px * 25.4) / $dpi;
+		};
+		$dpi = 300;
+		$w_px = (int) $design->ticket_width;
+		$h_px = (int) $design->ticket_height;
+		$top_px = (int) $design->qrcode_top;
+		$left_px = (int) $design->qrcode_left;
+		
+		$w_mm = $px_to_mm($w_px, $dpi);
+		$h_mm = $px_to_mm($h_px, $dpi);
+		$qr_mm = $px_to_mm($qr_px, $dpi);
+		$top_mm = $px_to_mm($top_px, $dpi);
+		$left_mm = $px_to_mm($left_px, $dpi);
+		
+		$orientation = ($w_mm > $h_mm) ? 'L' : 'P';
+		$pdf = new \FPDF($orientation, 'mm', [$w_mm, $h_mm]);
+		$pdf->SetAutoPageBreak(false);
+		$pdf->AddPage($orientation, [$w_mm, $h_mm]);
+		$pdf->Image($design_path, 0, 0, $w_mm, $h_mm);
+		$pdf->Image($qr_path, $left_mm, $top_mm, $qr_mm, $qr_mm);
 		$pdf->Output('F', $file);
 		@unlink($qr_path);
 		
