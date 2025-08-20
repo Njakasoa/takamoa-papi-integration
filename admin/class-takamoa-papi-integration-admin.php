@@ -251,8 +251,8 @@ class Takamoa_Papi_Integration_Admin
 			global $wpdb;
 			$table = $wpdb->prefix . 'takamoa_papi_payments';
 				$results = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC LIMIT 100');
-			$design_table = $wpdb->prefix . 'takamoa_papi_designs';
-				$designs = $wpdb->get_results('SELECT id FROM ' . $design_table . ' ORDER BY created_at DESC');
+                        $design_table = $wpdb->prefix . 'takamoa_papi_designs';
+                                $designs = $wpdb->get_results('SELECT id, title FROM ' . $design_table . ' ORDER BY created_at DESC');
 		?>
 		<div class="wrap container-fluid">
 			<h1>Historique des paiements</h1>
@@ -382,11 +382,11 @@ class Takamoa_Papi_Integration_Admin
 						<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
-						<select id="ticket-design" class="form-select">
-							<?php foreach ($designs as $d) : ?>
-								<option value="<?= esc_attr($d->id) ?>">Design #<?= esc_html($d->id) ?></option>
-							<?php endforeach; ?>
-						</select>
+                                                <select id="ticket-design" class="form-select">
+                                                        <?php foreach ($designs as $d) : ?>
+                                                                <option value="<?= esc_attr($d->id) ?>"><?= esc_html($d->title) ?></option>
+                                                        <?php endforeach; ?>
+                                                </select>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
