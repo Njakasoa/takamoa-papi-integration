@@ -1,8 +1,8 @@
 /**
- * Admin scripts for ticket and design management.
- *
- * @since 0.0.3
- */
+* Admin scripts for ticket and design management.
+*
+* @since 0.0.3
+*/
 jQuery(document).ready(function ($) {
 	if ($('#takamoa-payments-table').length) {
 		var table = $('#takamoa-payments-table').DataTable({
@@ -198,37 +198,33 @@ jQuery(document).ready(function ($) {
 			frame.open();
 		});
 	}
-        if ($('#qr-reader').length) {
-                var scanResult = $('#scan-result');
-                var scanner = new Html5Qrcode('qr-reader');
-                var processing = false;
-                scanner.start(
-                        { facingMode: 'environment' },
-                        { fps: 10, qrbox: 250 },
-                        function (decodedText) {
-                                if (processing) return;
-                                processing = true;
-                                scanner.pause(true);
-                                $.post(takamoaAjax.ajaxurl, {
-                                        action: 'takamoa_scan_ticket',
-                                        nonce: takamoaAjax.nonce,
-                                        reference: decodedText
-                                }).done(function (res) {
-                                        if (res.success) {
-                                                scanResult.html('<div class="card"><div class="card-body"><h5>' + res.data.name + '</h5><p>Email: ' + (res.data.email || '—') + '<br>Téléphone: ' + (res.data.phone || '—') + '<br>Entreprise: ' + (res.data.description || '—') + '</p></div></div>');
-                                        } else {
-                                                scanResult.html('<div class="alert alert-danger">' + (res.data && res.data.message ? res.data.message : 'Billet introuvable') + '</div>');
-                                        }
-                                }).fail(function () {
-                                        scanResult.html('<div class="alert alert-danger">Erreur de connexion</div>');
-                                }).always(function () {
-                                        setTimeout(function () {
-                                                scanResult.empty();
-                                                processing = false;
-                                                scanner.resume();
-                                        }, 2000);
-                                });
-                        }
-                );
-        }
+	if ($('#qr-reader').length) {
+		var scanResult = $('#scan-result');
+		var scanner = new Html5Qrcode('qr-reader');
+		var processing = false;
+		scanner.start(
+			{ facingMode: 'environment' },
+			{ fps: 10, qrbox: 250 },
+			function (decodedText) {
+				if (processing) return;
+				processing = true;
+				scanner.stop().then(function () {
+					$('#qr-reader').hide();
+				}).catch(function () {});
+				$.post(takamoaAjax.ajaxurl, {
+					action: 'takamoa_scan_ticket',
+					nonce: takamoaAjax.nonce,
+					reference: decodedText
+				}).done(function (res) {
+					if (res.success) {
+						scanResult.html('<div class="card"><div class="card-body"><h5>' + res.data.name + '</h5><p>Email: ' + (res.data.email || '—') + '<br>Téléphone: ' + (res.data.phone || '—') + '<br>Entreprise: ' + (res.data.description || '—') + '</p></div></div>');
+					} else {
+						scanResult.html('<div class="alert alert-danger">' + (res.data && res.data.message ? res.data.message : 'Billet introuvable') + '</div>');
+					}
+				}).fail(function () {
+					scanResult.html('<div class="alert alert-danger">Erreur de connexion</div>');
+				});
+			}
+		);
+	}
 });
