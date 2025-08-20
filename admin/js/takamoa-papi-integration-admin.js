@@ -202,29 +202,24 @@ jQuery(document).ready(function ($) {
 		var scanResult = $('#scan-result');
 		var scanner = new Html5Qrcode('qr-reader');
 		var processing = false;
-		scanner.start(
-			{ facingMode: 'environment' },
-			{ fps: 10, qrbox: 250 },
-			function (decodedText) {
-				if (processing) return;
-				processing = true;
-				scanner.stop().then(function () {
-					$('#qr-reader').hide();
-				}).catch(function () {});
-				$.post(takamoaAjax.ajaxurl, {
-					action: 'takamoa_scan_ticket',
-					nonce: takamoaAjax.nonce,
-					reference: decodedText
-				}).done(function (res) {
-					if (res.success) {
-						scanResult.html('<div class="card"><div class="card-body"><h5>' + res.data.name + '</h5><p>Email: ' + (res.data.email || '—') + '<br>Téléphone: ' + (res.data.phone || '—') + '<br>Entreprise: ' + (res.data.description || '—') + '</p></div></div>');
-					} else {
-						scanResult.html('<div class="alert alert-danger">' + (res.data && res.data.message ? res.data.message : 'Billet introuvable') + '</div>');
-					}
-				}).fail(function () {
-					scanResult.html('<div class="alert alert-danger">Erreur de connexion</div>');
-				});
-			}
-		);
+               scanner.start(
+                       { facingMode: 'environment' },
+                       { fps: 10, qrbox: 250 },
+                       function (decodedText) {
+                               if (processing) return;
+                               processing = true;
+                               scanner
+                                       .stop()
+                                       .then(function () {
+                                               $('#qr-reader').hide();
+                                               scanResult.html(
+                                                       '<div class="card"><div class="card-body">' +
+                                                               decodedText +
+                                                               '</div></div>',
+                                               );
+                                       })
+                                       .catch(function () {});
+                       }
+               );
 	}
 });
