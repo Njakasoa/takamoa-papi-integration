@@ -200,13 +200,17 @@ jQuery(document).ready(function ($) {
 	}
        if ($('#qr-reader').length) {
                // QR code scanning feature @since 0.0.5
+               if (typeof Html5Qrcode === 'undefined') {
+                       console.error('Html5Qrcode library not loaded');
+                       return;
+               }
                var scanResult = $('#scan-result');
-		var scanner = new Html5Qrcode('qr-reader');
-		var processing = false;
-		scanner.start(
-			{ facingMode: 'environment' },
-			{ fps: 10, qrbox: 250 },
-			function (decodedText) {
+                var scanner = new Html5Qrcode('qr-reader');
+                var processing = false;
+                scanner.start(
+                        { facingMode: 'environment' },
+                        { fps: 10, qrbox: 250 },
+                        function (decodedText) {
 				if (processing) return;
 				processing = true;
 				scanner.stop().then(function () {
