@@ -376,6 +376,11 @@ class Takamoa_Papi_Integration_Admin
 			<?php
 	}
 
+	/**
+	 * Display the tickets management page.
+	 *
+	 * @since 0.0.3
+	 */
 	public function display_tickets_page()
 	{
 			global $wpdb;
@@ -412,6 +417,11 @@ class Takamoa_Papi_Integration_Admin
 				<?php
 	}
 
+	/**
+	 * Display the ticket designs management page.
+	 *
+	 * @since 0.0.3
+	 */
 	public function display_designs_page()
 	{
 			global $wpdb;
@@ -473,6 +483,11 @@ class Takamoa_Papi_Integration_Admin
 				<?php
 	}
 
+	/**
+	 * Handle saving a ticket design.
+	 *
+	 * @since 0.0.3
+	 */
 	public function handle_save_design()
 	{
 			check_admin_referer('takamoa_save_design');

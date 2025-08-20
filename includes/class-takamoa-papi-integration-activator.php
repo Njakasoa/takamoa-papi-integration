@@ -85,7 +85,8 @@ class Takamoa_Papi_Integration_Activator
 
 				dbDelta($sql_tickets);
 
-			// Designs table
+			// Designs table.
+			// @since 0.0.3
 			$designs_table = $wpdb->prefix . 'takamoa_papi_designs';
 
 			$sql_designs = "CREATE TABLE $designs_table (
