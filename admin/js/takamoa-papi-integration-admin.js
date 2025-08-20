@@ -32,7 +32,10 @@ jQuery(document).ready(function ($) {
 		$('#takamoa-payments-table tbody').on(
 			'click',
 			'tr.payment-row',
-			function () {
+			function (e) {
+				if ($(e.target).closest('button').length) {
+					return;
+				}
 				var row = $(this);
 				$('#modal-reference').text(row.data('reference'));
 				$('#modal-name').text(row.data('client'));
@@ -80,7 +83,7 @@ jQuery(document).ready(function ($) {
 			);
 		});
 
-		$(document).on('click', '.takamoa-notify', function (e) {
+		$('.takamoa-notify').on('click', function (e) {
 			e.stopPropagation();
 			var btn = $(this);
 			var row = btn.closest('tr');
@@ -98,7 +101,7 @@ jQuery(document).ready(function ($) {
 					);
 				})
 				.fail(function () {
-					alert('Erreur lors de l\'envoi de la notification');
+					alert("Erreur lors de l'envoi de la notification");
 				})
 				.always(function () {
 					btn.prop('disabled', false);
@@ -106,7 +109,7 @@ jQuery(document).ready(function ($) {
 		});
 
 		var currentRef = '';
-		$(document).on('click', '.takamoa-generate-ticket', function (e) {
+		$('.takamoa-generate-ticket').on('click', function (e) {
 			e.stopPropagation();
 			currentRef = $(this).closest('tr').data('reference');
 			var modal = new bootstrap.Modal(document.getElementById('ticketModal'));
