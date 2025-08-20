@@ -83,7 +83,7 @@ jQuery(document).ready(function ($) {
 			);
 		});
 
-		$('.takamoa-notify').on('click', function (e) {
+		$('#takamoa-payments-table').on('click', '.takamoa-notify', function (e) {
 			e.stopPropagation();
 			var btn = $(this);
 			var row = btn.closest('tr');
@@ -109,7 +109,7 @@ jQuery(document).ready(function ($) {
 		});
 
 		var currentRef = '';
-		$('.takamoa-generate-ticket').on('click', function (e) {
+		$('#takamoa-payments-table').on('click', '.takamoa-generate-ticket', function (e) {
 			e.stopPropagation();
 			currentRef = $(this).closest('tr').data('reference');
 			var modal = new bootstrap.Modal(document.getElementById('ticketModal'));

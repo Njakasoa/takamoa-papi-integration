@@ -212,7 +212,7 @@ class Takamoa_Papi_Integration_Admin
 	public function display_admin_page()
 	{
 		?>
-		<div class="wrap">
+		<div class="wrap container-fluid">
 			<h1><?php echo esc_html(get_admin_page_title()); ?></h1>
 			<form method="post" action="options.php">
 				<?php
@@ -238,7 +238,7 @@ class Takamoa_Papi_Integration_Admin
 			$design_table = $wpdb->prefix . 'takamoa_papi_designs';
 				$designs = $wpdb->get_results('SELECT id FROM ' . $design_table . ' ORDER BY created_at DESC');
 		?>
-		<div class="wrap">
+		<div class="wrap container-fluid">
 			<h1>Historique des paiements</h1>
 			<table id="takamoa-payments-table" class="widefat striped">
 				<thead>
@@ -388,7 +388,7 @@ class Takamoa_Papi_Integration_Admin
 			$table = $wpdb->prefix . 'takamoa_papi_tickets';
 				$results = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC LIMIT 100');
 		?>
-				<div class="wrap">
+				<div class="wrap container-fluid">
 						<h1>Billets</h1>
 						<table id="takamoa-tickets-table" class="widefat striped">
 								<thead>
@@ -429,34 +429,34 @@ class Takamoa_Papi_Integration_Admin
 			$table = $wpdb->prefix . 'takamoa_papi_designs';
 				$designs = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC');
 		?>
-				<div class="wrap">
+				<div class="wrap container-fluid">
 						<h1>Designs de billets</h1>
 						<form id="takamoa-add-design" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
 								<?php wp_nonce_field('takamoa_save_design'); ?>
 								<input type="hidden" name="action" value="takamoa_save_design">
 								<p>
 										<label for="design_image">Image du billet</label><br>
-										<input type="text" id="design_image" name="design_image" style="width: 400px;" />
-										<button type="button" class="button" id="select_design_image">Choisir une image</button>
+										<input type="text" id="design_image" name="design_image" class="form-control" />
+										<button type="button" class="button btn btn-outline-secondary" id="select_design_image">Choisir une image</button>
 								</p>
 								<p>
 										<label>Largeur (px)</label>
-										<input type="number" id="ticket_width" name="ticket_width" min="1">
+										<input type="number" id="ticket_width" name="ticket_width" class="form-control" min="1">
 										<label>Hauteur (px)</label>
-										<input type="number" id="ticket_height" name="ticket_height" min="1">
+										<input type="number" id="ticket_height" name="ticket_height" class="form-control" min="1">
 								</p>
 								<p>
 										<label>Taille QR Code (px)</label>
-										<input type="number" id="qrcode_size" name="qrcode_size" min="1">
+										<input type="number" id="qrcode_size" name="qrcode_size" class="form-control" min="1">
 										<label>Position top (px)</label>
-										<input type="number" id="qrcode_top" name="qrcode_top" min="0">
+										<input type="number" id="qrcode_top" name="qrcode_top" class="form-control" min="0">
 										<label>Position left (px)</label>
-										<input type="number" id="qrcode_left" name="qrcode_left" min="0">
+										<input type="number" id="qrcode_left" name="qrcode_left" class="form-control" min="0">
 								</p>
 								<?php submit_button('Ajouter'); ?>
 						</form>
 						<hr>
-						<table class="widefat striped">
+						<table class="widefat striped table table-striped align-middle">
 								<thead>
 										<tr>
 												<th>ID</th>
@@ -533,7 +533,7 @@ class Takamoa_Papi_Integration_Admin
 	public function display_options_page()
 	{
 		?>
-				<div class="wrap">
+				<div class="wrap container-fluid">
 						<h1>Options avancées</h1>
 			<form method="post" action="options.php">
 			<?php
