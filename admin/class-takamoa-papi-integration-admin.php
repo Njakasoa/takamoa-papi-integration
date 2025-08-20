@@ -478,20 +478,20 @@ class Takamoa_Papi_Integration_Admin
                                                                                 <input type="text" id="design_image" name="design_image" class="form-control" />
                                                                                 <button type="button" class="button btn btn-outline-secondary" id="select_design_image">Choisir une image</button>
                                                                 </p>
-								<p>
-										<label>Largeur (px)</label>
-										<input type="number" id="ticket_width" name="ticket_width" class="form-control" min="1">
-										<label>Hauteur (px)</label>
-										<input type="number" id="ticket_height" name="ticket_height" class="form-control" min="1">
-								</p>
-								<p>
-										<label>Taille QR Code (px)</label>
-										<input type="number" id="qrcode_size" name="qrcode_size" class="form-control" min="1">
-										<label>Position top (px)</label>
-										<input type="number" id="qrcode_top" name="qrcode_top" class="form-control" min="0">
-										<label>Position left (px)</label>
-										<input type="number" id="qrcode_left" name="qrcode_left" class="form-control" min="0">
-								</p>
+                                                                <p class="flex-fields">
+                                                                                <label>Largeur (px)</label>
+                                                                                <input type="number" id="ticket_width" name="ticket_width" class="form-control small-input" min="1">
+                                                                                <label>Hauteur (px)</label>
+                                                                                <input type="number" id="ticket_height" name="ticket_height" class="form-control small-input" min="1">
+                                                                </p>
+                                                                <p class="flex-fields">
+                                                                                <label>Taille QR Code (px)</label>
+                                                                                <input type="number" id="qrcode_size" name="qrcode_size" class="form-control small-input" min="1">
+                                                                                <label>Position top (px)</label>
+                                                                                <input type="number" id="qrcode_top" name="qrcode_top" class="form-control small-input" min="0">
+                                                                                <label>Position left (px)</label>
+                                                                                <input type="number" id="qrcode_left" name="qrcode_left" class="form-control small-input" min="0">
+                                                                </p>
 								<?php submit_button('Ajouter'); ?>
 						</form>
 						<hr>
