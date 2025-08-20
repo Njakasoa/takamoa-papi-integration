@@ -1,13 +1,13 @@
 <?php
 
 /**
- * The admin-specific functionality of the plugin.
- *
- * @link       https://nexa.takamoa.com/
- * @since      0.0.1
- * @package    Takamoa
- * @subpackage takamoa-papi-integration/admin
- */
+* The admin-specific functionality of the plugin.
+*
+* @link       https://nexa.takamoa.com/
+* @since      0.0.1
+* @package    Takamoa
+* @subpackage takamoa-papi-integration/admin
+*/
 
 class Takamoa_Papi_Integration_Admin
 {
@@ -357,6 +357,7 @@ class Takamoa_Papi_Integration_Admin
 						</div>
 					</div>
 				</div>
+			</div>
 		<div class="modal fade" id="ticketModal" tabindex="-1" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
 				<div class="modal-content">
@@ -379,8 +380,7 @@ class Takamoa_Papi_Integration_Admin
 			</div>
 		</div>
 </div>
-		</div>
-			<?php
+<?php
 	}
 
 	/**
