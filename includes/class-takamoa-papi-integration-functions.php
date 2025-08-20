@@ -52,7 +52,29 @@ class Takamoa_Papi_Integration_Functions
 		}
 
 		$headers = ['Content-Type: text/html; charset=UTF-8'];
-		wp_mail($email, $subject, $message, $headers);
+wp_mail($email, $subject, $message, $headers);
+}
+
+	private function send_ticket_email($email, $name, $file)
+	{
+	if (empty($email) || !file_exists($file)) {
+	return;
+	}
+	
+	$subject = 'Votre billet';
+	
+	$message = '<p>Bonjour ' . esc_html($name) . ',</p>';
+	$message .= '<p>Veuillez trouver votre billet en pièce jointe.</p>';
+	$message .= '<p>Pour toute question ou précision, notre équipe logistique se tient à votre disposition au 034 04 105 06.</p>';
+	$message .= '<p>Bien cordialement,<br>L’équipe logistique</p>';
+	$logo = get_site_icon_url();
+	if ($logo) {
+	$logo = set_url_scheme($logo, 'https');
+	$message .= '<p><img src="' . esc_url($logo) . '" alt="Logo" style="max-width:150px;height:auto;"></p>';
+	}
+	
+	$headers = ['Content-Type: text/html; charset=UTF-8'];
+	wp_mail($email, $subject, $message, $headers, [$file]);
 	}
 
 	private function send_payment_success_email($email, $name)
@@ -595,6 +617,46 @@ class Takamoa_Papi_Integration_Functions
 			wp_send_json_success(['status' => 'VALIDATED']);
 		}
 		
-		wp_send_json_error(['message' => 'Erreur lors de la mise à jour.']);
+	wp_send_json_error(['message' => 'Erreur lors de la mise à jour.']);
+	}
+	
+	public function handle_send_ticket_email_ajax()
+	{
+	check_ajax_referer('takamoa_papi_nonce', 'nonce');
+	
+	if (!current_user_can('manage_options')) {
+	wp_send_json_error(['message' => 'Unauthorized'], 403);
+	}
+	
+	$reference = sanitize_text_field($_POST['reference'] ?? '');
+	if (!$reference) {
+	wp_send_json_error(['message' => 'Référence manquante.']);
+	}
+	
+	global $wpdb;
+	$tickets_table = $wpdb->prefix . 'takamoa_papi_tickets';
+	$payments_table = $wpdb->prefix . 'takamoa_papi_payments';
+	
+	$ticket = $wpdb->get_row(
+	$wpdb->prepare(
+	"SELECT t.qrcode_link, p.client_name, p.payer_email FROM {$tickets_table} t JOIN {$payments_table} p ON t.reference = p.reference WHERE t.reference = %s LIMIT 1",
+	$reference,
+	)
+	);
+	
+	if (!$ticket || empty($ticket->payer_email) || empty($ticket->qrcode_link)) {
+	wp_send_json_error(['message' => 'Billet introuvable.']);
+	}
+	
+	$upload = wp_upload_dir();
+	$file = str_replace($upload['baseurl'], $upload['basedir'], $ticket->qrcode_link);
+	if (!file_exists($file)) {
+	wp_send_json_error(['message' => 'Fichier billet introuvable.']);
+	}
+	
+	$this->send_ticket_email($ticket->payer_email, $ticket->client_name, $file);
+	$wpdb->update($tickets_table, ['last_notification' => current_time('mysql')], ['reference' => $reference]);
+	
+	wp_send_json_success(['message' => 'Billet envoyé.']);
 	}
 }
