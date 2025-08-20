@@ -37,20 +37,26 @@ class Takamoa_Papi_Integration_Admin
 	/**
 	* Enqueue admin scripts.
 	*/
-	public function enqueue_scripts()
-	{
-		if (strpos(get_current_screen()->id, $this->plugin_name) !== false) {
-			wp_enqueue_script('datatables-script', 'https://cdn.datatables.net/2.0.8/js/dataTables.min.js', array('jquery'), null, true);
-			wp_enqueue_script('html5-qrcode', 'https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js', array(), null, true);
-						wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/takamoa-papi-integration-admin.js', array('jquery', 'datatables-script', 'html5-qrcode'), $this->version, true);
-						wp_localize_script($this->plugin_name, 'takamoaAjax', array(
-								'ajaxurl' => admin_url('admin-ajax.php'),
-								'nonce'   => wp_create_nonce('takamoa_papi_nonce'),
-					'ticketsPage' => admin_url('admin.php?page=' . $this->plugin_name . '-tickets'),
-						));
-						wp_enqueue_media();
-		}
-	}
+        public function enqueue_scripts()
+        {
+                if (strpos(get_current_screen()->id, $this->plugin_name) !== false) {
+                        wp_enqueue_script('datatables-script', 'https://cdn.datatables.net/2.0.8/js/dataTables.min.js', array('jquery'), null, true);
+
+                        $deps = array('jquery', 'datatables-script');
+                        if (isset($_GET['page']) && $_GET['page'] === $this->plugin_name . '-scanner') {
+                                wp_enqueue_script('html5-qrcode', 'https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js', array(), null, true);
+                                $deps[] = 'html5-qrcode';
+                        }
+
+                        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/takamoa-papi-integration-admin.js', $deps, $this->version, true);
+                        wp_localize_script($this->plugin_name, 'takamoaAjax', array(
+                                        'ajaxurl' => admin_url('admin-ajax.php'),
+                                        'nonce'   => wp_create_nonce('takamoa_papi_nonce'),
+                                        'ticketsPage' => admin_url('admin.php?page=' . $this->plugin_name . '-tickets'),
+                                ));
+                        wp_enqueue_media();
+                }
+        }
 
 	/**
 	* Add admin menu.
