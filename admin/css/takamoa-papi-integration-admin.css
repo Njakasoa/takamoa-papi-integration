@@ -19,7 +19,11 @@
 
 /* Payments table */
 .payment-row {
-	cursor: pointer;
+	cursor: default;
+}
+
+.takamoa-action-toggle::after {
+	display: none;
 }
 
 /* DataTables custom styling */

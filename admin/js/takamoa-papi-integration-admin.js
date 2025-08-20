@@ -29,52 +29,46 @@ jQuery(document).ready(function ($) {
 			.find('.dataTables_length label, .dataTables_filter label')
 			.addClass('d-flex align-items-center gap-2 mb-0');
 
-		$('#takamoa-payments-table tbody').on(
-			'click',
-			'tr.payment-row',
-			function (e) {
-				if ($(e.target).closest('button').length) {
-					return;
-				}
-				var row = $(this);
-				$('#modal-reference').text(row.data('reference'));
-				$('#modal-name').text(row.data('client'));
-				$('#modal-email').text(row.data('email') || '—');
-				$('#modal-phone').text(row.data('phone') || '—');
-				$('#modal-amount').text(row.data('amount'));
-				$('#modal-status').text(row.data('status'));
-				$('#modal-method').text(row.data('method'));
-				$('#modal-date').text(row.data('date'));
-				$('#modal-description').text(row.data('description') || '—');
-				$('#modal-id').text(row.data('id'));
-				$('#modal-provider').text(row.data('provider') || '—');
-				$('#modal-success-url').text(row.data('successUrl') || '—');
-				$('#modal-failure-url').text(row.data('failureUrl') || '—');
-				$('#modal-notification-url').text(row.data('notificationUrl') || '—');
-				$('#modal-link-creation').text(row.data('linkCreation') || '—');
-				$('#modal-link-expiration').text(row.data('linkExpiration') || '—');
-				$('#modal-payment-link').text(row.data('paymentLink') || '—');
-				$('#modal-currency').text(row.data('currency') || '—');
-				$('#modal-fee').text(row.data('fee') || '—');
-				$('#modal-notification-token').text(
-					row.data('notificationToken') || '—',
-				);
-				$('#modal-test-mode').text(row.data('isTestMode') ? 'Yes' : 'No');
-				$('#modal-test-reason').text(row.data('testReason') || '—');
-				$('#modal-raw-request').text(row.data('rawRequest') || '—');
-				$('#modal-raw-response').text(row.data('rawResponse') || '—');
-				$('#modal-raw-notification').text(row.data('rawNotification') || '—');
-				$('#modal-updated-at').text(row.data('updatedAt') || '—');
+		$('#takamoa-payments-table').on('click', '.takamoa-details', function (e) {
+			e.stopPropagation();
+			var row = $(this).closest('tr');
+			$('#modal-reference').text(row.data('reference'));
+			$('#modal-name').text(row.data('client'));
+			$('#modal-email').text(row.data('email') || '—');
+			$('#modal-phone').text(row.data('phone') || '—');
+			$('#modal-amount').text(row.data('amount'));
+			$('#modal-status').text(row.data('status'));
+			$('#modal-method').text(row.data('method'));
+			$('#modal-date').text(row.data('date'));
+			$('#modal-description').text(row.data('description') || '—');
+			$('#modal-id').text(row.data('id'));
+			$('#modal-provider').text(row.data('provider') || '—');
+			$('#modal-success-url').text(row.data('successUrl') || '—');
+			$('#modal-failure-url').text(row.data('failureUrl') || '—');
+			$('#modal-notification-url').text(row.data('notificationUrl') || '—');
+			$('#modal-link-creation').text(row.data('linkCreation') || '—');
+			$('#modal-link-expiration').text(row.data('linkExpiration') || '—');
+			$('#modal-payment-link').text(row.data('paymentLink') || '—');
+			$('#modal-currency').text(row.data('currency') || '—');
+			$('#modal-fee').text(row.data('fee') || '—');
+			$('#modal-notification-token').text(
+				row.data('notificationToken') || '—',
+			);
+			$('#modal-test-mode').text(row.data('isTestMode') ? 'Yes' : 'No');
+			$('#modal-test-reason').text(row.data('testReason') || '—');
+			$('#modal-raw-request').text(row.data('rawRequest') || '—');
+			$('#modal-raw-response').text(row.data('rawResponse') || '—');
+			$('#modal-raw-notification').text(row.data('rawNotification') || '—');
+			$('#modal-updated-at').text(row.data('updatedAt') || '—');
 
-				$('#modal-extra-info').addClass('d-none');
-				$('#toggle-more-info').text('Show more');
+			$('#modal-extra-info').addClass('d-none');
+			$('#toggle-more-info').text('Show more');
 
-				var modal = new bootstrap.Modal(
-					document.getElementById('paymentModal'),
-				);
-				modal.show();
-			},
-		);
+			var modal = new bootstrap.Modal(
+				document.getElementById('paymentModal'),
+			);
+			modal.show();
+		});
 
 		$('#toggle-more-info').on('click', function () {
 			$('#modal-extra-info').toggleClass('d-none');
