@@ -41,7 +41,7 @@ class Takamoa_Papi_Integration_Admin
 	{
 		if (strpos(get_current_screen()->id, $this->plugin_name) !== false) {
 			wp_enqueue_script('datatables-script', 'https://cdn.datatables.net/2.0.8/js/dataTables.min.js', array('jquery'), null, true);
-                       wp_enqueue_script('html5-qrcode', plugin_dir_url(__FILE__) . 'js/html5-qrcode.min.js', array(), '2.3.8', true);
+                       wp_enqueue_script('html5-qrcode', 'https://unpkg.com/html5-qrcode@latest/dist/html5-qrcode.min.js', array(), null, true);
 						wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/takamoa-papi-integration-admin.js', array('jquery', 'datatables-script', 'html5-qrcode'), $this->version, true);
 						wp_localize_script($this->plugin_name, 'takamoaAjax', array(
 								'ajaxurl' => admin_url('admin-ajax.php'),
