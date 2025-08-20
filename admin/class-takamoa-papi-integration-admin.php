@@ -93,14 +93,14 @@ class Takamoa_Papi_Integration_Admin
 					$this->plugin_name . '-design',
 					array($this, 'display_designs_page')
 				);
-					add_submenu_page(
-					$this->plugin_name,
-					'Scanner billets',
-					'Scanner billets',
-					'manage_options',
-					$this->plugin_name . '-scanner',
-					array($this, 'display_scanner_page')
-					);
+                                       add_submenu_page(
+                                       $this->plugin_name,
+                                       'Scanner billets',
+                                       'Scanner billets',
+                                       'manage_options',
+                                       $this->plugin_name . '-scanner',
+                                       array($this, 'display_scanner_page')
+                                       ); // @since 0.0.5
 
 
 				add_submenu_page(
@@ -499,11 +499,13 @@ class Takamoa_Papi_Integration_Admin
 				<?php
 	}
 
-	/**
-	* Display the ticket scanner page.
-	*/
-        public function display_scanner_page()
-        {
+       /**
+       * Display the ticket scanner page.
+       *
+       * @since 0.0.5
+       */
+       public function display_scanner_page()
+       {
                         ?>
                         <style>
 			#wpadminbar,

@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Plugin Name:       Takamoa Papi Integration
  * Plugin URI:        https://nexa.takamoa.com/nos-realisations/
  * Description:       Easily generate and track payment links via Papi.mg directly from your WordPress site. Supports MVOLA, Orange Money, Airtel Money, and BRED. Includes real-time status tracking and customizable forms.
- * Version:           0.0.3
+ * Version:           0.0.5
  * Author:            Nexa by Takamoa
  * Author URI:        https://nexa.takamoa.com/
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 0.0.1 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'TAKAMOA_PAPI_INTEGRATION_VERSION', '0.0.3' );
+define( 'TAKAMOA_PAPI_INTEGRATION_VERSION', '0.0.5' );
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-takamoa-papi-integration-activator.php

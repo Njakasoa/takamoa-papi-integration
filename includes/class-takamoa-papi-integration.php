@@ -176,7 +176,7 @@ class Takamoa_Papi_Integration {
 		$this->loader->add_action('admin_post_takamoa_save_design', $plugin_admin, 'handle_save_design');
 		$this->loader->add_action('wp_ajax_takamoa_resend_payment_email', $this->functions, 'handle_resend_payment_email_ajax');
 		$this->loader->add_action('wp_ajax_takamoa_generate_ticket', $this->functions, 'handle_generate_ticket_ajax');
-		$this->loader->add_action('wp_ajax_takamoa_scan_ticket', $this->functions, 'handle_scan_ticket_ajax');
+               $this->loader->add_action('wp_ajax_takamoa_scan_ticket', $this->functions, 'handle_scan_ticket_ajax'); // @since 0.0.5
 		}
 
 	/**
