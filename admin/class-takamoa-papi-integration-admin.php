@@ -506,22 +506,25 @@ class Takamoa_Papi_Integration_Admin
         {
                         ?>
                         <style>
-                        #wpadminbar,
-                        #adminmenumain,
-                        #adminmenuback,
-                        #adminmenuwrap {
-                                        display: none;
-                        }
-                        #wpcontent,
-                        #wpfooter {
-                                        margin-left: 0;
-                        }
-                        #takamoa-scanner-home {
-                                        position: fixed;
-                                        top: 20px;
-                                        left: 20px;
-                                        z-index: 999;
-                        }
+			#wpadminbar,
+			#adminmenumain,
+			#adminmenuback,
+			#adminmenuwrap {
+				display: none;
+			}
+			.notice {
+					display: none;
+			}
+			#wpcontent,
+			#wpfooter {
+				margin-left: 0;
+			}
+			#takamoa-scanner-home {
+				position: fixed;
+				top: 20px;
+				left: 20px;
+				z-index: 999;
+			}
                         </style>
                         <div class="wrap text-center">
                                         <a href="<?= esc_url(admin_url()); ?>" class="button button-secondary" id="takamoa-scanner-home">Home</a>
