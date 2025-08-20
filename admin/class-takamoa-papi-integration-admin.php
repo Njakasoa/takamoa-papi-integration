@@ -466,14 +466,18 @@ class Takamoa_Papi_Integration_Admin
 		?>
 				<div class="wrap container-fluid">
 						<h1>Designs de billets</h1>
-						<form id="takamoa-add-design" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-								<?php wp_nonce_field('takamoa_save_design'); ?>
-								<input type="hidden" name="action" value="takamoa_save_design">
-								<p>
-										<label for="design_image">Image du billet</label><br>
-										<input type="text" id="design_image" name="design_image" class="form-control" />
-										<button type="button" class="button btn btn-outline-secondary" id="select_design_image">Choisir une image</button>
-								</p>
+                                                <form id="takamoa-add-design" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+                                                                <?php wp_nonce_field('takamoa_save_design'); ?>
+                                                                <input type="hidden" name="action" value="takamoa_save_design">
+                                                                <p>
+                                                                                <label for="design_title">Titre du design</label><br>
+                                                                                <input type="text" id="design_title" name="design_title" class="form-control" />
+                                                                </p>
+                                                                <p>
+                                                                                <label for="design_image">Image du billet</label><br>
+                                                                                <input type="text" id="design_image" name="design_image" class="form-control" />
+                                                                                <button type="button" class="button btn btn-outline-secondary" id="select_design_image">Choisir une image</button>
+                                                                </p>
 								<p>
 										<label>Largeur (px)</label>
 										<input type="number" id="ticket_width" name="ticket_width" class="form-control" min="1">
@@ -493,28 +497,30 @@ class Takamoa_Papi_Integration_Admin
 						<hr>
 						<table class="widefat striped table table-striped align-middle">
 								<thead>
-										<tr>
-												<th>ID</th>
-												<th>Image</th>
-												<th>Billet (px)</th>
-												<th>Taille QR</th>
-												<th>Position QR</th>
-												<th>Date</th>
-										</tr>
-								</thead>
-								<tbody>
-							<?php foreach ($designs as $d) : ?>
-										<tr>
-												<td><?= esc_html($d->id) ?></td>
-												<td><?= $d->image_url ? '<img src="' . esc_url($d->image_url) . '" style="max-width:150px;height:auto;" />' : '—'; ?></td>
-												<td><?= esc_html($d->ticket_width . '×' . $d->ticket_height) ?></td>
-												<td><?= esc_html($d->qrcode_size) ?></td>
-												<td><?= esc_html($d->qrcode_left . ',' . $d->qrcode_top) ?></td>
-												<td><?= esc_html($d->created_at) ?></td>
-										</tr>
-							<?php endforeach; ?>
-								</tbody>
-						</table>
+                                                                                <tr>
+                                                                                                <th>ID</th>
+                                                                                                <th>Titre</th>
+                                                                                                <th>Image</th>
+                                                                                                <th>Billet (px)</th>
+                                                                                                <th>Taille QR</th>
+                                                                                                <th>Position QR</th>
+                                                                                                <th>Date</th>
+                                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                        <?php foreach ($designs as $d) : ?>
+                                                                                <tr>
+                                                                                                <td><?= esc_html($d->id) ?></td>
+                                                                                                <td><?= esc_html($d->title) ?></td>
+                                                                                                <td><?= $d->image_url ? '<img src="' . esc_url($d->image_url) . '" style="max-width:150px;height:auto;" />' : '—'; ?></td>
+                                                                                                <td><?= esc_html($d->ticket_width . '×' . $d->ticket_height) ?></td>
+                                                                                                <td><?= esc_html($d->qrcode_size) ?></td>
+                                                                                                <td><?= esc_html($d->qrcode_left . ',' . $d->qrcode_top) ?></td>
+                                                                                                <td><?= esc_html($d->created_at) ?></td>
+                                                                                </tr>
+                                                        <?php endforeach; ?>
+                                                                </tbody>
+                                                </table>
 				</div>
 				<?php
 	}
@@ -567,17 +573,18 @@ class Takamoa_Papi_Integration_Admin
 	{
 			check_admin_referer('takamoa_save_design');
 
-			$image        = esc_url_raw($_POST['design_image'] ?? '');
-			$width        = intval($_POST['ticket_width'] ?? 0);
-			$height       = intval($_POST['ticket_height'] ?? 0);
-			$qrsize       = intval($_POST['qrcode_size'] ?? 0);
-			$qtop         = intval($_POST['qrcode_top'] ?? 0);
-			$qleft        = intval($_POST['qrcode_left'] ?? 0);
+                        $title        = sanitize_text_field($_POST['design_title'] ?? '');
+                        $image        = esc_url_raw($_POST['design_image'] ?? '');
+                        $width        = intval($_POST['ticket_width'] ?? 0);
+                        $height       = intval($_POST['ticket_height'] ?? 0);
+                        $qrsize       = intval($_POST['qrcode_size'] ?? 0);
+                        $qtop         = intval($_POST['qrcode_top'] ?? 0);
+                        $qleft        = intval($_POST['qrcode_left'] ?? 0);
 
-			if (!$image || !$width || !$height || !$qrsize) {
-				wp_redirect(add_query_arg('error', 'missing', wp_get_referer()));
-				exit;
-			}
+                        if (!$title || !$image || !$width || !$height || !$qrsize) {
+                                wp_redirect(add_query_arg('error', 'missing', wp_get_referer()));
+                                exit;
+                        }
 
 			$attachment_id = attachment_url_to_postid($image);
 			if ($attachment_id) {
@@ -590,15 +597,16 @@ class Takamoa_Papi_Integration_Admin
 
 			global $wpdb;
 			$table = $wpdb->prefix . 'takamoa_papi_designs';
-			$wpdb->insert($table, [
-				'image_url'    => $image,
-				'ticket_width' => $width,
-				'ticket_height'=> $height,
-				'qrcode_size'  => $qrsize,
-				'qrcode_top'   => $qtop,
-				'qrcode_left'  => $qleft,
-				'created_at'   => current_time('mysql')
-			]);
+                        $wpdb->insert($table, [
+                                'title'        => $title,
+                                'image_url'    => $image,
+                                'ticket_width' => $width,
+                                'ticket_height'=> $height,
+                                'qrcode_size'  => $qrsize,
+                                'qrcode_top'   => $qtop,
+                                'qrcode_left'  => $qleft,
+                                'created_at'   => current_time('mysql')
+                        ]);
 
 			wp_redirect(add_query_arg('success', '1', wp_get_referer()));
 			exit;
