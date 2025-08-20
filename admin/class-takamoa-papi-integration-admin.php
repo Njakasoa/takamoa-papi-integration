@@ -290,14 +290,20 @@ class Takamoa_Papi_Integration_Admin
 						<td><?= number_format($row->amount, 0, '', ' ') ?> MGA</td>
 						<td><?= esc_html($row->payment_status) ?></td>
 						<td><?= esc_html($row->payment_method ?: '—') ?></td>
-						<td><?= esc_html($row->created_at) ?></td>
-						<td>
-					<div class="btn-group" role="group">
-						<button type="button" class="button takamoa-notify">Notifier</button>
-						<button type="button" class="button takamoa-generate-ticket">Générer un billet</button>
-					</div>
-				</td>
-					</tr>
+					       <td><?= esc_html($row->created_at) ?></td>
+					       <td>
+						       <div class="btn-group">
+							       <button type="button" class="btn btn-sm btn-secondary dropdown-toggle takamoa-action-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+								       <i class="fa fa-cog"></i>
+							       </button>
+							       <ul class="dropdown-menu">
+								       <li><button type="button" class="dropdown-item takamoa-notify">Notifier</button></li>
+								       <li><button type="button" class="dropdown-item takamoa-generate-ticket">Générer un billet</button></li>
+								       <li><button type="button" class="dropdown-item takamoa-details">Détails</button></li>
+							       </ul>
+						       </div>
+					       </td>
+				       </tr>
 			<?php endforeach; ?>
 				</tbody>
 			</table>
