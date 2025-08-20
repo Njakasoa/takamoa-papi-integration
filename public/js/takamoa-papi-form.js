@@ -1,25 +1,23 @@
-const appRoot = document.getElementById('takamoa-papi-app');
-
-document.querySelectorAll('.takamoa-papi-app').forEach((el, index) => {
-		new Vue({
-				el,
-				data: {
+document.querySelectorAll('.takamoa-papi-app').forEach((el) => {
+	new Vue({
+		el,
+		data: {
 			clientFirstName: '',
-				clientLastName: '',
-						amount: el.dataset.amount || '',
-						reference: el.dataset.reference || '',
-						payment: el.dataset.payment === 'no' ? 'no' : 'yes',
-						payerEmail: '',
-						payerPhone: '',
-						description: '',
-						provider: '',
-						loading: false,
-						link: '',
-						status: '',
-						error: '',
-						success: '',
-						polling: null
-				},
+			clientLastName: '',
+			amount: el.dataset.amount || '',
+			reference: el.dataset.reference || '',
+			payment: el.dataset.payment === 'no' ? 'no' : 'yes',
+			payerEmail: '',
+			payerPhone: '',
+			description: '',
+			provider: '',
+			loading: false,
+			link: '',
+			status: '',
+			error: '',
+			success: '',
+			polling: null,
+		},
 		computed: {
 			clientName() {
 				return `${this.clientFirstName} ${this.clientLastName}`.trim();
@@ -29,7 +27,7 @@ document.querySelectorAll('.takamoa-papi-app').forEach((el, index) => {
 			},
 			providers() {
 				return TakamoaPapiVars.providers || [];
-			}
+			},
 		},
 		mounted() {
 			if (this.providers.length === 1) {
@@ -37,96 +35,96 @@ document.querySelectorAll('.takamoa-papi-app').forEach((el, index) => {
 			}
 		},
 		methods: {
-						submitForm() {
-								this.loading = true;
-								this.error = '';
-								this.link = '';
-								this.success = '';
-								this.status = '';
+			submitForm() {
+				this.loading = true;
+				this.error = '';
+				this.link = '';
+				this.success = '';
+				this.status = '';
 
-								if (this.payment === 'no') {
-										this.success = 'Merci pour votre inscription.';
-										this.loading = false;
-										return;
-								}
-
-								const data = {
-										action: 'takamoa_create_payment',
-										_ajax_nonce: TakamoaPapiVars.api_nonce,
-										clientName: this.clientName,
-										amount: this.amount,
-										reference: this.reference,
-										payerEmail: this.payerEmail,
-										payerPhone: this.payerPhone,
-										description: this.description
-								};
+				const data = {
+					action: 'takamoa_create_payment',
+					_ajax_nonce: TakamoaPapiVars.api_nonce,
+					clientName: this.clientName,
+					amount: this.amount,
+					reference: this.reference,
+					payerEmail: this.payerEmail,
+					payerPhone: this.payerPhone,
+					description: this.description,
+				};
 
 				if (this.provider) {
-										data.provider = this.provider;
-								}
+					data.provider = this.provider;
+				}
 
-								fetch(TakamoaPapiVars.ajax_url, {
-										method: 'POST',
-										headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-										body: new URLSearchParams(data)
-								})
-								.then(res => res.json())
-								.then(res => {
-										if (res.success && res.data.link) {
-												this.link = res.data.link;
-												window.open(this.link, '_blank');
-						this.polling = setInterval(this.checkStatus, 2000);
-										} else {
-												this.error = res.data?.message || 'Erreur';
-												this.loading = false;
-										}
-								})
-								.catch(() => {
-										this.loading = false;
-										this.error = 'Erreur réseau. Veuillez réessayer.';
-								});
-						},
-			checkStatus() {
-				if (!this.reference) return;
-			
-				const data = {
-					action: 'takamoa_check_payment_status',
-					_ajax_nonce: TakamoaPapiVars.api_nonce,
-					reference: this.reference
-				};
-			
 				fetch(TakamoaPapiVars.ajax_url, {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-					body: new URLSearchParams(data)
+					body: new URLSearchParams(data),
 				})
-				.then(res => res.json())
-				.then(res => {
-					if (res.success && res.data.status) {
-						const status = res.data.status;
-			
-						if (status === 'SUCCESS') {
-							clearInterval(this.polling);
-							this.status = 'SUCCESS';
-							this.success = 'Paiement confirmé. Merci pour votre inscription.';
+					.then((res) => res.json())
+					.then((res) => {
+						if (res.success && res.data.link) {
+							this.link = res.data.link;
+							if (this.payment === 'yes') {
+								window.open(this.link, '_blank');
+								this.polling = setInterval(this.checkStatus, 2000);
+							} else {
+								this.success = 'Merci pour votre inscription.';
+								this.loading = false;
+							}
+						} else {
+							this.error = res.data?.message || 'Erreur';
 							this.loading = false;
 						}
-						else if (status === 'FAILED') {
-							clearInterval(this.polling);
-							this.status = 'FAILED';
-							this.error = 'Le paiement a échoué. Veuillez réessayer ou contacter le support.';
-							this.loading = false;
-						}
-					}
+					})
+					.catch(() => {
+						this.loading = false;
+						this.error = 'Erreur réseau. Veuillez réessayer.';
+					});
+			},
+			checkStatus() {
+				if (!this.reference) return;
+
+				const data = {
+					action: 'takamoa_check_payment_status',
+					_ajax_nonce: TakamoaPapiVars.api_nonce,
+					reference: this.reference,
+				};
+
+				fetch(TakamoaPapiVars.ajax_url, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+					body: new URLSearchParams(data),
 				})
-				.catch(() => {
-					clearInterval(this.polling);
-					this.error = 'Erreur lors de la vérification du paiement.';
-					this.loading = false;
-				});
-			}
+					.then((res) => res.json())
+					.then((res) => {
+						if (res.success && res.data.status) {
+							const status = res.data.status;
+
+							if (status === 'SUCCESS') {
+								clearInterval(this.polling);
+								this.status = 'SUCCESS';
+								this.success =
+									'Paiement confirmé. Merci pour votre inscription.';
+								this.loading = false;
+							} else if (status === 'FAILED') {
+								clearInterval(this.polling);
+								this.status = 'FAILED';
+								this.error =
+									'Le paiement a échoué. Veuillez réessayer ou contacter le support.';
+								this.loading = false;
+							}
+						}
+					})
+					.catch(() => {
+						clearInterval(this.polling);
+						this.error = 'Erreur lors de la vérification du paiement.';
+						this.loading = false;
+					});
+			},
 		},
-				template: `
+		template: `
 			<div class="takamoa-papi-form" :class="{ 'is-loading': loading }">
 								<div class="takamoa-papi-loading-overlay" v-if="loading && payment === 'yes'">
 					<div class="spinner"></div>
@@ -202,6 +200,6 @@ document.querySelectorAll('.takamoa-papi-app').forEach((el, index) => {
 					<p v-if="error" class="takamoa-papi-error">{{ error }}</p>
 				</form>
 			</div>
-		`
+		`,
 	});
 });
