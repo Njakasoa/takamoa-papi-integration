@@ -116,37 +116,58 @@ $('#generate-ticket-btn').on('click', function () {
 	if (!design || !currentRef) {
 		return;
 	}
-	btn.prop('disabled', true);
+
+	function generate() {
+		btn.prop('disabled', true);
+		$.post(takamoaAjax.ajaxurl, {
+			action: 'takamoa_generate_ticket',
+			nonce: takamoaAjax.nonce,
+			reference: currentRef,
+			design_id: design,
+		})
+		.done(function (res) {
+			if (res.success && res.data.url) {
+				if (confirm('Billet généré. Voulez-vous télécharger le billet ?')) {
+					window.open(res.data.url, '_blank');
+				} else {
+					window.location.href = takamoaAjax.ticketsPage;
+				}
+			} else {
+				alert(
+					res.data && res.data.message
+					? res.data.message
+					: 'Erreur lors de la génération',
+				);
+			}
+		})
+		.fail(function () {
+			alert('Erreur lors de la génération');
+		})
+		.always(function () {
+			btn.prop('disabled', false);
+			bootstrap.Modal.getInstance(
+				document.getElementById('ticketModal'),
+			).hide();
+		});
+	}
+
 	$.post(takamoaAjax.ajaxurl, {
-		action: 'takamoa_generate_ticket',
+		action: 'takamoa_ticket_exists',
 		nonce: takamoaAjax.nonce,
 		reference: currentRef,
-		design_id: design,
 	})
 	.done(function (res) {
-		if (res.success && res.data.url) {
-			if (confirm('Billet généré. Voulez-vous télécharger le billet ?')) {
-				window.open(res.data.url, '_blank');
-			} else {
-				window.location.href = takamoaAjax.ticketsPage;
+		if (res.success && res.data.exists) {
+			if (confirm('Un billet existe déjà pour cette référence. Voulez-vous le remplacer ?')) {
+				generate();
 			}
 		} else {
-			alert(
-			res.data && res.data.message
-			? res.data.message
-			: 'Erreur lors de la génération',
-		);
-	}
-})
-.fail(function () {
-	alert('Erreur lors de la génération');
-})
-.always(function () {
-	btn.prop('disabled', false);
-	bootstrap.Modal.getInstance(
-	document.getElementById('ticketModal'),
-	).hide();
-});
+			generate();
+		}
+	})
+	.fail(function () {
+		alert('Erreur lors de la vérification du billet');
+	});
 });
 }
 

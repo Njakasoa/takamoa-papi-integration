@@ -1,25 +1,25 @@
 <?php
 
 /**
- * Fired during plugin activation
- *
- * @link       https://nexa.takamoa.com/
- * @since      0.0.1
- *
- * @package    Takamoa
- * @subpackage takamoa-papi-integration/includes
- */
+	* Fired during plugin activation
+	*
+	* @link       https://nexa.takamoa.com/
+	* @since      0.0.1
+	*
+	* @package    Takamoa
+	* @subpackage takamoa-papi-integration/includes
+	*/
 
 /**
- * Fired during plugin activation. https://regex101.com/r/TvKR9I/1
- *
- * This class defines all code necessary to run during the plugin"s activation.
- *
- * @since      0.0.1
- * @package    Takamoa
- * @subpackage takamoa-papi-integration/includes
- * @author     Nexa by Takamoa <nexa.takamoa@gmail.com>
- */
+	* Fired during plugin activation. https://regex101.com/r/TvKR9I/1
+	*
+	* This class defines all code necessary to run during the plugin"s activation.
+	*
+	* @since      0.0.1
+	* @package    Takamoa
+	* @subpackage takamoa-papi-integration/includes
+	* @author     Nexa by Takamoa <nexa.takamoa@gmail.com>
+	*/
 class Takamoa_Papi_Integration_Functions
 {
 	private function send_registration_email($email, $name, $link)
@@ -382,10 +382,40 @@ class Takamoa_Papi_Integration_Functions
 	}
 
 	/**
-	 * AJAX handler to generate a ticket PDF from a design.
-	 *
-	 * @since 0.0.3
-	 */
+	* AJAX handler to check if a ticket already exists for a reference.
+	*
+	* @since 0.0.7
+	*/
+	public function handle_ticket_exists_ajax()
+	{
+		check_ajax_referer('takamoa_papi_nonce', 'nonce');
+
+		if (!current_user_can('manage_options')) {
+			wp_send_json_error(['message' => 'Unauthorized'], 403);
+		}
+
+		$reference = sanitize_text_field($_POST['reference'] ?? '');
+		if (!$reference) {
+			wp_send_json_error(['message' => 'Données manquantes.']);
+		}
+
+		global $wpdb;
+		$tickets_table = $wpdb->prefix . 'takamoa_papi_tickets';
+		$exists = $wpdb->get_var(
+			$wpdb->prepare(
+			'SELECT id FROM ' . $tickets_table . ' WHERE reference = %s',
+			$reference,
+			),
+		);
+
+		wp_send_json_success(['exists' => (bool) $exists]);
+	}
+
+	/**
+	* AJAX handler to generate a ticket PDF from a design.
+	*
+	* @since 0.0.3
+	*/
 	public function handle_generate_ticket_ajax()
 	{
 		check_ajax_referer('takamoa_papi_nonce', 'nonce');
@@ -485,13 +515,13 @@ class Takamoa_Papi_Integration_Functions
 
 		wp_send_json_success(['url' => $url]);
 	}
-       /**
-         * AJAX handler to verify a ticket reference and return ticket info.
-         *
-         * @since 0.0.5
-         */
-        public function handle_scan_ticket_ajax()
-        {
+	/**
+	* AJAX handler to verify a ticket reference and return ticket info.
+	*
+	* @since 0.0.5
+	*/
+	public function handle_scan_ticket_ajax()
+	{
 			check_ajax_referer('takamoa_papi_nonce', 'nonce');
 
 			$reference = sanitize_text_field($_POST['reference'] ?? '');
@@ -503,7 +533,7 @@ class Takamoa_Papi_Integration_Functions
 			$tickets_table = $wpdb->prefix . 'takamoa_papi_tickets';
 			$payments_table = $wpdb->prefix . 'takamoa_papi_payments';
 
-		 $ticket = $wpdb->get_row(
+		$ticket = $wpdb->get_row(
 		$wpdb->prepare(
 		"SELECT p.client_name, p.payer_email, p.payer_phone, p.description, t.status
 		FROM {$tickets_table} t
@@ -527,10 +557,10 @@ class Takamoa_Papi_Integration_Functions
 		}
 	
 	/**
-	 * AJAX handler to validate a ticket.
-	 *
-	 * @since 0.0.6
-	 */
+	* AJAX handler to validate a ticket.
+	*
+	* @since 0.0.6
+	*/
 	public function handle_validate_ticket_ajax()
 	{
 		check_ajax_referer('takamoa_papi_nonce', 'nonce');
