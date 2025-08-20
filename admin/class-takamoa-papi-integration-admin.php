@@ -23,8 +23,8 @@ class Takamoa_Papi_Integration_Admin
 	}
 
 	/**
-	 * Enqueue admin styles.
-	 */
+	* Enqueue admin styles.
+	*/
 	public function enqueue_styles()
 	{
 		if (strpos(get_current_screen()->id, $this->plugin_name) !== false) {
@@ -35,14 +35,14 @@ class Takamoa_Papi_Integration_Admin
 	}
 
 	/**
-	 * Enqueue admin scripts.
-	 */
+	* Enqueue admin scripts.
+	*/
 	public function enqueue_scripts()
 	{
 		if (strpos(get_current_screen()->id, $this->plugin_name) !== false) {
 			wp_enqueue_script('datatables-script', 'https://cdn.datatables.net/2.0.8/js/dataTables.min.js', array('jquery'), null, true);
-			wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array('jquery'), null, true);
-						wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/takamoa-papi-integration-admin.js', array('jquery', 'datatables-script'), $this->version, true);
+						wp_enqueue_script('html5-qrcode', 'https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/minified/html5-qrcode.min.js', array(), null, true);
+						wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/takamoa-papi-integration-admin.js', array('jquery', 'datatables-script', 'html5-qrcode'), $this->version, true);
 						wp_localize_script($this->plugin_name, 'takamoaAjax', array(
 								'ajaxurl' => admin_url('admin-ajax.php'),
 								'nonce'   => wp_create_nonce('takamoa_papi_nonce'),
@@ -53,8 +53,8 @@ class Takamoa_Papi_Integration_Admin
 	}
 
 	/**
-	 * Add admin menu.
-	 */
+	* Add admin menu.
+	*/
 	public function add_menu()
 	{
 		add_menu_page(
@@ -93,6 +93,15 @@ class Takamoa_Papi_Integration_Admin
 					$this->plugin_name . '-design',
 					array($this, 'display_designs_page')
 				);
+					add_submenu_page(
+					$this->plugin_name,
+					'Scanner billets',
+					'Scanner billets',
+					'manage_options',
+					$this->plugin_name . '-scanner',
+					array($this, 'display_scanner_page')
+					);
+
 
 				add_submenu_page(
 					$this->plugin_name,
@@ -105,8 +114,8 @@ class Takamoa_Papi_Integration_Admin
 	}
 
 	/**
-	 * Register API key setting.
-	 */
+	* Register API key setting.
+	*/
 	public function register_settings()
 	{
 		register_setting('takamoa_papi_key_group', 'takamoa_papi_api_key');
@@ -207,8 +216,8 @@ class Takamoa_Papi_Integration_Admin
 	}
 
 	/**
-	 * Display admin config page.
-	 */
+	* Display admin config page.
+	*/
 	public function display_admin_page()
 	{
 		?>
@@ -290,20 +299,20 @@ class Takamoa_Papi_Integration_Admin
 						<td><?= number_format($row->amount, 0, '', ' ') ?> MGA</td>
 						<td><?= esc_html($row->payment_status) ?></td>
 						<td><?= esc_html($row->payment_method ?: '—') ?></td>
-					       <td><?= esc_html($row->created_at) ?></td>
-					       <td>
-						       <div class="btn-group">
-							       <button type="button" class="btn btn-sm btn-secondary dropdown-toggle takamoa-action-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-								       <i class="fa fa-cog"></i>
-							       </button>
-							       <ul class="dropdown-menu">
-								       <li><button type="button" class="dropdown-item takamoa-notify">Notifier</button></li>
-								       <li><button type="button" class="dropdown-item takamoa-generate-ticket">Générer un billet</button></li>
-								       <li><button type="button" class="dropdown-item takamoa-details">Détails</button></li>
-							       </ul>
-						       </div>
-					       </td>
-				       </tr>
+					<td><?= esc_html($row->created_at) ?></td>
+					<td>
+						<div class="btn-group">
+							<button type="button" class="btn btn-sm btn-secondary dropdown-toggle takamoa-action-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="fa fa-cog"></i>
+							</button>
+							<ul class="dropdown-menu">
+								<li><button type="button" class="dropdown-item takamoa-notify">Notifier</button></li>
+								<li><button type="button" class="dropdown-item takamoa-generate-ticket">Générer un billet</button></li>
+								<li><button type="button" class="dropdown-item takamoa-details">Détails</button></li>
+							</ul>
+						</div>
+					</td>
+				</tr>
 			<?php endforeach; ?>
 				</tbody>
 			</table>
@@ -384,10 +393,10 @@ class Takamoa_Papi_Integration_Admin
 	}
 
 	/**
-	 * Display the tickets management page.
-	 *
-	 * @since 0.0.3
-	 */
+	* Display the tickets management page.
+	*
+	* @since 0.0.3
+	*/
 	public function display_tickets_page()
 	{
 			global $wpdb;
@@ -425,10 +434,10 @@ class Takamoa_Papi_Integration_Admin
 	}
 
 	/**
-	 * Display the ticket designs management page.
-	 *
-	 * @since 0.0.3
-	 */
+	* Display the ticket designs management page.
+	*
+	* @since 0.0.3
+	*/
 	public function display_designs_page()
 	{
 			global $wpdb;
@@ -491,10 +500,24 @@ class Takamoa_Papi_Integration_Admin
 	}
 
 	/**
-	 * Handle saving a ticket design.
-	 *
-	 * @since 0.0.3
-	 */
+	* Display the ticket scanner page.
+	*/
+	public function display_scanner_page()
+	{
+			?>
+			<div class="wrap text-center">
+					<h1>Scanner billets</h1>
+					<div id="qr-reader"></div>
+					<div id="scan-result" class="mt-3"></div>
+			</div>
+			<?php
+	}
+
+	/**
+	* Handle saving a ticket design.
+	*
+	* @since 0.0.3
+	*/
 	public function handle_save_design()
 	{
 			check_admin_referer('takamoa_save_design');

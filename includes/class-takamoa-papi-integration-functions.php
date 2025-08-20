@@ -485,4 +485,41 @@ class Takamoa_Papi_Integration_Functions
 
 		wp_send_json_success(['url' => $url]);
 	}
+	/**
+	 * AJAX handler to verify a ticket reference and return ticket info.
+	 */
+	public function handle_scan_ticket_ajax()
+	{
+			check_ajax_referer('takamoa_papi_nonce', 'nonce');
+
+			$reference = sanitize_text_field($_POST['reference'] ?? '');
+			if (!$reference) {
+					wp_send_json_error(['message' => 'Référence manquante.']);
+			}
+
+			global $wpdb;
+			$tickets_table = $wpdb->prefix . 'takamoa_papi_tickets';
+			$payments_table = $wpdb->prefix . 'takamoa_papi_payments';
+
+			$ticket = $wpdb->get_row(
+					$wpdb->prepare(
+					        "SELECT p.client_name, p.payer_email, p.payer_phone, p.description
+					        FROM {$tickets_table} t
+					        JOIN {$payments_table} p ON t.reference = p.reference
+					        WHERE t.reference = %s",
+					        $reference
+					)
+			);
+
+			if ($ticket) {
+					wp_send_json_success([
+					        'name' => $ticket->client_name,
+					        'email' => $ticket->payer_email,
+					        'phone' => $ticket->payer_phone,
+					        'description' => $ticket->description,
+					]);
+			}
+
+			wp_send_json_error(['message' => 'Billet introuvable.']);
+	}
 }
