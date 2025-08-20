@@ -420,22 +420,33 @@ class Takamoa_Papi_Integration_Admin
 												<th>QR Code</th>
 												<th>Date création</th>
 												<th>Date mise à jour</th>
-												<th>Status</th>
-												<th>Dernière notification</th>
-										</tr>
-								</thead>
-								<tbody>
-							<?php foreach ($results as $row) : ?>
-										<tr>
-												<td><?= esc_html($row->reference) ?></td>
-												<td><?= esc_html($row->description ?: '—') ?></td>
-												<td><?= $row->qrcode_link ? '<a href="' . esc_url($row->qrcode_link) . '" target="_blank">Voir</a>' : '—'; ?></td>
-												<td><?= esc_html($row->created_at) ?></td>
-												<td><?= esc_html($row->updated_at ?: '—') ?></td>
-												<td><?= esc_html($row->status) ?></td>
-												<td><?= esc_html($row->last_notification ?: '—') ?></td>
-										</tr>
-							<?php endforeach; ?>
+	<th>Status</th>
+	<th>Dernière notification</th>
+	<th>Action</th>
+											</tr>
+									</thead>
+									<tbody>
+	<?php foreach ($results as $row) : ?>
+	<tr data-reference="<?= esc_attr($row->reference) ?>">
+	<td><?= esc_html($row->reference) ?></td>
+	<td><?= esc_html($row->description ?: '—') ?></td>
+	<td><?= $row->qrcode_link ? '<a href="' . esc_url($row->qrcode_link) . '" target="_blank">Voir</a>' : '—'; ?></td>
+	<td><?= esc_html($row->created_at) ?></td>
+	<td><?= esc_html($row->updated_at ?: '—') ?></td>
+	<td><?= esc_html($row->status) ?></td>
+	<td><?= esc_html($row->last_notification ?: '—') ?></td>
+	<td>
+	<div class="btn-group">
+		<button type="button" class="btn btn-sm btn-secondary dropdown-toggle takamoa-action-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+		<i class="fa fa-cog"></i>
+		</button>
+		<ul class="dropdown-menu">
+		<li><button type="button" class="dropdown-item takamoa-send-ticket-email">Envoyer le billet par email</button></li>
+		</ul>
+		</div>
+		</td>
+	</tr>
+	<?php endforeach; ?>
 								</tbody>
 						</table>
 				</div>

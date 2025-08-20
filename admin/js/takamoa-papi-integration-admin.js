@@ -195,6 +195,31 @@ if ($('#takamoa-tickets-table').length) {
 	twrapper
 	.find('.dataTables_length label, .dataTables_filter label')
 	.addClass('d-flex align-items-center gap-2 mb-0');
+	
+	$('#takamoa-tickets-table').on('click', '.takamoa-send-ticket-email', function (e) {
+	e.stopPropagation();
+	var btn = $(this);
+	var row = btn.closest('tr');
+	btn.prop('disabled', true);
+	$.post(takamoaAjax.ajaxurl, {
+	action: 'takamoa_send_ticket_email',
+	nonce: takamoaAjax.nonce,
+	reference: row.data('reference'),
+	})
+		.done(function (res) {
+	alert(
+	res.data && res.data.message
+	? res.data.message
+	: 'Billet envoyé'
+	);
+	})
+	.fail(function () {
+	alert("Erreur lors de l'envoi du billet");
+	})
+	.always(function () {
+	btn.prop('disabled', false);
+	});
+	});
 }
 
 if ($('#select_design_image').length) {
