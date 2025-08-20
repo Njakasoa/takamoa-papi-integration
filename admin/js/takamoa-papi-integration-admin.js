@@ -1,3 +1,8 @@
+/**
+ * Admin scripts for ticket and design management.
+ *
+ * @since 0.0.3
+ */
 jQuery(document).ready(function ($) {
 	if ($('#takamoa-payments-table').length) {
 		var table = $('#takamoa-payments-table').DataTable({

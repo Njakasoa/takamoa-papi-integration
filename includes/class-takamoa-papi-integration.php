@@ -79,7 +79,7 @@ class Takamoa_Papi_Integration {
 		if ( defined( 'TAKAMOA_PAPI_INTEGRATION_VERSION' ) ) {
 			$this->version = TAKAMOA_PAPI_INTEGRATION_VERSION;
 		} else {
-			$this->version = '0.0.1';
+			$this->version = '0.0.3';
 		}
 		$this->plugin_name = 'takamoa-papi-integration';
 		$this->load_dependencies();

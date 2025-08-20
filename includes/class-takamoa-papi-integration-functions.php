@@ -381,6 +381,11 @@ class Takamoa_Papi_Integration_Functions
 		wp_send_json_success(['message' => 'Notification envoyée.']);
 	}
 
+	/**
+	 * AJAX handler to generate a ticket PDF from a design.
+	 *
+	 * @since 0.0.3
+	 */
 	public function handle_generate_ticket_ajax()
 	{
 		check_ajax_referer('takamoa_papi_nonce', 'nonce');
