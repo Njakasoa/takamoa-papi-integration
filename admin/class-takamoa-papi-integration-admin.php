@@ -351,9 +351,8 @@ class Takamoa_Papi_Integration_Admin
 						</div>
 					</div>
 				</div>
-			</div>
 		<div class="modal fade" id="ticketModal" tabindex="-1" aria-hidden="true">
-			<div class="modal-dialog">
+			<div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">Générer un billet</h5>
@@ -367,11 +366,13 @@ class Takamoa_Papi_Integration_Admin
 						</select>
 					</div>
 					<div class="modal-footer">
-						<button type="button" id="generate-ticket-btn" class="button button-primary">Générer</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+						<button type="button" id="generate-ticket-btn" class="btn btn-primary">Générer</button>
 					</div>
 				</div>
 			</div>
 		</div>
+</div>
 		</div>
 			<?php
 	}

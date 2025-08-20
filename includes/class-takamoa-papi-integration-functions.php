@@ -431,10 +431,16 @@ class Takamoa_Papi_Integration_Functions
 		$design_path = str_replace($upload['baseurl'], $upload['basedir'], $design->image_url);
 		$file = $dir . '/billet-' . $reference . '.pdf';
 		
-		$pdf = new \FPDF('P', 'pt', [$design->ticket_width, $design->ticket_height]);
+		$factor = 72 / 96;
+		$width = $design->ticket_width * $factor;
+		$height = $design->ticket_height * $factor;
+		$qrSize = $design->qrcode_size * $factor;
+		$qrTop = $design->qrcode_top * $factor;
+		$qrLeft = $design->qrcode_left * $factor;
+		$pdf = new \FPDF('P', 'pt', [$width, $height]);
 		$pdf->AddPage();
-		$pdf->Image($design_path, 0, 0, $design->ticket_width, $design->ticket_height);
-		$pdf->Image($qr_path, $design->qrcode_left, $design->qrcode_top, $design->qrcode_size, $design->qrcode_size);
+		$pdf->Image($design_path, 0, 0, $width, $height);
+		$pdf->Image($qr_path, $qrLeft, $qrTop, $qrSize, $qrSize);
 		$pdf->Output('F', $file);
 		@unlink($qr_path);
 		
