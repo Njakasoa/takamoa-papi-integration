@@ -143,15 +143,3 @@
 .d-none {
         display: none !important;
 }
-#qr-reader {
-	max-width: 400px;
-	margin: 0 auto;
-}
-#scan-result {
-	max-width: 400px;
-	margin: 1rem auto;
-}
-#rescan-btn {
-        display: none;
-}
-

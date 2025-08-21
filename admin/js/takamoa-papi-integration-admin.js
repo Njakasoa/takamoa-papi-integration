@@ -335,21 +335,21 @@ function onScan(decodedText) {
 		nonce: takamoaAjax.nonce,
 		reference: decodedText
 	}).done(function (res) {
-		if (res.success) {
-			var html = '<div class="card"><div class="card-body"><h5>' + res.data.name + '</h5><p>Email: ' + (res.data.email || '—') + '<br>Téléphone: ' + (res.data.phone || '—') + '<br>Entreprise: ' + (res.data.description || '—') + '<br>Status: <span class="ticket-status">' + res.data.status + '</span></p>';
-			if (res.data.status === 'GENERATED') {
-				html += '<button id="validate-ticket" data-ref="' + decodedText + '" class="button button-primary mt-2">Valider le billet</button>';
-			}
-			html += '</div></div>';
-			scanResult.html(html);
-		} else {
-			scanResult.html('<div class="alert alert-danger">' + (res.data && res.data.message ? res.data.message : 'Billet introuvable') + '</div>');
-		}
-		rescanBtn.show();
-	}).fail(function () {
-		scanResult.html('<div class="alert alert-danger">Erreur de connexion</div>');
-		rescanBtn.show();
-	});
+                if (res.success) {
+                        var html = '<div class="tk-result"><div class="tk-title">' + res.data.name + '</div><div class="tk-sub">Email: ' + (res.data.email || '—') + '<br>Téléphone: ' + (res.data.phone || '—') + '<br>Entreprise: ' + (res.data.description || '—') + '<br>Status: <span class="ticket-status">' + res.data.status + '</span></div>';
+                        if (res.data.status === 'GENERATED') {
+                                html += '<button id="validate-ticket" data-ref="' + decodedText + '" class="tk-btn primary">Valider le billet</button>';
+                        }
+                        html += '</div>';
+                        scanResult.html(html);
+                } else {
+                        scanResult.html('<div class="tk-sub tk-bad">' + (res.data && res.data.message ? res.data.message : 'Billet introuvable') + '</div>');
+                }
+                rescanBtn.show();
+        }).fail(function () {
+                scanResult.html('<div class="tk-sub tk-bad">Erreur de connexion</div>');
+                rescanBtn.show();
+        });
 }
 
 startScanner();

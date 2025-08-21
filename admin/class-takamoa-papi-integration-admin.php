@@ -283,43 +283,7 @@ class Takamoa_Papi_Integration_Admin
        */
        public function display_scanner_page()
        {
-               ?>
-               <style>
-               #wpadminbar,
-               #adminmenumain,
-               #adminmenuback,
-               #adminmenuwrap {
-                       display: none;
-               }
-               .notice {
-                               display: none;
-               }
-               #wpcontent,
-               #wpfooter {
-                       margin-left: 0;
-               }
-               #takamoa-scanner-home {
-                       position: fixed;
-                       top: 20px;
-                       left: 20px;
-                       z-index: 999;
-               }
-               .tk-header{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:20px;}
-               .tk-title{font-size:18px;font-weight:700;letter-spacing:.2px;}
-               .tk-sub{color:#8892a6;font-size:13px}
-               </style>
-               <div class="wrap text-center">
-                               <a href="<?= esc_url(admin_url()); ?>" class="button button-secondary" id="takamoa-scanner-home">Home</a>
-                               <header class="tk-header">
-                                       <div>
-                                               <div class="tk-title"><?php echo esc_html(get_admin_page_title()); ?></div>
-                                       </div>
-                               </header>
-                               <div id="qr-reader"></div>
-                               <div id="scan-result" class="mt-3"></div>
-                               <button id="rescan-btn" class="button button-primary mt-3">Re-scan</button>
-                       </div>
-<?php
+               include plugin_dir_path(__FILE__) . 'partials/scanner-page.php';
        }
 
 	/**
