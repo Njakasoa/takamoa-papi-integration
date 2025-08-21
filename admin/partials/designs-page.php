@@ -68,6 +68,18 @@
                                                                        .tk-small{color:var(--muted);font-size:12px;}
                                                                        .tk-valid{color:var(--ok);}
                                                                        .tk-bad{color:var(--err);}
+                                                                       .tk-table{width:100%;border-collapse:collapse;}
+                                                                       .tk-table th,.tk-table td{padding:12px;text-align:left;border-bottom:1px solid var(--border);}
+                                                                       .tk-table th{background:#101622;font-weight:600;}
+                                                                       .tk-table tbody tr:nth-child(even){background:#0e1320;}
+                                                                       .tk-table tbody tr:last-child td{border-bottom:none;}
+                                                                       .tk-table tbody tr:hover{background:#0f1526;}
+                                                                       .tk-icon-btn{background:none;border:none;color:var(--text);cursor:pointer;padding:4px;border-radius:8px;}
+                                                                       .tk-icon-btn:hover{background:#0f1526;}
+                                                                       .tk-star{color:var(--warn);}
+                                                                       .tk-btn.danger{border-color:var(--err);color:var(--err);}
+                                                                       .tk-btn.danger:hover{background:rgba(255,107,107,.1);}
+                                                                       .tk-btn[disabled]{opacity:.5;cursor:not-allowed;}
                                                                </style>
 
                                                                <header class="tk-header">
@@ -295,58 +307,57 @@
                                                                </script>
                                                </section>
 
-                                               <hr>
-                                                <table class="widefat striped table table-striped align-middle">
-                                                                <thead>
-                                                                                <tr>
-                                                                                                <th>Par défaut</th>
-                                                                                                <th>ID</th>
-                                                                                                <th>Titre</th>
-                                                                                                <th>Image</th>
-                                                                                                <th>Billet (px)</th>
-                                                                                                <th>Taille QR</th>
-                                                                                                <th>Position QR</th>
-                                                                                                <th>Date</th>
-                                                                                                <th>Actions</th>
-                                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                        <?php foreach ($designs as $d) : ?>
-                                                                                <tr>
-                                                                                                <td>
-                                                                                                                <button type="button" class="btn btn-link p-0 takamoa-set-default" data-id="<?= esc_attr($d->id) ?>" title="Définir comme par défaut">
-
-<i class="fa <?= $d->id == $default_design ? 'fa-star text-warning' : 'fa-star-o'; ?>" aria-hidden="true"></i>
-
-<span class="screen-reader-text">
-
-                <?= $d->id == $default_design ? 'Design par défaut' : 'Définir comme par défaut'; ?>
-
-</span>
-                                                                                                                </button>
-                                                                                                </td>
-                                                                                                <td><?= esc_html($d->id) ?></td>
-                                                                                                <td><?= esc_html($d->title) ?></td>
-                                                                                                <td><?= $d->image_url ? '<img src="' . esc_url($d->image_url) . '" style="max-width:150px;height:auto;" />' : '—'; ?></td>
-                                                                                                <td><?= esc_html($d->ticket_width . '×' . $d->ticket_height) ?></td>
-                                                                                                <td><?= esc_html($d->qrcode_size) ?></td>
-                                                                                                <td><?= esc_html($d->qrcode_left . ',' . $d->qrcode_top) ?></td>
-                                                                                                <td><?= esc_html($d->created_at) ?></td>
-                                                                                                <td>
-                                                                                                                <?php
-                                                                                                                $delete_url = wp_nonce_url(
-                                                                                                                        admin_url('admin-post.php?action=takamoa_delete_design&design_id=' . intval($d->id)),
-                                                                                                                        'takamoa_delete_design_' . intval($d->id)
-                                                                                                                );
-                                                                                                                ?>
-                                                                                                                <?php if ($d->id == $default_design) : ?>
-                                                                                                                        <button class="btn btn-outline-danger btn-sm" disabled>Supprimer</button>
-                                                                                                                <?php else : ?>
-                                                                                                                        <a href="<?= esc_url($delete_url) ?>" class="btn btn-outline-danger btn-sm takamoa-delete-design" data-id="<?= esc_attr($d->id) ?>">Supprimer</a>
-                                                                                                                <?php endif; ?>
-                                                                                                </td>
-                                                                                </tr>
-                                                        <?php endforeach; ?>
-                                                                </tbody>
-                                                </table>
+                                               <section class="tk-wrap" style="margin-top:24px;">
+               <div class="tk-card">
+                   <table class="tk-table">
+                       <thead>
+                           <tr>
+                               <th>Par défaut</th>
+                               <th>ID</th>
+                               <th>Titre</th>
+                               <th>Image</th>
+                               <th>Billet (px)</th>
+                               <th>Taille QR</th>
+                               <th>Position QR</th>
+                               <th>Date</th>
+                               <th>Actions</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                       <?php foreach ($designs as $d) : ?>
+                           <tr>
+                               <td>
+                                   <button type="button" class="tk-icon-btn takamoa-set-default" data-id="<?= esc_attr($d->id) ?>" title="Définir comme par défaut">
+                                       <i class="fa <?= $d->id == $default_design ? 'fa-star tk-star' : 'fa-star-o'; ?>" aria-hidden="true"></i>
+                                       <span class="screen-reader-text">
+                                           <?= $d->id == $default_design ? 'Design par défaut' : 'Définir comme par défaut'; ?>
+                                       </span>
+                                   </button>
+                               </td>
+                               <td><?= esc_html($d->id) ?></td>
+                               <td><?= esc_html($d->title) ?></td>
+                               <td><?= $d->image_url ? '<img src="' . esc_url($d->image_url) . '" style="max-width:150px;height:auto;" />' : '—'; ?></td>
+                               <td><?= esc_html($d->ticket_width . '×' . $d->ticket_height) ?></td>
+                               <td><?= esc_html($d->qrcode_size) ?></td>
+                               <td><?= esc_html($d->qrcode_left . ',' . $d->qrcode_top) ?></td>
+                               <td><?= esc_html($d->created_at) ?></td>
+                               <td>
+                                   <?php
+                                   $delete_url = wp_nonce_url(
+                                       admin_url('admin-post.php?action=takamoa_delete_design&design_id=' . intval($d->id)),
+                                       'takamoa_delete_design_' . intval($d->id)
+                                   );
+                                   ?>
+                                   <?php if ($d->id == $default_design) : ?>
+                                       <button class="tk-btn danger" disabled>Supprimer</button>
+                                   <?php else : ?>
+                                       <a href="<?= esc_url($delete_url) ?>" class="tk-btn danger takamoa-delete-design" data-id="<?= esc_attr($d->id) ?>">Supprimer</a>
+                                   <?php endif; ?>
+                               </td>
+                           </tr>
+                       <?php endforeach; ?>
+                       </tbody>
+                   </table>
+               </div>
+           </section>
                                 </div>
