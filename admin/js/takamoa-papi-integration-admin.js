@@ -312,6 +312,14 @@ if ($('.takamoa-set-default').length) {
                         });
         });
 }
+
+if ($('.takamoa-delete-design').length) {
+        $('.takamoa-delete-design').on('click', function (e) {
+                if (!confirm('Supprimer ce design ?')) {
+                        e.preventDefault();
+                }
+        });
+}
 if ($('#qr-reader').length) {
 	// QR code scanning feature @since 0.0.5
 	var scanResult = $('#scan-result');
