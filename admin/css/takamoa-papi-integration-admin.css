@@ -62,34 +62,52 @@
 	cursor: default;
 }
 
-/* Payment modal styling */
-#paymentModal .modal-header {
-	background-color: #0073aa;
-	color: #fff;
+/* Unified modal styling */
+.tk-modal .modal-content {
+        background: var(--card);
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: var(--radius);
 }
 
-#paymentModal .modal-header .btn-close {
-	filter: invert(1);
+.tk-modal .modal-header,
+.tk-modal .modal-footer {
+        border-color: var(--border);
 }
 
-#paymentModal .table th {
-	width: 40%;
-	white-space: nowrap;
+.tk-modal .modal-header .btn-close {
+        filter: invert(1);
 }
 
-#paymentModal .table-responsive {
-	max-height: 70vh;
-	overflow-y: auto;
+.tk-modal .form-select {
+        background-color: var(--bg);
+        color: var(--text);
+        border: 1px solid var(--border);
 }
 
-#paymentModal .table td {
-	word-break: break-word;
+.tk-modal .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 1px var(--primary);
 }
 
-#paymentModal pre {
-	white-space: pre-wrap;
-	word-break: break-word;
-	font-size: 0.875rem;
+.tk-modal .tk-table th {
+        width: 40%;
+        white-space: nowrap;
+}
+
+.tk-modal .table-responsive {
+        max-height: 70vh;
+        overflow-y: auto;
+}
+
+.tk-modal .tk-table td {
+        word-break: break-word;
+}
+
+.tk-modal pre {
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-size: 0.875rem;
 }
 #qr-reader {
 	max-width: 400px;
