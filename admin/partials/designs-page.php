@@ -5,10 +5,9 @@
  * @since 0.0.3
  */
 ?>
-                               <div class="wrap container-fluid">
-                                               <h1>Designs de billets</h1>
-                                               <section class="tk-wrap">
-                                                               <style>
+<div class="wrap container-fluid">
+    <section class="tk-wrap">
+        <style>
                                                                        :root{
                                                                                --bg:#0b0d12;
                                                                                --card:#121723;
@@ -82,12 +81,12 @@
                                                                        .tk-btn[disabled]{opacity:.5;cursor:not-allowed;}
                                                                </style>
 
-                                                               <header class="tk-header">
-                                                                               <div>
-                                                                                               <div class="tk-title">Créer un design de billet</div>
-                                                                                               <div class="tk-sub">Définis l’image, les dimensions et place le QR code précisément avec l’aperçu en direct.</div>
-                                                                               </div>
-                                                               </header>
+        <header class="tk-header">
+            <div>
+                <div class="tk-title"><?php echo esc_html(get_admin_page_title()); ?></div>
+                <div class="tk-sub">Définis l’image, les dimensions et place le QR code précisément avec l’aperçu en direct.</div>
+            </div>
+        </header>
 
                                                                <div class="tk-grid">
                                                                                <div class="tk-card">
