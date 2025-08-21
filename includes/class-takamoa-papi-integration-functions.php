@@ -225,16 +225,31 @@ wp_mail($email, $subject, $message, $headers);
 
 	public function handle_create_payment_ajax()
 	{
-		check_ajax_referer('takamoa_papi_nonce');
+                check_ajax_referer('takamoa_papi_nonce');
 
-		// Vérifie les données
-		$clientName = sanitize_text_field($_POST['clientName'] ?? '');
-		$amount = floatval($_POST['amount'] ?? 0);
-		$reference = sanitize_text_field($_POST['reference'] ?? '');
-		$payerEmail = sanitize_email($_POST['payerEmail'] ?? '');
-		$payerPhone = sanitize_text_field($_POST['payerPhone'] ?? '');
-		$description = sanitize_text_field($_POST['description'] ?? '');
-		$provider = sanitize_text_field($_POST['provider'] ?? '');
+                global $wpdb;
+
+                // Vérifie les données
+                $clientName = sanitize_text_field($_POST['clientName'] ?? '');
+                $amount = floatval($_POST['amount'] ?? 0);
+                $reference = sanitize_text_field($_POST['reference'] ?? '');
+                $payerEmail = sanitize_email($_POST['payerEmail'] ?? '');
+                $payerPhone = sanitize_text_field($_POST['payerPhone'] ?? '');
+                $description = sanitize_text_field($_POST['description'] ?? '');
+                $provider = sanitize_text_field($_POST['provider'] ?? '');
+                $design_id = intval($_POST['design_id'] ?? 0);
+                if ($design_id > 0) {
+                        $designs_table = $wpdb->prefix . 'takamoa_papi_designs';
+                        $exists = $wpdb->get_var(
+                                $wpdb->prepare(
+                                        'SELECT id FROM ' . $designs_table . ' WHERE id = %d',
+                                        $design_id,
+                                ),
+                        );
+                        $design_id = $exists ? $design_id : null;
+                } else {
+                        $design_id = null;
+                }
 
 		if ($amount < 300 || !$clientName || !$reference) {
 			wp_send_json_error([
@@ -308,31 +323,31 @@ wp_mail($email, $subject, $message, $headers);
 
 		$link = esc_url($body['data']['paymentLink']);
 
-		// Sauvegarde dans la base
-		global $wpdb;
-		$table = $wpdb->prefix . 'takamoa_papi_payments';
+                // Sauvegarde dans la base
+                $table = $wpdb->prefix . 'takamoa_papi_payments';
 		$payment_method = !empty($provider) ? $provider : '—';
-		$wpdb->insert($table, [
-			'reference' => $reference,
-			'client_name' => $clientName,
-			'amount' => $amount,
-			'description' => $request['description'],
-			'payer_email' => $payerEmail,
-			'payer_phone' => $payerPhone,
-			'provider' => $provider,
-			'success_url' => $successUrl,
-			'failure_url' => $failureUrl,
-			'notification_url' => $notificationUrl,
-			'link_creation' => current_time('mysql'),
-			'payment_link' => $link,
-			'payment_status' => 'PENDING',
-			'payment_method' => $payment_method,
-			'notification_token' => $body['data']['notificationToken'] ?? '',
-			'is_test_mode' => $isTestMode,
-			'test_reason' => $testReason,
-			'raw_request' => json_encode($request),
-			'raw_response' => json_encode($body),
-		]);
+                $wpdb->insert($table, [
+                        'reference' => $reference,
+                        'client_name' => $clientName,
+                        'amount' => $amount,
+                        'description' => $request['description'],
+                        'payer_email' => $payerEmail,
+                        'payer_phone' => $payerPhone,
+                        'provider' => $provider,
+                        'success_url' => $successUrl,
+                        'failure_url' => $failureUrl,
+                        'notification_url' => $notificationUrl,
+                        'link_creation' => current_time('mysql'),
+                        'payment_link' => $link,
+                        'payment_status' => 'PENDING',
+                        'payment_method' => $payment_method,
+                        'notification_token' => $body['data']['notificationToken'] ?? '',
+                        'is_test_mode' => $isTestMode,
+                        'test_reason' => $testReason,
+                        'raw_request' => json_encode($request),
+                        'raw_response' => json_encode($body),
+                        'design_id' => $design_id,
+                ]);
 
 		if ($payerEmail) {
 			$this->send_registration_email($payerEmail, $clientName, $link);
