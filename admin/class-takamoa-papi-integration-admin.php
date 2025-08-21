@@ -312,11 +312,12 @@ class Takamoa_Papi_Integration_Admin
 							<button type="button" class="btn btn-sm btn-secondary dropdown-toggle takamoa-action-toggle" data-bs-toggle="dropdown" aria-expanded="false">
 								<i class="fa fa-cog"></i>
 							</button>
-							<ul class="dropdown-menu">
-								<li><button type="button" class="dropdown-item takamoa-notify">Notifier</button></li>
-								<li><button type="button" class="dropdown-item takamoa-generate-ticket">Générer un billet</button></li>
-								<li><button type="button" class="dropdown-item takamoa-details">Détails</button></li>
-							</ul>
+                                                       <ul class="dropdown-menu">
+                                                               <li><button type="button" class="dropdown-item takamoa-notify">Notifier</button></li>
+                                                               <li><button type="button" class="dropdown-item takamoa-regenerate-link">Regénérer le lien de paiement</button></li>
+                                                               <li><button type="button" class="dropdown-item takamoa-generate-ticket">Générer un billet</button></li>
+                                                               <li><button type="button" class="dropdown-item takamoa-details">Détails</button></li>
+                                                       </ul>
 						</div>
 					</td>
 				</tr>

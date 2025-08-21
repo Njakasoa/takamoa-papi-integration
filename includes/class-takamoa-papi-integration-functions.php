@@ -526,11 +526,121 @@ wp_mail($email, $subject, $message, $headers);
 			$payment->payment_link,
 		);
 
-		wp_send_json_success(['message' => 'Notification envoyée.']);
-	}
+               wp_send_json_success(['message' => 'Notification envoyée.']);
+       }
 
-	/**
-	* AJAX handler to check if a ticket already exists for a reference.
+       public function handle_regenerate_payment_link_ajax()
+       {
+               check_ajax_referer('takamoa_papi_nonce', 'nonce');
+
+               if (!current_user_can('manage_options')) {
+                       wp_send_json_error(['message' => 'Unauthorized'], 403);
+               }
+
+               $reference = sanitize_text_field($_POST['reference'] ?? '');
+               if (!$reference) {
+                       wp_send_json_error(['message' => 'Référence manquante.']);
+               }
+
+               global $wpdb;
+               $table = $wpdb->prefix . 'takamoa_papi_payments';
+               $payment = $wpdb->get_row(
+                       $wpdb->prepare(
+                               'SELECT * FROM ' . $table . ' WHERE reference = %s LIMIT 1',
+                               $reference,
+                       ),
+               );
+
+               if (!$payment) {
+                       wp_send_json_error(['message' => 'Paiement introuvable.']);
+               }
+
+               $api_key = get_option('takamoa_papi_api_key');
+               $validDuration = intval(get_option('takamoa_papi_valid_duration', 60));
+
+               $request = [
+                       'clientName' => $payment->client_name,
+                       'amount' => floatval($payment->amount),
+                       'reference' => $payment->reference,
+                       'description' => $payment->description ?: 'Paiement via Papi',
+                       'payerEmail' => $payment->payer_email,
+                       'payerPhone' => $payment->payer_phone,
+                       'notificationUrl' => $payment->notification_url,
+                       'validDuration' => $validDuration,
+                       'isTestMode' => (bool) $payment->is_test_mode,
+                       'testReason' => $payment->is_test_mode ? $payment->test_reason : '',
+               ];
+
+               if (!empty($payment->provider)) {
+                       $request['provider'] = $payment->provider;
+               }
+               if (!empty($payment->success_url)) {
+                       $request['successUrl'] = $payment->success_url;
+               }
+               if (!empty($payment->failure_url)) {
+                       $request['failureUrl'] = $payment->failure_url;
+               }
+
+               $response = wp_remote_post(
+                       'https://app.papi.mg/dashboard/api/payment-links',
+                       [
+                               'headers' => [
+                                       'Token' => $api_key,
+                                       'Content-Type' => 'application/json',
+                               ],
+                               'body' => json_encode($request),
+                       ],
+               );
+
+               if (is_wp_error($response)) {
+                       wp_send_json_error(['message' => 'Erreur de connexion à Papi.']);
+               }
+
+               $body = json_decode(wp_remote_retrieve_body($response), true);
+
+               if (!isset($body['data']['paymentLink'])) {
+                       wp_send_json_error([
+                               'message' => $body['error']['message'] ?? 'Erreur inconnue.',
+                       ]);
+               }
+
+               $link = esc_url($body['data']['paymentLink']);
+               $now = current_time('mysql');
+               $link_expiration = !empty($body['data']['linkExpiration']) ? date('Y-m-d H:i:s', strtotime($body['data']['linkExpiration'])) : null;
+               $notification_token = $body['data']['notificationToken'] ?? '';
+               $payment_method = !empty($payment->provider) ? $payment->provider : '—';
+
+               $wpdb->update(
+                       $table,
+                       [
+                               'payment_link' => $link,
+                               'link_creation' => $now,
+                               'link_expiration' => $link_expiration,
+                               'notification_token' => $notification_token,
+                               'payment_status' => 'PENDING',
+                               'payment_method' => $payment_method,
+                               'raw_request' => json_encode($request),
+                               'raw_response' => json_encode($body),
+                               'updated_at' => $now,
+                       ],
+                       ['id' => $payment->id],
+               );
+
+               wp_send_json_success([
+                       'payment_link' => $link,
+                       'link_creation' => $now,
+                       'link_expiration' => $link_expiration,
+                       'notification_token' => $notification_token,
+                       'raw_request' => json_encode($request),
+                       'raw_response' => json_encode($body),
+                       'payment_method' => $payment_method,
+                       'updated_at' => $now,
+                       'status' => 'PENDING',
+               ]);
+       }
+
+       /**
+       * AJAX handler to check if a ticket already exists for a reference.
 	*
 	* @since 0.0.7
 	*/
