@@ -322,8 +322,11 @@ wp_mail($email, $subject, $message, $headers);
                                 $payment->client_name,
                         );
 
-                        if (!empty($payment->design_id)) {
-                                $url = $this->generate_ticket_pdf($payment->reference, (int) $payment->design_id);
+                        $default_design = intval(get_option('takamoa_papi_default_design'));
+                        $design_id = !empty($payment->design_id) ? (int) $payment->design_id : $default_design;
+
+                        if (!empty($design_id)) {
+                                $url = $this->generate_ticket_pdf($payment->reference, $design_id);
                                 if ($url) {
                                         $this->send_ticket_email_by_reference($payment->reference);
                                 }
