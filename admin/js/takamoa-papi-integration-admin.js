@@ -103,14 +103,19 @@ $('#takamoa-payments-table').on('click', '.takamoa-notify', function (e) {
 });
 
 $('#takamoa-payments-table').on('click', '.takamoa-regenerate-link', function (e) {
+        e.preventDefault();
         e.stopPropagation();
         var btn = $(this);
         var row = btn.closest('tr');
+        var reference = btn.data('reference') || (row.length ? row.data('reference') : '');
+        if (!reference) {
+                return;
+        }
         btn.prop('disabled', true);
         $.post(takamoaAjax.ajaxurl, {
                 action: 'takamoa_regenerate_payment_link',
                 nonce: takamoaAjax.nonce,
-                reference: row.data('reference'),
+                reference: reference,
         })
                 .done(function (res) {
                         if (res.success && res.data) {

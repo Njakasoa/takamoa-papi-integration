@@ -314,12 +314,12 @@ class Takamoa_Papi_Integration_Admin
 							</button>
                                                        <ul class="dropdown-menu">
                                                                <li><button type="button" class="dropdown-item takamoa-notify">Notifier</button></li>
-                                                               <li><button type="button" class="dropdown-item takamoa-regenerate-link">Regénérer le lien de paiement</button></li>
+                                                               <li><button type="button" class="dropdown-item takamoa-regenerate-link" data-reference="<?= esc_attr($row->reference) ?>">Regénérer le lien de paiement</button></li>
                                                                <li><button type="button" class="dropdown-item takamoa-generate-ticket">Générer un billet</button></li>
                                                                <li><button type="button" class="dropdown-item takamoa-details">Détails</button></li>
                                                        </ul>
-						</div>
-					</td>
+                                               </div>
+                                       </td>
 				</tr>
 			<?php endforeach; ?>
 				</tbody>
