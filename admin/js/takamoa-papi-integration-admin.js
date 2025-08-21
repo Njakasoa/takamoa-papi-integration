@@ -4,7 +4,24 @@
 * @since 0.0.3
 */
 jQuery(document).ready(function ($) {
-	if ($('#takamoa-payments-table').length) {
+        function openModal(id) {
+                $('#' + id).addClass('show');
+        }
+        function closeModal(id) {
+                $('#' + id).removeClass('show');
+        }
+
+        $(document).on('click', '[data-close]', function () {
+                closeModal($(this).data('close'));
+        });
+
+        $('.tk-modal').on('click', function (e) {
+                if ($(e.target).is('.tk-modal')) {
+                        closeModal($(this).attr('id'));
+                }
+        });
+
+        if ($('#takamoa-payments-table').length) {
 		var table = $('#takamoa-payments-table').DataTable({
 			pageLength: 10,
 			lengthMenu: [5, 10, 25, 50],
@@ -51,9 +68,9 @@ jQuery(document).ready(function ($) {
 			$('#modal-payment-link').text(row.data('paymentLink') || '—');
 			$('#modal-currency').text(row.data('currency') || '—');
 			$('#modal-fee').text(row.data('fee') || '—');
-			$('#modal-notification-token').text(
-			row.data('notificationToken') || '—',
-		);
+                $('#modal-notification-token').text(
+                        row.data('notificationToken') || '—'
+                );
 		$('#modal-test-mode').text(row.data('isTestMode') ? 'Yes' : 'No');
 		$('#modal-test-reason').text(row.data('testReason') || '—');
 		$('#modal-raw-request').text(row.data('rawRequest') || '—');
@@ -64,16 +81,13 @@ jQuery(document).ready(function ($) {
 		$('#modal-extra-info').addClass('d-none');
 		$('#toggle-more-info').text('Show more');
 		
-		var modal = new bootstrap.Modal(
-		document.getElementById('paymentModal'),
-	);
-	modal.show();
+                openModal('paymentModal');
 });
 
 $('#toggle-more-info').on('click', function () {
 	$('#modal-extra-info').toggleClass('d-none');
-	$(this).text(
-	$('#modal-extra-info').hasClass('d-none') ? 'Show more' : 'Show less',
+        $(this).text(
+        $('#modal-extra-info').hasClass('d-none') ? 'Show more' : 'Show less'
 );
 });
 
@@ -151,8 +165,7 @@ var currentRef = '';
 $('#takamoa-payments-table').on('click', '.takamoa-generate-ticket', function (e) {
 	e.stopPropagation();
 	currentRef = $(this).closest('tr').data('reference');
-	var modal = new bootstrap.Modal(document.getElementById('ticketModal'));
-	modal.show();
+        openModal('ticketModal');
 });
 
 $('#generate-ticket-btn').on('click', function () {
@@ -189,12 +202,10 @@ $('#generate-ticket-btn').on('click', function () {
 			alert('Erreur lors de la génération');
 		})
 		.always(function () {
-			btn.prop('disabled', false);
-			bootstrap.Modal.getInstance(
-				document.getElementById('ticketModal'),
-			).hide();
-		});
-	}
+                        btn.prop('disabled', false);
+                        closeModal('ticketModal');
+                });
+        }
 
 	$.post(takamoaAjax.ajaxurl, {
 		action: 'takamoa_ticket_exists',

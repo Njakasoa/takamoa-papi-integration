@@ -114,77 +114,71 @@
         </div>
     </section>
 
-    <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Détails du paiement</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <tbody id="modal-basic-info">
-                                <tr><th>ID</th><td id="modal-id"></td></tr>
-                                <tr><th>Référence</th><td id="modal-reference"></td></tr>
-                                <tr><th>Nom client</th><td id="modal-name"></td></tr>
-                                <tr><th>Email</th><td id="modal-email"></td></tr>
-                                <tr><th>Téléphone</th><td id="modal-phone"></td></tr>
-                                <tr><th>Montant</th><td id="modal-amount"></td></tr>
-                                <tr><th>Status</th><td id="modal-status"></td></tr>
-                                <tr><th>Méthode</th><td id="modal-method"></td></tr>
-                                <tr><th>Date</th><td id="modal-date"></td></tr>
-                                <tr><th>Description</th><td id="modal-description"></td></tr>
-                            </tbody>
-                            <tbody id="modal-extra-info" class="d-none">
-                                <tr><th>Provider</th><td id="modal-provider"></td></tr>
-                                <tr><th>Success URL</th><td id="modal-success-url"></td></tr>
-                                <tr><th>Failure URL</th><td id="modal-failure-url"></td></tr>
-                                <tr><th>Notification URL</th><td id="modal-notification-url"></td></tr>
-                                <tr><th>Link creation</th><td id="modal-link-creation"></td></tr>
-                                <tr><th>Link expiration</th><td id="modal-link-expiration"></td></tr>
-                                <tr><th>Payment link</th><td id="modal-payment-link"></td></tr>
-                                <tr><th>Currency</th><td id="modal-currency"></td></tr>
-                                <tr><th>Fee</th><td id="modal-fee"></td></tr>
-                                <tr><th>Notification token</th><td id="modal-notification-token"></td></tr>
-                                <tr><th>Test mode</th><td id="modal-test-mode"></td></tr>
-                                <tr><th>Test reason</th><td id="modal-test-reason"></td></tr>
-                                <tr><th>Raw request</th><td><pre id="modal-raw-request" class="mb-0"></pre></td></tr>
-                                <tr><th>Raw response</th><td><pre id="modal-raw-response" class="mb-0"></pre></td></tr>
-                                <tr><th>Raw notification</th><td><pre id="modal-raw-notification" class="mb-0"></pre></td></tr>
-                                <tr><th>Updated at</th><td id="modal-updated-at"></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary" id="toggle-more-info">Show more</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                </div>
+    <div class="tk-modal" id="paymentModal" aria-hidden="true">
+        <div class="tk-modal-content tk-card">
+            <div class="tk-modal-header">
+                <h3 class="tk-title">Détails du paiement</h3>
+                <button type="button" class="tk-close" data-close="paymentModal">&times;</button>
+            </div>
+            <div class="tk-modal-body">
+                <table class="tk-table">
+                    <tbody id="modal-basic-info">
+                        <tr><th>ID</th><td id="modal-id"></td></tr>
+                        <tr><th>Référence</th><td id="modal-reference"></td></tr>
+                        <tr><th>Nom client</th><td id="modal-name"></td></tr>
+                        <tr><th>Email</th><td id="modal-email"></td></tr>
+                        <tr><th>Téléphone</th><td id="modal-phone"></td></tr>
+                        <tr><th>Montant</th><td id="modal-amount"></td></tr>
+                        <tr><th>Status</th><td id="modal-status"></td></tr>
+                        <tr><th>Méthode</th><td id="modal-method"></td></tr>
+                        <tr><th>Date</th><td id="modal-date"></td></tr>
+                        <tr><th>Description</th><td id="modal-description"></td></tr>
+                    </tbody>
+                    <tbody id="modal-extra-info" class="d-none">
+                        <tr><th>Provider</th><td id="modal-provider"></td></tr>
+                        <tr><th>Success URL</th><td id="modal-success-url"></td></tr>
+                        <tr><th>Failure URL</th><td id="modal-failure-url"></td></tr>
+                        <tr><th>Notification URL</th><td id="modal-notification-url"></td></tr>
+                        <tr><th>Link creation</th><td id="modal-link-creation"></td></tr>
+                        <tr><th>Link expiration</th><td id="modal-link-expiration"></td></tr>
+                        <tr><th>Payment link</th><td id="modal-payment-link"></td></tr>
+                        <tr><th>Currency</th><td id="modal-currency"></td></tr>
+                        <tr><th>Fee</th><td id="modal-fee"></td></tr>
+                        <tr><th>Notification token</th><td id="modal-notification-token"></td></tr>
+                        <tr><th>Test mode</th><td id="modal-test-mode"></td></tr>
+                        <tr><th>Test reason</th><td id="modal-test-reason"></td></tr>
+                        <tr><th>Raw request</th><td><pre id="modal-raw-request"></pre></td></tr>
+                        <tr><th>Raw response</th><td><pre id="modal-raw-response"></pre></td></tr>
+                        <tr><th>Raw notification</th><td><pre id="modal-raw-notification"></pre></td></tr>
+                        <tr><th>Updated at</th><td id="modal-updated-at"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tk-modal-footer">
+                <button type="button" class="tk-btn" id="toggle-more-info">Show more</button>
+                <button type="button" class="tk-btn" data-close="paymentModal">Fermer</button>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="ticketModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Générer un billet</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <select id="ticket-design" class="form-select">
-                        <?php foreach ($designs as $d) : ?>
-                            <option value="<?= esc_attr($d->id) ?>" <?= selected($d->id, $default_design, false) ?>>
-                                <?= esc_html($d->title) ?><?= $d->id == $default_design ? ' (par défaut)' : '' ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button type="button" id="generate-ticket-btn" class="btn btn-primary">Générer</button>
-                </div>
+    <div class="tk-modal" id="ticketModal" aria-hidden="true">
+        <div class="tk-modal-content tk-card">
+            <div class="tk-modal-header">
+                <h3 class="tk-title">Générer un billet</h3>
+                <button type="button" class="tk-close" data-close="ticketModal">&times;</button>
+            </div>
+            <div class="tk-modal-body">
+                <select id="ticket-design">
+                    <?php foreach ($designs as $d) : ?>
+                        <option value="<?= esc_attr($d->id) ?>" <?= selected($d->id, $default_design, false) ?>>
+                            <?= esc_html($d->title) ?><?= $d->id == $default_design ? ' (par défaut)' : '' ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="tk-modal-footer">
+                <button type="button" class="tk-btn" data-close="ticketModal">Fermer</button>
+                <button type="button" id="generate-ticket-btn" class="tk-btn">Générer</button>
             </div>
         </div>
     </div>
