@@ -630,17 +630,6 @@ class Takamoa_Papi_Integration_Admin
 
         public function display_options_page()
         {
-                ?>
-                                <div class="wrap container-fluid">
-						<h1>Options avancées</h1>
-			<form method="post" action="options.php">
-			<?php
-			settings_fields('takamoa_papi_settings_group');
-			do_settings_sections($this->plugin_name . '-settings');
-			submit_button();
-			?>
-			</form>
-		</div>
-		<?php
-	}
+                include plugin_dir_path(__FILE__) . 'partials/settings-page.php';
+        }
 }
