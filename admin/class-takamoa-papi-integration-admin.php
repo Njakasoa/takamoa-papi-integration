@@ -397,54 +397,14 @@ class Takamoa_Papi_Integration_Admin
 	*
 	* @since 0.0.3
 	*/
-	public function display_tickets_page()
-	{
-			global $wpdb;
-			$table = $wpdb->prefix . 'takamoa_papi_tickets';
-				$results = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC LIMIT 100');
-		?>
-				<div class="wrap container-fluid">
-						<h1>Billets</h1>
-						<table id="takamoa-tickets-table" class="widefat striped">
-								<thead>
-										<tr>
-												<th>Référence</th>
-												<th>Description</th>
-												<th>QR Code</th>
-												<th>Date création</th>
-												<th>Date mise à jour</th>
-	<th>Status</th>
-	<th>Dernière notification</th>
-	<th>Action</th>
-											</tr>
-									</thead>
-									<tbody>
-	<?php foreach ($results as $row) : ?>
-	<tr data-reference="<?= esc_attr($row->reference) ?>">
-	<td><?= esc_html($row->reference) ?></td>
-	<td><?= esc_html($row->description ?: '—') ?></td>
-	<td><?= $row->qrcode_link ? '<a href="' . esc_url($row->qrcode_link) . '" target="_blank">Voir</a>' : '—'; ?></td>
-	<td><?= esc_html($row->created_at) ?></td>
-	<td><?= esc_html($row->updated_at ?: '—') ?></td>
-	<td><?= esc_html($row->status) ?></td>
-	<td><?= esc_html($row->last_notification ?: '—') ?></td>
-	<td>
-	<div class="btn-group">
-		<button type="button" class="btn btn-sm btn-secondary dropdown-toggle takamoa-action-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-		<i class="fa fa-cog"></i>
-		</button>
-		<ul class="dropdown-menu">
-		<li><button type="button" class="dropdown-item takamoa-send-ticket-email">Envoyer le billet par email</button></li>
-		</ul>
-		</div>
-		</td>
-	</tr>
-	<?php endforeach; ?>
-								</tbody>
-						</table>
-				</div>
-				<?php
-	}
+        public function display_tickets_page()
+        {
+                global $wpdb;
+                $table   = $wpdb->prefix . 'takamoa_papi_tickets';
+                $results = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC LIMIT 100');
+
+                include plugin_dir_path(__FILE__) . 'partials/tickets-page.php';
+        }
 
 	/**
 	* Display the ticket designs management page.
