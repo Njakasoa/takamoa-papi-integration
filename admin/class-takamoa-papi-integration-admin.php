@@ -464,97 +464,12 @@ class Takamoa_Papi_Integration_Admin
 	*/
         public function display_designs_page()
         {
-                        global $wpdb;
-                        $table = $wpdb->prefix . 'takamoa_papi_designs';
-                                $designs = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC');
-                                $default_design = intval(get_option('takamoa_papi_default_design'));
-                ?>
-                                <div class="wrap container-fluid">
-                                                <h1>Designs de billets</h1>
-                                                <form id="takamoa-add-design" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                                                                <?php wp_nonce_field('takamoa_save_design'); ?>
-                                                                <input type="hidden" name="action" value="takamoa_save_design">
-                                                                <p>
-                                                                                <label for="design_title">Titre du design</label><br>
-                                                                                <input type="text" id="design_title" name="design_title" class="form-control" />
-                                                                </p>
-                                                                <p>
-                                                                                <label for="design_image">Image du billet</label><br>
-                                                                                <input type="text" id="design_image" name="design_image" class="form-control" />
-                                                                                <button type="button" class="button btn btn-outline-secondary" id="select_design_image">Choisir une image</button>
-                                                                </p>
-                                                                <p class="flex-fields">
-                                                                                <label>Largeur (px)</label>
-                                                                                <input type="number" id="ticket_width" name="ticket_width" class="form-control small-input" min="1">
-                                                                                <label>Hauteur (px)</label>
-                                                                                <input type="number" id="ticket_height" name="ticket_height" class="form-control small-input" min="1">
-                                                                </p>
-                                                                <p class="flex-fields">
-                                                                                <label>Taille QR Code (px)</label>
-                                                                                <input type="number" id="qrcode_size" name="qrcode_size" class="form-control small-input" min="1">
-                                                                                <label>Position top (px)</label>
-                                                                                <input type="number" id="qrcode_top" name="qrcode_top" class="form-control small-input" min="0">
-                                                                                <label>Position left (px)</label>
-                                                                                <input type="number" id="qrcode_left" name="qrcode_left" class="form-control small-input" min="0">
-                                                                </p>
-								<?php submit_button('Ajouter'); ?>
-						</form>
-						<hr>
-                                                <table class="widefat striped table table-striped align-middle">
-                                                                <thead>
-                                                                                <tr>
-                                                                                                <th>Par défaut</th>
-                                                                                                <th>ID</th>
-                                                                                                <th>Titre</th>
-                                                                                                <th>Image</th>
-                                                                                                <th>Billet (px)</th>
-                                                                                                <th>Taille QR</th>
-                                                                                                <th>Position QR</th>
-                                                                                                <th>Date</th>
-                                                                                                <th>Actions</th>
-                                                                                </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                        <?php foreach ($designs as $d) : ?>
-                                                                                <tr>
-                                                                                                <td>
-                                                                                                                <button type="button" class="btn btn-link p-0 takamoa-set-default" data-id="<?= esc_attr($d->id) ?>" title="Définir comme par défaut">
+                global $wpdb;
+                $table = $wpdb->prefix . 'takamoa_papi_designs';
+                $designs = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC');
+                $default_design = intval(get_option('takamoa_papi_default_design'));
 
-<i class="fa <?= $d->id == $default_design ? 'fa-star text-warning' : 'fa-star-o'; ?>" aria-hidden="true"></i>
-
-<span class="screen-reader-text">
-
-                <?= $d->id == $default_design ? 'Design par défaut' : 'Définir comme par défaut'; ?>
-
-</span>
-                                                                                                                </button>
-                                                                                                </td>
-                                                                                                <td><?= esc_html($d->id) ?></td>
-                                                                                                <td><?= esc_html($d->title) ?></td>
-                                                                                                <td><?= $d->image_url ? '<img src="' . esc_url($d->image_url) . '" style="max-width:150px;height:auto;" />' : '—'; ?></td>
-                                                                                                <td><?= esc_html($d->ticket_width . '×' . $d->ticket_height) ?></td>
-                                                                                                <td><?= esc_html($d->qrcode_size) ?></td>
-                                                                                                <td><?= esc_html($d->qrcode_left . ',' . $d->qrcode_top) ?></td>
-                                                                                                <td><?= esc_html($d->created_at) ?></td>
-                                                                                                <td>
-                                                                                                                <?php
-                                                                                                                $delete_url = wp_nonce_url(
-                                                                                                                        admin_url('admin-post.php?action=takamoa_delete_design&design_id=' . intval($d->id)),
-                                                                                                                        'takamoa_delete_design_' . intval($d->id)
-                                                                                                                );
-                                                                                                                ?>
-                                                                                                                <?php if ($d->id == $default_design) : ?>
-                                                                                                                        <button class="btn btn-outline-danger btn-sm" disabled>Supprimer</button>
-                                                                                                                <?php else : ?>
-                                                                                                                        <a href="<?= esc_url($delete_url) ?>" class="btn btn-outline-danger btn-sm takamoa-delete-design" data-id="<?= esc_attr($d->id) ?>">Supprimer</a>
-                                                                                                                <?php endif; ?>
-                                                                                                </td>
-                                                                                </tr>
-                                                        <?php endforeach; ?>
-                                                                </tbody>
-                                                </table>
-                                </div>
-                                <?php
+                include plugin_dir_path(__FILE__) . 'partials/designs-page.php';
         }
 
        /**
