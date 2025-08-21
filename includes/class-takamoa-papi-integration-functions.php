@@ -152,7 +152,7 @@ wp_mail($email, $subject, $message, $headers);
 
 		if (
 			!$body ||
-			!isset($body['paymentReference'], $body['notificationToken'])
+			!isset($body['merchantPaymentReference'], $body['notificationToken'])
 		) {
 			status_header(400);
 			echo json_encode(['error' => 'Requête invalide']);
@@ -162,7 +162,7 @@ wp_mail($email, $subject, $message, $headers);
 		global $wpdb;
 		$table = $wpdb->prefix . 'takamoa_papi_payments';
 
-		$reference = sanitize_text_field($body['paymentReference']);
+		$reference = sanitize_text_field($body['merchantPaymentReference']);
 		$token = sanitize_text_field($body['notificationToken']);
 
 		$payment = $wpdb->get_row(
