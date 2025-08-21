@@ -22,10 +22,6 @@
 	cursor: default;
 }
 
-.takamoa-action-toggle::after {
-	display: none;
-}
-
 /* DataTables custom styling */
 .datatable-header .dataTables_length,
 .datatable-header .dataTables_filter,
