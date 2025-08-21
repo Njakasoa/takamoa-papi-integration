@@ -4,9 +4,10 @@ document.querySelectorAll('.takamoa-papi-app').forEach((el) => {
 		data: {
 			clientFirstName: '',
 			clientLastName: '',
-			amount: el.dataset.amount || '',
-			reference: el.dataset.reference || '',
-			payment: el.dataset.payment === 'no' ? 'no' : 'yes',
+                        amount: el.dataset.amount || '',
+                        reference: el.dataset.reference || '',
+                        payment: el.dataset.payment === 'no' ? 'no' : 'yes',
+                        ticket: el.dataset.ticket || '',
 			payerEmail: '',
 			payerPhone: '',
 			description: '',
@@ -50,8 +51,9 @@ document.querySelectorAll('.takamoa-papi-app').forEach((el) => {
 					reference: this.reference,
 					payerEmail: this.payerEmail,
 					payerPhone: this.payerPhone,
-					description: this.description,
-				};
+                                        description: this.description,
+                                        design_id: this.ticket,
+                                };
 
 				if (this.provider) {
 					data.provider = this.provider;
