@@ -6,7 +6,6 @@
  */
 ?>
 <div class="wrap container-fluid">
-    <h1>Billets</h1>
     <section class="tk-wrap">
         <style>
             :root{
@@ -25,6 +24,9 @@
                 --gap:16px;
             }
             .tk-wrap{font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;color:var(--text);background:var(--bg);padding:24px;border-radius:var(--radius);box-shadow:0 0 0 1px #0f1320,0 10px 30px rgba(0,0,0,.35);}
+            .tk-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;}
+            .tk-title{font-size:18px;font-weight:700;letter-spacing:.2px;}
+            .tk-sub{color:var(--muted);font-size:13px}
             .tk-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
             .tk-table{width:100%;border-collapse:collapse;}
             .tk-table th,.tk-table td{padding:12px;text-align:left;border-bottom:1px solid var(--border);}
@@ -38,6 +40,12 @@
             .tk-btn.danger{border-color:var(--err);color:var(--err);}
             .tk-btn.danger:hover{background:rgba(255,107,107,.1);}
         </style>
+        <header class="tk-header">
+            <div>
+                <div class="tk-title"><?php echo esc_html(get_admin_page_title()); ?></div>
+                <div class="tk-sub">Liste des billets générés.</div>
+            </div>
+        </header>
         <div class="tk-card">
             <table id="takamoa-tickets-table" class="tk-table">
                 <thead>
