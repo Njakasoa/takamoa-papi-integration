@@ -267,29 +267,6 @@ if ($('#takamoa-tickets-table').length) {
 	});
 }
 
-if ($('#select_design_image').length) {
-	var frame;
-	$('#select_design_image').on('click', function (e) {
-		e.preventDefault();
-		if (frame) {
-			frame.open();
-			return;
-		}
-		frame = wp.media({
-			title: 'Choisir une image',
-			button: { text: 'Utiliser cette image' },
-			multiple: false,
-		});
-		frame.on('select', function () {
-			var att = frame.state().get('selection').first().toJSON();
-			$('#design_image').val(att.url);
-			$('#ticket_width').val(att.width);
-			$('#ticket_height').val(att.height);
-		});
-		frame.open();
-	});
-}
-
 if ($('.takamoa-set-default').length) {
         $('.takamoa-set-default').on('click', function () {
                 var btn = $(this);
