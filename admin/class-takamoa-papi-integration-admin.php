@@ -511,6 +511,7 @@ class Takamoa_Papi_Integration_Admin
                                                                                                 <th>Taille QR</th>
                                                                                                 <th>Position QR</th>
                                                                                                 <th>Date</th>
+                                                                                                <th>Actions</th>
                                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -531,6 +532,15 @@ class Takamoa_Papi_Integration_Admin
                                                                                                 <td><?= esc_html($d->qrcode_size) ?></td>
                                                                                                 <td><?= esc_html($d->qrcode_left . ',' . $d->qrcode_top) ?></td>
                                                                                                 <td><?= esc_html($d->created_at) ?></td>
+                                                                                                <td>
+                                                                                                                <?php
+                                                                                                                $delete_url = wp_nonce_url(
+                                                                                                                        admin_url('admin-post.php?action=takamoa_delete_design&design_id=' . intval($d->id)),
+                                                                                                                        'takamoa_delete_design_' . intval($d->id)
+                                                                                                                );
+                                                                                                                ?>
+                                                                                                                <a href="<?= esc_url($delete_url) ?>" class="btn btn-danger btn-sm takamoa-delete-design" data-id="<?= esc_attr($d->id) ?>">Supprimer</a>
+                                                                                                </td>
                                                                                 </tr>
                                                         <?php endforeach; ?>
                                                                 </tbody>
@@ -625,6 +635,34 @@ class Takamoa_Papi_Integration_Admin
                         wp_redirect(add_query_arg('success', '1', wp_get_referer()));
                         exit;
         }
+
+       /**
+       * Handle deleting a ticket design.
+       *
+       * @since 0.0.7
+       */
+       public function handle_delete_design()
+       {
+                       $design_id = intval($_GET['design_id'] ?? 0);
+                       check_admin_referer('takamoa_delete_design_' . $design_id);
+
+                       if (!$design_id) {
+                               wp_redirect(add_query_arg('error', 'missing', wp_get_referer()));
+                               exit;
+                       }
+
+                       global $wpdb;
+                       $table = $wpdb->prefix . 'takamoa_papi_designs';
+                       $wpdb->delete($table, ['id' => $design_id], ['%d']);
+
+                       $default = intval(get_option('takamoa_papi_default_design'));
+                       if ($default === $design_id) {
+                               update_option('takamoa_papi_default_design', 0);
+                       }
+
+                       wp_redirect(add_query_arg('deleted', '1', admin_url('admin.php?page=' . $this->plugin_name . '-design')));
+                       exit;
+       }
 
        /**
        * AJAX handler to set a ticket design as default.
