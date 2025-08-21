@@ -106,7 +106,7 @@
         </div>
     </section>
 
-    <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade tk-modal" id="paymentModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
             <div class="modal-content">
                 <div class="modal-header">
@@ -115,7 +115,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
-                        <table class="table table-striped">
+                        <table class="tk-table">
                             <tbody id="modal-basic-info">
                                 <tr><th>ID</th><td id="modal-id"></td></tr>
                                 <tr><th>Référence</th><td id="modal-reference"></td></tr>
@@ -150,14 +150,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-primary" id="toggle-more-info">Show more</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" class="tk-btn" id="toggle-more-info">Show more</button>
+                    <button type="button" class="tk-btn" data-bs-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="ticketModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade tk-modal" id="ticketModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
             <div class="modal-content">
                 <div class="modal-header">
@@ -174,8 +174,8 @@
                     </select>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                    <button type="button" id="generate-ticket-btn" class="btn btn-primary">Générer</button>
+                    <button type="button" class="tk-btn" data-bs-dismiss="modal">Fermer</button>
+                    <button type="button" id="generate-ticket-btn" class="tk-btn">Générer</button>
                 </div>
             </div>
         </div>
