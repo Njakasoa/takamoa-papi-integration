@@ -102,6 +102,46 @@ $('#takamoa-payments-table').on('click', '.takamoa-notify', function (e) {
 });
 });
 
+$('#takamoa-payments-table').on('click', '.takamoa-regenerate-link', function (e) {
+        e.stopPropagation();
+        var btn = $(this);
+        var row = btn.closest('tr');
+        btn.prop('disabled', true);
+        $.post(takamoaAjax.ajaxurl, {
+                action: 'takamoa_regenerate_payment_link',
+                nonce: takamoaAjax.nonce,
+                reference: row.data('reference'),
+        })
+                .done(function (res) {
+                        if (res.success && res.data) {
+                                alert('Lien régénéré');
+                                row.data('paymentLink', res.data.payment_link).attr('data-payment-link', res.data.payment_link);
+                                row.data('linkCreation', res.data.link_creation).attr('data-link-creation', res.data.link_creation);
+                                row.data('linkExpiration', res.data.link_expiration).attr('data-link-expiration', res.data.link_expiration);
+                                row.data('notificationToken', res.data.notification_token).attr('data-notification-token', res.data.notification_token);
+                                row.data('rawRequest', res.data.raw_request).attr('data-raw-request', res.data.raw_request);
+                                row.data('rawResponse', res.data.raw_response).attr('data-raw-response', res.data.raw_response);
+                                row.data('updatedAt', res.data.updated_at).attr('data-updated-at', res.data.updated_at);
+                                row.data('status', res.data.status).attr('data-status', res.data.status);
+                                row.data('method', res.data.payment_method).attr('data-method', res.data.payment_method);
+                                row.find('td').eq(5).text(res.data.status);
+                                row.find('td').eq(6).text(res.data.payment_method);
+                        } else {
+                                alert(
+                                        res.data && res.data.message
+                                                ? res.data.message
+                                                : 'Erreur lors de la régénération'
+                                );
+                        }
+                })
+                .fail(function () {
+                        alert('Erreur lors de la régénération');
+                })
+                .always(function () {
+                        btn.prop('disabled', false);
+                });
+});
+
 var currentRef = '';
 $('#takamoa-payments-table').on('click', '.takamoa-generate-ticket', function (e) {
 	e.stopPropagation();
