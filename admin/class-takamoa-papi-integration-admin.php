@@ -225,21 +225,10 @@ class Takamoa_Papi_Integration_Admin
 	/**
 	* Display admin config page.
 	*/
-	public function display_admin_page()
-	{
-		?>
-		<div class="wrap container-fluid">
-			<h1><?php echo esc_html(get_admin_page_title()); ?></h1>
-			<form method="post" action="options.php">
-				<?php
-				settings_fields('takamoa_papi_key_group');
-				do_settings_sections($this->plugin_name); // clé API
-				submit_button();
-				?>
-			</form>
-		</div>
-		<?php
-	}
+        public function display_admin_page()
+        {
+                require plugin_dir_path(__FILE__) . 'partials/admin-page.php';
+        }
 
 	public function init_admin_route()
 	{
