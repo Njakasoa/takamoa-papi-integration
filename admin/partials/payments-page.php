@@ -40,6 +40,10 @@
             .tk-btn.danger{border-color:var(--err);color:var(--err);}
             .tk-btn.danger:hover{background:rgba(255,107,107,.1);}
             .tk-actions{display:flex;gap:8px;flex-wrap:wrap;}
+            .tk-modal,
+            .tk-modal .tk-btn,
+            .tk-modal .tk-close,
+            .tk-modal select{color:#fff;}
         </style>
         <header class="tk-header">
             <div>
