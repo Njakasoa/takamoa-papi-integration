@@ -87,9 +87,6 @@
                                                                                                <div class="tk-title">Créer un design de billet</div>
                                                                                                <div class="tk-sub">Définis l’image, les dimensions et place le QR code précisément avec l’aperçu en direct.</div>
                                                                                </div>
-                                                                               <div class="tk-actions">
-                                                                                               <button type="button" class="tk-btn" id="tk-fill-demo" title="Remplir des valeurs de démo">Remplir démo</button>
-                                                                               </div>
                                                                </header>
 
                                                                <div class="tk-grid">
@@ -242,13 +239,6 @@
                                                                                                document.getElementById('takamoa-add-design').reset();
                                                                                                previewImg.removeAttribute('src');
                                                                                                qr.style.display = 'none';
-                                                                                               updatePreview();
-                                                                               });
-
-                                                                               $('#tk-fill-demo').addEventListener('click', () => {
-                                                                                               if (!designImgInput.value) { designImgInput.value = 'https://picsum.photos/2480/874'; }
-                                                                                               if (!previewImg.src) { previewImg.src = designImgInput.value; }
-                                                                                               w.value = 2480; h.value = 874; s.value = 380; t.value = 72; l.value = 1820;
                                                                                                updatePreview();
                                                                                });
 
