@@ -177,10 +177,11 @@ class Takamoa_Papi_Integration {
         $this->loader->add_action('wp_ajax_takamoa_resend_payment_email', $this->functions, 'handle_resend_payment_email_ajax');
         $this->loader->add_action('wp_ajax_takamoa_regenerate_payment_link', $this->functions, 'handle_regenerate_payment_link_ajax');
         $this->loader->add_action('wp_ajax_takamoa_ticket_exists', $this->functions, 'handle_ticket_exists_ajax');
-	$this->loader->add_action('wp_ajax_takamoa_generate_ticket', $this->functions, 'handle_generate_ticket_ajax');
-	$this->loader->add_action('wp_ajax_takamoa_scan_ticket', $this->functions, 'handle_scan_ticket_ajax'); // @since 0.0.5
-	$this->loader->add_action('wp_ajax_takamoa_validate_ticket', $this->functions, 'handle_validate_ticket_ajax'); // @since 0.0.6
-	$this->loader->add_action('wp_ajax_takamoa_send_ticket_email', $this->functions, 'handle_send_ticket_email_ajax');
+        $this->loader->add_action('wp_ajax_takamoa_generate_ticket', $this->functions, 'handle_generate_ticket_ajax');
+        $this->loader->add_action('wp_ajax_takamoa_scan_ticket', $this->functions, 'handle_scan_ticket_ajax'); // @since 0.0.5
+        $this->loader->add_action('wp_ajax_takamoa_validate_ticket', $this->functions, 'handle_validate_ticket_ajax'); // @since 0.0.6
+        $this->loader->add_action('wp_ajax_takamoa_send_ticket_email', $this->functions, 'handle_send_ticket_email_ajax');
+        $this->loader->add_action('wp_ajax_takamoa_set_default_design', $plugin_admin, 'handle_set_default_design_ajax');
 }
 
 	/**

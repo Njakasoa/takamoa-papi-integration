@@ -253,6 +253,7 @@ class Takamoa_Papi_Integration_Admin
 				$results = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC LIMIT 100');
                         $design_table = $wpdb->prefix . 'takamoa_papi_designs';
                                 $designs = $wpdb->get_results('SELECT id, title FROM ' . $design_table . ' ORDER BY created_at DESC');
+                                $default_design = intval(get_option('takamoa_papi_default_design'));
 		?>
 		<div class="wrap container-fluid">
 			<h1>Historique des paiements</h1>
@@ -385,10 +386,12 @@ class Takamoa_Papi_Integration_Admin
 					<div class="modal-body">
                                                 <select id="ticket-design" class="form-select">
                                                         <?php foreach ($designs as $d) : ?>
-                                                                <option value="<?= esc_attr($d->id) ?>"><?= esc_html($d->title) ?></option>
+                                                                <option value="<?= esc_attr($d->id) ?>" <?= selected($d->id, $default_design, false) ?>>
+                                                                        <?= esc_html($d->title) ?><?= $d->id == $default_design ? ' (par défaut)' : '' ?>
+                                                                </option>
                                                         <?php endforeach; ?>
                                                 </select>
-					</div>
+                                        </div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
 						<button type="button" id="generate-ticket-btn" class="btn btn-primary">Générer</button>
@@ -459,14 +462,15 @@ class Takamoa_Papi_Integration_Admin
 	*
 	* @since 0.0.3
 	*/
-	public function display_designs_page()
-	{
-			global $wpdb;
-			$table = $wpdb->prefix . 'takamoa_papi_designs';
-				$designs = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC');
-		?>
-				<div class="wrap container-fluid">
-						<h1>Designs de billets</h1>
+        public function display_designs_page()
+        {
+                        global $wpdb;
+                        $table = $wpdb->prefix . 'takamoa_papi_designs';
+                                $designs = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC');
+                                $default_design = intval(get_option('takamoa_papi_default_design'));
+                ?>
+                                <div class="wrap container-fluid">
+                                                <h1>Designs de billets</h1>
                                                 <form id="takamoa-add-design" method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
                                                                 <?php wp_nonce_field('takamoa_save_design'); ?>
                                                                 <input type="hidden" name="action" value="takamoa_save_design">
@@ -496,9 +500,10 @@ class Takamoa_Papi_Integration_Admin
 								<?php submit_button('Ajouter'); ?>
 						</form>
 						<hr>
-						<table class="widefat striped table table-striped align-middle">
-								<thead>
+                                                <table class="widefat striped table table-striped align-middle">
+                                                                <thead>
                                                                                 <tr>
+                                                                                                <th>Par défaut</th>
                                                                                                 <th>ID</th>
                                                                                                 <th>Titre</th>
                                                                                                 <th>Image</th>
@@ -511,6 +516,14 @@ class Takamoa_Papi_Integration_Admin
                                                                 <tbody>
                                                         <?php foreach ($designs as $d) : ?>
                                                                                 <tr>
+                                                                                                <td>
+                                                                                                                <button type="button" class="btn btn-link p-0 takamoa-set-default" data-id="<?= esc_attr($d->id) ?>" title="Définir comme par défaut">
+                                                                                                                                <i class="fa <?= $d->id == $default_design ? 'fa-star text-warning' : 'fa-star-o'; ?>" aria-hidden="true"></i>
+                                                                                                                                <span class="screen-reader-text">
+                                                                                                                                                <?= $d->id == $default_design ? 'Design par défaut' : 'Définir comme par défaut'; ?>
+                                                                                                                                </span>
+                                                                                                                </button>
+                                                                                                </td>
                                                                                                 <td><?= esc_html($d->id) ?></td>
                                                                                                 <td><?= esc_html($d->title) ?></td>
                                                                                                 <td><?= $d->image_url ? '<img src="' . esc_url($d->image_url) . '" style="max-width:150px;height:auto;" />' : '—'; ?></td>
@@ -522,9 +535,9 @@ class Takamoa_Papi_Integration_Admin
                                                         <?php endforeach; ?>
                                                                 </tbody>
                                                 </table>
-				</div>
-				<?php
-	}
+                                </div>
+                                <?php
+        }
 
        /**
        * Display the ticket scanner page.
@@ -570,8 +583,8 @@ class Takamoa_Papi_Integration_Admin
 	*
 	* @since 0.0.3
 	*/
-	public function handle_save_design()
-	{
+        public function handle_save_design()
+        {
 			check_admin_referer('takamoa_save_design');
 
                         $title        = sanitize_text_field($_POST['design_title'] ?? '');
@@ -609,14 +622,45 @@ class Takamoa_Papi_Integration_Admin
                                 'created_at'   => current_time('mysql')
                         ]);
 
-			wp_redirect(add_query_arg('success', '1', wp_get_referer()));
-			exit;
-	}
+                        wp_redirect(add_query_arg('success', '1', wp_get_referer()));
+                        exit;
+        }
 
-	public function display_options_page()
-	{
-		?>
-				<div class="wrap container-fluid">
+       /**
+       * AJAX handler to set a ticket design as default.
+       *
+       * @since 0.0.7
+       */
+       public function handle_set_default_design_ajax()
+       {
+                       check_ajax_referer('takamoa_papi_nonce', 'nonce');
+
+                       if (!current_user_can('manage_options')) {
+                               wp_send_json_error(['message' => 'Unauthorized'], 403);
+                       }
+
+                       $design_id = intval($_POST['design_id'] ?? 0);
+                       if (!$design_id) {
+                               wp_send_json_error(['message' => 'ID manquant.']);
+                       }
+
+                       global $wpdb;
+                       $table = $wpdb->prefix . 'takamoa_papi_designs';
+                       $exists = $wpdb->get_var(
+                               $wpdb->prepare('SELECT id FROM ' . $table . ' WHERE id = %d', $design_id)
+                       );
+                       if (!$exists) {
+                               wp_send_json_error(['message' => 'Design introuvable.']);
+                       }
+
+                       update_option('takamoa_papi_default_design', $design_id);
+                       wp_send_json_success();
+       }
+
+        public function display_options_page()
+        {
+                ?>
+                                <div class="wrap container-fluid">
 						<h1>Options avancées</h1>
 			<form method="post" action="options.php">
 			<?php

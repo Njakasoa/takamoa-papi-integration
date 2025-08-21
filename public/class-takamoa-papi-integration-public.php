@@ -109,11 +109,16 @@ class Takamoa_Papi_Integration_Public {
                                                'ticket' => '',
                                ], $atts);
 
+                               $default_design = intval(get_option('takamoa_papi_default_design'));
+
                                // Assure que le paramètre payment n'accepte que 'yes' ou 'no'
                                $atts['payment'] = in_array($atts['payment'], ['yes', 'no'], true) ? $atts['payment'] : 'yes';
 
                                // Assure que ticket est un entier valide
                                $atts['ticket'] = is_numeric($atts['ticket']) ? intval($atts['ticket']) : '';
+                               if ($atts['ticket'] === '' && $default_design) {
+                                               $atts['ticket'] = $default_design;
+                               }
 	
 		$timestamp = time();
 	

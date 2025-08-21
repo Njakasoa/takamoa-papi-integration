@@ -289,6 +289,29 @@ if ($('#select_design_image').length) {
 		frame.open();
 	});
 }
+
+if ($('.takamoa-set-default').length) {
+        $('.takamoa-set-default').on('click', function () {
+                var btn = $(this);
+                var id = btn.data('id');
+                $.post(takamoaAjax.ajaxurl, {
+                        action: 'takamoa_set_default_design',
+                        nonce: takamoaAjax.nonce,
+                        design_id: id,
+                })
+                        .done(function (res) {
+                                if (res.success) {
+                                        $('.takamoa-set-default i').removeClass('fa-star text-warning').addClass('fa-star-o');
+                                        btn.find('i').removeClass('fa-star-o').addClass('fa-star text-warning');
+                                } else {
+                                        alert(res.data && res.data.message ? res.data.message : 'Erreur lors de la mise à jour');
+                                }
+                        })
+                        .fail(function () {
+                                alert('Erreur lors de la mise à jour');
+                        });
+        });
+}
 if ($('#qr-reader').length) {
 	// QR code scanning feature @since 0.0.5
 	var scanResult = $('#scan-result');

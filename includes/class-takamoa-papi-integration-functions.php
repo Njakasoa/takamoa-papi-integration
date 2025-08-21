@@ -349,8 +349,8 @@ wp_mail($email, $subject, $message, $headers);
                 $description = sanitize_text_field($_POST['description'] ?? '');
                 $provider = sanitize_text_field($_POST['provider'] ?? '');
                 $design_id = intval($_POST['design_id'] ?? 0);
+                $designs_table = $wpdb->prefix . 'takamoa_papi_designs';
                 if ($design_id > 0) {
-                        $designs_table = $wpdb->prefix . 'takamoa_papi_designs';
                         $exists = $wpdb->get_var(
                                 $wpdb->prepare(
                                         'SELECT id FROM ' . $designs_table . ' WHERE id = %d',
@@ -359,7 +359,18 @@ wp_mail($email, $subject, $message, $headers);
                         );
                         $design_id = $exists ? $design_id : null;
                 } else {
-                        $design_id = null;
+                        $default_design = intval(get_option('takamoa_papi_default_design'));
+                        if ($default_design > 0) {
+                                $exists = $wpdb->get_var(
+                                        $wpdb->prepare(
+                                                'SELECT id FROM ' . $designs_table . ' WHERE id = %d',
+                                                $default_design,
+                                        ),
+                                );
+                                $design_id = $exists ? $default_design : null;
+                        } else {
+                                $design_id = null;
+                        }
                 }
 
 		if ($amount < 300 || !$clientName || !$reference) {
@@ -684,6 +695,10 @@ wp_mail($email, $subject, $message, $headers);
 
                 $reference = sanitize_text_field($_POST['reference'] ?? '');
                 $design_id = intval($_POST['design_id'] ?? 0);
+                if (!$design_id) {
+                        $default_design = intval(get_option('takamoa_papi_default_design'));
+                        $design_id = $default_design;
+                }
                 if (!$reference || !$design_id) {
                         wp_send_json_error(['message' => 'Données manquantes.']);
                 }

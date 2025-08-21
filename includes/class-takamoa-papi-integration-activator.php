@@ -141,5 +141,6 @@ class Takamoa_Papi_Integration_Activator
 
         add_option('takamoa_papi_test_mode', false);
         add_option('takamoa_papi_test_reason', '');
+        add_option('takamoa_papi_default_design', 0);
     }
 }
