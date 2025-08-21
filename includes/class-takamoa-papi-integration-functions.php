@@ -77,32 +77,154 @@ wp_mail($email, $subject, $message, $headers);
 	wp_mail($email, $subject, $message, $headers, [$file]);
 	}
 
-	private function send_payment_success_email($email, $name)
-	{
-		if (empty($email)) {
-			return;
-		}
+        private function send_payment_success_email($email, $name)
+        {
+                if (empty($email)) {
+                        return;
+                }
 
-		$subject = 'Confirmation de paiement';
+                $subject = 'Confirmation de paiement';
 
-		$message = '<p>Bonjour ' . esc_html($name) . ',</p>';
-		$message .=
-			'<p>Nous vous confirmons que votre paiement a bien été reçu. Merci pour votre inscription.</p>';
-		$message .=
-			'<p>Pour toute question ou précision, notre équipe logistique se tient à votre disposition au 034 04 105 06.</p>';
-		$message .= '<p>Bien cordialement,<br>L’équipe logistique</p>';
-		$logo = get_site_icon_url();
-		if ($logo) {
-			$logo = set_url_scheme($logo, 'https');
-			$message .=
-				'<p><img src="' .
-				esc_url($logo) .
-				'" alt="Logo" style="max-width:150px;height:auto;"></p>';
-		}
+                $message = '<p>Bonjour ' . esc_html($name) . ',</p>';
+                $message .=
+                        '<p>Nous vous confirmons que votre paiement a bien été reçu. Merci pour votre inscription.</p>';
+                $message .=
+                        '<p>Pour toute question ou précision, notre équipe logistique se tient à votre disposition au 034 04 105 06.</p>';
+                $message .= '<p>Bien cordialement,<br>L’équipe logistique</p>';
+                $logo = get_site_icon_url();
+                if ($logo) {
+                        $logo = set_url_scheme($logo, 'https');
+                        $message .=
+                                '<p><img src="' .
+                                esc_url($logo) .
+                                '" alt="Logo" style="max-width:150px;height:auto;"></p>';
+                }
 
-		$headers = ['Content-Type: text/html; charset=UTF-8'];
-		wp_mail($email, $subject, $message, $headers);
-	}
+                $headers = ['Content-Type: text/html; charset=UTF-8'];
+                wp_mail($email, $subject, $message, $headers);
+        }
+
+        private function generate_ticket_pdf($reference, $design_id)
+        {
+                global $wpdb;
+
+                $design_table = $wpdb->prefix . 'takamoa_papi_designs';
+                $design = $wpdb->get_row(
+                        $wpdb->prepare(
+                                'SELECT * FROM ' . $design_table . ' WHERE id = %d',
+                                $design_id,
+                        ),
+                );
+
+                if (!$design) {
+                        return false;
+                }
+
+                $upload = wp_upload_dir();
+                $dir = trailingslashit($upload['basedir']) . 'takamoa';
+                if (!file_exists($dir)) {
+                        wp_mkdir_p($dir);
+                }
+
+                require_once plugin_dir_path(__FILE__) . 'lib/fpdf.php';
+
+                $qr_px = (int) $design->qrcode_size;
+                $qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=' . $qr_px . 'x' . $qr_px . '&data=' . urlencode($reference);
+                $response = wp_remote_get($qr_url);
+                if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
+                        return false;
+                }
+                $qr_path = $dir . '/qr-' . $reference . '.png';
+                file_put_contents($qr_path, wp_remote_retrieve_body($response));
+
+                $design_path = str_replace($upload['baseurl'], $upload['basedir'], $design->image_url);
+                $file = $dir . '/billet-' . $reference . '.pdf';
+
+                $px_to_mm = static function($px, $dpi = 300) {
+                        return ($px * 25.4) / $dpi;
+                };
+                $dpi = 300;
+                $w_px = (int) $design->ticket_width;
+                $h_px = (int) $design->ticket_height;
+                $top_px = (int) $design->qrcode_top;
+                $left_px = (int) $design->qrcode_left;
+
+                $w_mm = $px_to_mm($w_px, $dpi);
+                $h_mm = $px_to_mm($h_px, $dpi);
+                $qr_mm = $px_to_mm($qr_px, $dpi);
+                $top_mm = $px_to_mm($top_px, $dpi);
+                $left_mm = $px_to_mm($left_px, $dpi);
+
+                $orientation = ($w_mm > $h_mm) ? 'L' : 'P';
+                $pdf = new \FPDF($orientation, 'mm', [$w_mm, $h_mm]);
+                $pdf->SetAutoPageBreak(false);
+                $pdf->AddPage($orientation, [$w_mm, $h_mm]);
+                $pdf->Image($design_path, 0, 0, $w_mm, $h_mm);
+                $pdf->Image($qr_path, $left_mm, $top_mm, $qr_mm, $qr_mm);
+                $pdf->Output('F', $file);
+                @unlink($qr_path);
+
+                $url = trailingslashit($upload['baseurl']) . 'takamoa/billet-' . $reference . '.pdf';
+
+                $tickets_table = $wpdb->prefix . 'takamoa_papi_tickets';
+                $ticket = $wpdb->get_row(
+                        $wpdb->prepare(
+                                'SELECT id FROM ' . $tickets_table . ' WHERE reference = %s',
+                                $reference,
+                        ),
+                );
+                if ($ticket) {
+                        $wpdb->update(
+                                $tickets_table,
+                                [
+                                        'qrcode_link' => $url,
+                                        'status' => 'GENERATED',
+                                        'updated_at' => current_time('mysql'),
+                                ],
+                                ['id' => $ticket->id],
+                        );
+                } else {
+                        $wpdb->insert($tickets_table, [
+                                'reference' => $reference,
+                                'qrcode_link' => $url,
+                                'status' => 'GENERATED',
+                                'created_at' => current_time('mysql'),
+                                'updated_at' => current_time('mysql'),
+                        ]);
+                }
+
+                return $url;
+        }
+
+        private function send_ticket_email_by_reference($reference)
+        {
+                global $wpdb;
+
+                $tickets_table = $wpdb->prefix . 'takamoa_papi_tickets';
+                $payments_table = $wpdb->prefix . 'takamoa_papi_payments';
+
+                $ticket = $wpdb->get_row(
+                        $wpdb->prepare(
+                                "SELECT t.qrcode_link, p.client_name, p.payer_email FROM {$tickets_table} t JOIN {$payments_table} p ON t.reference = p.reference WHERE t.reference = %s LIMIT 1",
+                                $reference,
+                        ),
+                );
+
+                if (!$ticket || empty($ticket->payer_email) || empty($ticket->qrcode_link)) {
+                        return false;
+                }
+
+                $upload = wp_upload_dir();
+                $file = str_replace($upload['baseurl'], $upload['basedir'], $ticket->qrcode_link);
+                if (!file_exists($file)) {
+                        return false;
+                }
+
+                $this->send_ticket_email($ticket->payer_email, $ticket->client_name, $file);
+                $wpdb->update($tickets_table, ['last_notification' => current_time('mysql')], ['reference' => $reference]);
+
+                return true;
+        }
 
 	public function register_endpoints()
 	{
@@ -194,30 +316,19 @@ wp_mail($email, $subject, $message, $headers);
 			['id' => $payment->id],
 		);
 
-		if ($status === 'SUCCESS') {
-			$this->send_payment_success_email(
-				$payment->payer_email,
-				$payment->client_name,
-			);
+                if ($status === 'SUCCESS') {
+                        $this->send_payment_success_email(
+                                $payment->payer_email,
+                                $payment->client_name,
+                        );
 
-			// Generate ticket if not already created
-			$tickets_table = $wpdb->prefix . 'takamoa_papi_tickets';
-			$exists = $wpdb->get_var(
-				$wpdb->prepare(
-				'SELECT id FROM ' . $tickets_table . ' WHERE reference = %s',
-					$payment->reference,
-				),
-			);
-
-			if (!$exists) {
-				$wpdb->insert($tickets_table, [
-					'reference' => $payment->reference,
-					'description' => $payment->description,
-					'status' => 'PENDING',
-					'created_at' => current_time('mysql'),
-				]);
-			}
-		}
+                        if (!empty($payment->design_id)) {
+                                $url = $this->generate_ticket_pdf($payment->reference, (int) $payment->design_id);
+                                if ($url) {
+                                        $this->send_ticket_email_by_reference($payment->reference);
+                                }
+                        }
+                }
 
 		status_header(200);
 		echo json_encode(['success' => true]);
@@ -453,107 +564,27 @@ wp_mail($email, $subject, $message, $headers);
 	*
 	* @since 0.0.3
 	*/
-	public function handle_generate_ticket_ajax()
-	{
-		check_ajax_referer('takamoa_papi_nonce', 'nonce');
+        public function handle_generate_ticket_ajax()
+        {
+                check_ajax_referer('takamoa_papi_nonce', 'nonce');
 
-		if (!current_user_can('manage_options')) {
-			wp_send_json_error(['message' => 'Unauthorized'], 403);
-		}
+                if (!current_user_can('manage_options')) {
+                        wp_send_json_error(['message' => 'Unauthorized'], 403);
+                }
 
-		$reference = sanitize_text_field($_POST['reference'] ?? '');
-		$design_id = intval($_POST['design_id'] ?? 0);
-		if (!$reference || !$design_id) {
-			wp_send_json_error(['message' => 'Données manquantes.']);
-		}
+                $reference = sanitize_text_field($_POST['reference'] ?? '');
+                $design_id = intval($_POST['design_id'] ?? 0);
+                if (!$reference || !$design_id) {
+                        wp_send_json_error(['message' => 'Données manquantes.']);
+                }
 
-		global $wpdb;
-		$design_table = $wpdb->prefix . 'takamoa_papi_designs';
-		$design = $wpdb->get_row(
-			$wpdb->prepare(
-				'SELECT * FROM ' . $design_table . ' WHERE id = %d',
-				$design_id,
-			),
-		);
-		if (!$design) {
-			wp_send_json_error(['message' => 'Design introuvable.']);
-		}
+                $url = $this->generate_ticket_pdf($reference, $design_id);
+                if (!$url) {
+                        wp_send_json_error(['message' => 'Erreur génération billet.']);
+                }
 
-		$upload = wp_upload_dir();
-		$dir = trailingslashit($upload['basedir']) . 'takamoa';
-		if (!file_exists($dir)) {
-			wp_mkdir_p($dir);
-		}
-		
-		require_once plugin_dir_path(__FILE__) . 'lib/fpdf.php';
-		
-		$qr_px = (int) $design->qrcode_size;
-		$qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=' . $qr_px . 'x' . $qr_px . '&data=' . urlencode($reference);
-		$response = wp_remote_get($qr_url);
-		if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
-			wp_send_json_error(['message' => 'Erreur génération QR code.']);
-		}
-		$qr_path = $dir . '/qr-' . $reference . '.png';
-		file_put_contents($qr_path, wp_remote_retrieve_body($response));
-		
-		$design_path = str_replace($upload['baseurl'], $upload['basedir'], $design->image_url);
-		$file = $dir . '/billet-' . $reference . '.pdf';
-		
-		$px_to_mm = static function($px, $dpi = 300) {
-		return ($px * 25.4) / $dpi;
-		};
-		$dpi = 300;
-		$w_px = (int) $design->ticket_width;
-		$h_px = (int) $design->ticket_height;
-		$top_px = (int) $design->qrcode_top;
-		$left_px = (int) $design->qrcode_left;
-		
-		$w_mm = $px_to_mm($w_px, $dpi);
-		$h_mm = $px_to_mm($h_px, $dpi);
-		$qr_mm = $px_to_mm($qr_px, $dpi);
-		$top_mm = $px_to_mm($top_px, $dpi);
-		$left_mm = $px_to_mm($left_px, $dpi);
-		
-		$orientation = ($w_mm > $h_mm) ? 'L' : 'P';
-		$pdf = new \FPDF($orientation, 'mm', [$w_mm, $h_mm]);
-		$pdf->SetAutoPageBreak(false);
-		$pdf->AddPage($orientation, [$w_mm, $h_mm]);
-		$pdf->Image($design_path, 0, 0, $w_mm, $h_mm);
-		$pdf->Image($qr_path, $left_mm, $top_mm, $qr_mm, $qr_mm);
-		$pdf->Output('F', $file);
-		@unlink($qr_path);
-		
-		$url = trailingslashit($upload['baseurl']) . 'takamoa/billet-' . $reference . '.pdf';
-
-		$tickets_table = $wpdb->prefix . 'takamoa_papi_tickets';
-		$ticket = $wpdb->get_row(
-			$wpdb->prepare(
-				'SELECT id FROM ' . $tickets_table . ' WHERE reference = %s',
-				$reference,
-			),
-		);
-		if ($ticket) {
-			$wpdb->update(
-				$tickets_table,
-				[
-					'qrcode_link' => $url,
-					'status' => 'GENERATED',
-					'updated_at' => current_time('mysql'),
-				],
-				['id' => $ticket->id],
-			);
-		} else {
-			$wpdb->insert($tickets_table, [
-				'reference' => $reference,
-				'qrcode_link' => $url,
-				'status' => 'GENERATED',
-				'created_at' => current_time('mysql'),
-				'updated_at' => current_time('mysql'),
-			]);
-		}
-
-		wp_send_json_success(['url' => $url]);
-	}
+                wp_send_json_success(['url' => $url]);
+        }
 	/**
 	* AJAX handler to verify a ticket reference and return ticket info.
 	*
@@ -635,43 +666,23 @@ wp_mail($email, $subject, $message, $headers);
 	wp_send_json_error(['message' => 'Erreur lors de la mise à jour.']);
 	}
 	
-	public function handle_send_ticket_email_ajax()
-	{
-	check_ajax_referer('takamoa_papi_nonce', 'nonce');
-	
-	if (!current_user_can('manage_options')) {
-	wp_send_json_error(['message' => 'Unauthorized'], 403);
-	}
-	
-	$reference = sanitize_text_field($_POST['reference'] ?? '');
-	if (!$reference) {
-	wp_send_json_error(['message' => 'Référence manquante.']);
-	}
-	
-	global $wpdb;
-	$tickets_table = $wpdb->prefix . 'takamoa_papi_tickets';
-	$payments_table = $wpdb->prefix . 'takamoa_papi_payments';
-	
-	$ticket = $wpdb->get_row(
-	$wpdb->prepare(
-	"SELECT t.qrcode_link, p.client_name, p.payer_email FROM {$tickets_table} t JOIN {$payments_table} p ON t.reference = p.reference WHERE t.reference = %s LIMIT 1",
-	$reference,
-	)
-	);
-	
-	if (!$ticket || empty($ticket->payer_email) || empty($ticket->qrcode_link)) {
-	wp_send_json_error(['message' => 'Billet introuvable.']);
-	}
-	
-	$upload = wp_upload_dir();
-	$file = str_replace($upload['baseurl'], $upload['basedir'], $ticket->qrcode_link);
-	if (!file_exists($file)) {
-	wp_send_json_error(['message' => 'Fichier billet introuvable.']);
-	}
-	
-	$this->send_ticket_email($ticket->payer_email, $ticket->client_name, $file);
-	$wpdb->update($tickets_table, ['last_notification' => current_time('mysql')], ['reference' => $reference]);
-	
-	wp_send_json_success(['message' => 'Billet envoyé.']);
-	}
+        public function handle_send_ticket_email_ajax()
+        {
+                check_ajax_referer('takamoa_papi_nonce', 'nonce');
+
+                if (!current_user_can('manage_options')) {
+                        wp_send_json_error(['message' => 'Unauthorized'], 403);
+                }
+
+                $reference = sanitize_text_field($_POST['reference'] ?? '');
+                if (!$reference) {
+                        wp_send_json_error(['message' => 'Référence manquante.']);
+                }
+
+                if (!$this->send_ticket_email_by_reference($reference)) {
+                        wp_send_json_error(['message' => 'Billet introuvable.']);
+                }
+
+                wp_send_json_success(['message' => 'Billet envoyé.']);
+        }
 }
