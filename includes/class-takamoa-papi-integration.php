@@ -79,7 +79,7 @@ class Takamoa_Papi_Integration {
 		if ( defined( 'TAKAMOA_PAPI_INTEGRATION_VERSION' ) ) {
 			$this->version = TAKAMOA_PAPI_INTEGRATION_VERSION;
 		} else {
-			$this->version = '0.0.7';
+                       $this->version = '0.0.8';
 		}
 		$this->plugin_name = 'takamoa-papi-integration';
 		$this->load_dependencies();
@@ -173,8 +173,9 @@ class Takamoa_Papi_Integration {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action('admin_menu', $plugin_admin, 'add_menu');
 		$this->loader->add_action('admin_init', $plugin_admin, 'register_settings');
-        $this->loader->add_action('admin_post_takamoa_save_design', $plugin_admin, 'handle_save_design');
-        $this->loader->add_action('admin_post_takamoa_delete_design', $plugin_admin, 'handle_delete_design');
+       $this->loader->add_action('admin_post_takamoa_save_design', $plugin_admin, 'handle_save_design');
+       $this->loader->add_action('admin_post_takamoa_delete_design', $plugin_admin, 'handle_delete_design');
+       $this->loader->add_action('admin_post_takamoa_export_payments', $plugin_admin, 'handle_export_payments_csv');
         $this->loader->add_action('wp_ajax_takamoa_resend_payment_email', $this->functions, 'handle_resend_payment_email_ajax');
         $this->loader->add_action('wp_ajax_takamoa_regenerate_payment_link', $this->functions, 'handle_regenerate_payment_link_ajax');
         $this->loader->add_action('wp_ajax_takamoa_ticket_exists', $this->functions, 'handle_ticket_exists_ajax');
