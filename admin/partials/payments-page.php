@@ -50,6 +50,9 @@
                 <div class="tk-title"><?php echo esc_html(get_admin_page_title()); ?></div>
                 <div class="tk-sub">Liste des paiements effectués via Papi.mg.</div>
             </div>
+            <div class="tk-actions">
+                <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=takamoa_export_payments' ), 'takamoa_export_payments' ) ); ?>" class="tk-btn">Exporter CSV</a>
+            </div>
         </header>
         <div class="tk-card">
             <table id="takamoa-payments-table" class="tk-table">

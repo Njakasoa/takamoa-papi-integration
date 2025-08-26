@@ -247,7 +247,38 @@ class Takamoa_Papi_Integration_Admin
                 include plugin_dir_path(__FILE__) . 'partials/payments-page.php';
         }
 
-	/**
+        /**
+        * Export all payments as CSV with contact information.
+        *
+        * @since 0.0.8
+        */
+        public function handle_export_payments_csv()
+        {
+                if (!current_user_can('manage_options')) {
+                        wp_die('Unauthorized', 403);
+                }
+
+                check_admin_referer('takamoa_export_payments');
+
+                global $wpdb;
+                $table = $wpdb->prefix . 'takamoa_papi_payments';
+                $rows  = $wpdb->get_results("SELECT reference, client_name, payer_email, payer_phone, amount, payment_status, payment_method, created_at FROM $table ORDER BY created_at DESC", ARRAY_A);
+
+                header('Content-Type: text/csv; charset=utf-8');
+                header('Content-Disposition: attachment; filename=takamoa-payments.csv');
+
+                $output = fopen('php://output', 'w');
+                fputcsv($output, ['Reference', 'Client Name', 'Email', 'Phone', 'Amount', 'Status', 'Method', 'Date']);
+
+                foreach ($rows as $row) {
+                        fputcsv($output, $row);
+                }
+
+                fclose($output);
+                exit;
+        }
+
+        /**
 	* Display the tickets management page.
 	*
 	* @since 0.0.3
