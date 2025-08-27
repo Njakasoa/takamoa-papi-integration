@@ -344,13 +344,13 @@ wp_mail($email, $subject, $message, $headers);
                 global $wpdb;
 
                 // Vérifie les données
-                $clientName = sanitize_text_field($_POST['clientName'] ?? '');
-                $amount = floatval($_POST['amount'] ?? 0);
-                $reference = sanitize_text_field($_POST['reference'] ?? '');
-                $payerEmail = sanitize_email($_POST['payerEmail'] ?? '');
-                $payerPhone = sanitize_text_field($_POST['payerPhone'] ?? '');
-                $description = sanitize_text_field($_POST['description'] ?? '');
-                $provider = sanitize_text_field($_POST['provider'] ?? '');
+               $clientName = sanitize_text_field(wp_unslash($_POST['clientName'] ?? ''));
+               $amount = floatval($_POST['amount'] ?? 0);
+               $reference = sanitize_text_field(wp_unslash($_POST['reference'] ?? ''));
+               $payerEmail = sanitize_email(wp_unslash($_POST['payerEmail'] ?? ''));
+               $payerPhone = sanitize_text_field(wp_unslash($_POST['payerPhone'] ?? ''));
+               $description = sanitize_text_field(wp_unslash($_POST['description'] ?? ''));
+               $provider = sanitize_text_field(wp_unslash($_POST['provider'] ?? ''));
                 $design_id = intval($_POST['design_id'] ?? 0);
                 $designs_table = $wpdb->prefix . 'takamoa_papi_designs';
                 if ($design_id > 0) {
