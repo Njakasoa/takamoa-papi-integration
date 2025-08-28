@@ -130,7 +130,9 @@ wp_mail($email, $subject, $message, $headers);
 
                 $qr_px = (int) $design->qrcode_size;
                 $qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=' . $qr_px . 'x' . $qr_px . '&data=' . urlencode($reference);
-                $response = wp_remote_get($qr_url);
+               $response = wp_remote_get($qr_url, [
+                       'timeout' => 30,
+               ]);
                 if (is_wp_error($response) || 200 !== wp_remote_retrieve_response_code($response)) {
                         return false;
                 }
@@ -423,16 +425,17 @@ wp_mail($email, $subject, $message, $headers);
 			$request['failureUrl'] = $failureUrl;
 		}
 
-		$response = wp_remote_post(
-			'https://app.papi.mg/dashboard/api/payment-links',
-			[
-				'headers' => [
-					'Token' => $api_key,
-					'Content-Type' => 'application/json',
-				],
-				'body' => json_encode($request),
-			],
-		);
+               $response = wp_remote_post(
+                       'https://app.papi.mg/dashboard/api/payment-links',
+                       [
+                               'headers' => [
+                                       'Token' => $api_key,
+                                       'Content-Type' => 'application/json',
+                               ],
+                               'body' => json_encode($request),
+                               'timeout' => 30,
+                       ],
+               );
 
 		if (is_wp_error($response)) {
 			wp_send_json_error(['message' => 'Erreur de connexion à Papi.']);
@@ -603,6 +606,7 @@ wp_mail($email, $subject, $message, $headers);
                                        'Content-Type' => 'application/json',
                                ],
                                'body' => json_encode($request),
+                               'timeout' => 30,
                        ],
                );
 
