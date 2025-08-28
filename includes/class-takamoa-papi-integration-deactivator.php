@@ -19,18 +19,18 @@
  * @subpackage takamoa-papi-integration/includes
  * @author     Nexa by Takamoa <nexa.takamoa@gmail.com>
  */
-class Takamoa_Papi_Integration_Deactivator {
+class Takamoa_Papi_Integration_Deactivator
+{
 
-	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    0.0.1
-	 */
-	public static function deactivate() {
-		var_dump('deactivate');
-	}
-
+/**
+ * Short Description. (use period)
+ *
+ * Long Description.
+ *
+ * @since    0.0.1
+ */
+    public static function deactivate()
+    {
+        var_dump('deactivate');
+    }
 }
-?>
