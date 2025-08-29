@@ -1,9 +1,9 @@
 <?php
-/**
- * Advanced options page.
- *
- * @since 0.0.6
- */
+	/**
+	* Advanced options page.
+	*
+	* @since 0.0.6
+	*/
 ?>
 <div class="wrap container-fluid">
 <section class="tk-wrap">

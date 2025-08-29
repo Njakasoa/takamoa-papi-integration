@@ -1,25 +1,23 @@
 <?php
-
-/**
-* Fired during plugin activation
-*
-* @link       https://nexa.takamoa.com/
-* @since      0.0.1
-*
-* @package    Takamoa
-* @subpackage takamoa-papi-integration/includes
-*/
-
-/**
-* Fired during plugin activation. https://regex101.com/r/TvKR9I/1
-*
-* This class defines all code necessary to run during the plugin"s activation.
-*
-* @since      0.0.1
-* @package    Takamoa
-* @subpackage takamoa-papi-integration/includes
-* @author     Nexa by Takamoa <nexa.takamoa@gmail.com>
-*/
+	/**
+	* Fired during plugin activation
+	*
+	* @link       https://nexa.takamoa.com/
+	* @since      0.0.1
+	*
+	* @package    Takamoa
+	* @subpackage takamoa-papi-integration/includes
+	*/
+	/**
+	* Fired during plugin activation. https://regex101.com/r/TvKR9I/1
+	*
+	* This class defines all code necessary to run during the plugin"s activation.
+	*
+	* @since      0.0.1
+	* @package    Takamoa
+	* @subpackage takamoa-papi-integration/includes
+	* @author     Nexa by Takamoa <nexa.takamoa@gmail.com>
+	*/
 class Takamoa_Papi_Integration_Functions
 {
 private function send_registration_email($email, $name, $link)
@@ -344,8 +342,7 @@ public function handle_create_payment_ajax()
 check_ajax_referer('takamoa_papi_nonce');
 
 global $wpdb;
-
-// Vérifie les données
+	// Vérifie les données
 $clientName = sanitize_text_field(wp_unslash($_POST['clientName'] ?? ''));
 $amount = floatval($_POST['amount'] ?? 0);
 $reference = sanitize_text_field(wp_unslash($_POST['reference'] ?? ''));
@@ -383,8 +380,7 @@ wp_send_json_error([
 'message' => 'Champs requis manquants ou invalides.',
 ]);
 }
-
-// Récupère les options admin
+	// Récupère les options admin
 $api_key = get_option('takamoa_papi_api_key');
 $successUrl = get_option(
 'takamoa_papi_success_url',
@@ -400,8 +396,7 @@ $isTestMode = (bool) get_option('takamoa_papi_test_mode', false);
 $testReason = sanitize_text_field(
 get_option('takamoa_papi_test_reason', ''),
 );
-
-// Construction du corps de la requête
+	// Construction du corps de la requête
 $request = [
 'clientName' => $clientName,
 'amount' => $amount,
@@ -450,8 +445,7 @@ wp_send_json_error([
 }
 
 $link = esc_url($body['data']['paymentLink']);
-
-// Sauvegarde dans la base
+	// Sauvegarde dans la base
 $table = $wpdb->prefix . 'takamoa_papi_payments';
 $payment_method = !empty($provider) ? $provider : '—';
 $wpdb->insert($table, [
@@ -656,12 +650,11 @@ wp_send_json_success([
 'status' => 'PENDING',
 ]);
 }
-
-/**
-* AJAX handler to check if a ticket already exists for a reference.
-*
-* @since 0.0.7
-*/
+	/**
+	* AJAX handler to check if a ticket already exists for a reference.
+	*
+	* @since 0.0.7
+	*/
 public function handle_ticket_exists_ajax()
 {
 check_ajax_referer('takamoa_papi_nonce', 'nonce');
@@ -686,12 +679,11 @@ $reference,
 
 wp_send_json_success(['exists' => (bool) $exists]);
 }
-
-/**
-* AJAX handler to generate a ticket PDF from a design.
-*
-* @since 0.0.3
-*/
+	/**
+	* AJAX handler to generate a ticket PDF from a design.
+	*
+	* @since 0.0.3
+	*/
 public function handle_generate_ticket_ajax()
 {
 check_ajax_referer('takamoa_papi_nonce', 'nonce');
@@ -717,11 +709,11 @@ wp_send_json_error(['message' => 'Erreur génération billet.']);
 
 wp_send_json_success(['url' => $url]);
 }
-/**
-* AJAX handler to verify a ticket reference and return ticket info.
-*
-* @since 0.0.5
-*/
+	/**
+	* AJAX handler to verify a ticket reference and return ticket info.
+	*
+	* @since 0.0.5
+	*/
 public function handle_scan_ticket_ajax()
 {
 check_ajax_referer('takamoa_papi_nonce', 'nonce');
@@ -757,12 +749,11 @@ wp_send_json_success([
 
 wp_send_json_error(['message' => 'Billet introuvable.']);
 }
-
-/**
-* AJAX handler to validate a ticket.
-*
-* @since 0.0.6
-*/
+	/**
+	* AJAX handler to validate a ticket.
+	*
+	* @since 0.0.6
+	*/
 public function handle_validate_ticket_ajax()
 {
 check_ajax_referer('takamoa_papi_nonce', 'nonce');

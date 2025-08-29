@@ -1,9 +1,9 @@
 <?php
-/**
- * Payments history page with unified design.
- *
- * @since 0.0.8
- */
+	/**
+	* Payments history page with unified design.
+	*
+	* @since 0.0.8
+	*/
 ?>
 <div class="wrap container-fluid">
 <section class="tk-wrap">

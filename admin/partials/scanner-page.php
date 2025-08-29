@@ -1,9 +1,9 @@
 <?php
-/**
- * Ticket scanner page.
- *
- * @since 0.0.9
- */
+	/**
+	* Ticket scanner page.
+	*
+	* @since 0.0.9
+	*/
 ?>
 <div class="wrap container-fluid">
 <section class="tk-wrap">

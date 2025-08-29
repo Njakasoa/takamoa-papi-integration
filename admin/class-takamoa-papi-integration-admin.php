@@ -1,13 +1,12 @@
 <?php
-
-/**
-* The admin-specific functionality of the plugin.
-*
-* @link       https://nexa.takamoa.com/
-* @since      0.0.1
-* @package    Takamoa
-* @subpackage takamoa-papi-integration/admin
-*/
+	/**
+	* The admin-specific functionality of the plugin.
+	*
+	* @link       https://nexa.takamoa.com/
+	* @since      0.0.1
+	* @package    Takamoa
+	* @subpackage takamoa-papi-integration/admin
+	*/
 
 class Takamoa_Papi_Integration_Admin
 {
@@ -21,10 +20,9 @@ class Takamoa_Papi_Integration_Admin
 		$this->version     = $version;
 		$this->functions   = $functions;
 	}
-
-/**
-* Enqueue admin styles.
-*/
+	/**
+	* Enqueue admin styles.
+	*/
 	public function enqueue_styles()
 	{
 		if (strpos(get_current_screen()->id, $this->plugin_name) !== false) {
@@ -33,10 +31,9 @@ class Takamoa_Papi_Integration_Admin
 			wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/takamoa-papi-integration-admin.css', array(), $this->version, 'all');
 		}
 	}
-
-/**
-* Enqueue admin scripts.
-*/
+	/**
+	* Enqueue admin scripts.
+	*/
 	public function enqueue_scripts()
 	{
 		if (strpos(get_current_screen()->id, $this->plugin_name) !== false) {
@@ -58,95 +55,90 @@ class Takamoa_Papi_Integration_Admin
 			wp_enqueue_media();
 		}
 	}
-
-/**
-* Add admin menu.
-*/
+	/**
+	* Add admin menu.
+	*/
 	public function add_menu()
 	{
 		add_menu_page(
-'Takamoa x Papi Intégration',
-'Takamoa Papi',
-'manage_options',
-$this->plugin_name,
-array($this, 'display_admin_page'),
-'dashicons-admin-generic',
-6
+            'Takamoa x Papi Intégration',
+            'Takamoa Papi',
+            'manage_options',
+            $this->plugin_name,
+            array($this, 'display_admin_page'),
+            'dashicons-admin-generic',
+            6
 		);
 
 		add_submenu_page(
-$this->plugin_name,
-'Historique des paiements',
-'Paiements',
-'manage_options',
-$this->plugin_name . '-payments',
-array($this, 'display_payments_page')
+            $this->plugin_name,
+            'Historique des paiements',
+            'Paiements',
+            'manage_options',
+            $this->plugin_name . '-payments',
+            array($this, 'display_payments_page')
 		);
 
 		add_submenu_page(
-$this->plugin_name,
-'Billets',
-'Billets',
-'manage_options',
-$this->plugin_name . '-tickets',
-array($this, 'display_tickets_page')
+            $this->plugin_name,
+            'Billets',
+            'Billets',
+            'manage_options',
+            $this->plugin_name . '-tickets',
+            array($this, 'display_tickets_page')
 		);
 
 		add_submenu_page(
-$this->plugin_name,
-'Design des billets',
-'Design',
-'manage_options',
-$this->plugin_name . '-design',
-array($this, 'display_designs_page')
-);
-add_submenu_page(
-$this->plugin_name,
-'Scanner billets',
-'Scanner billets',
-'manage_options',
-$this->plugin_name . '-scanner',
-array($this, 'display_scanner_page')
+            $this->plugin_name,
+            'Design des billets',
+            'Design',
+            'manage_options',
+            $this->plugin_name . '-design',
+            array($this, 'display_designs_page')
+        );
+
+        add_submenu_page(
+            $this->plugin_name,
+            'Scanner billets',
+            'Scanner billets',
+            'manage_options',
+            $this->plugin_name . '-scanner',
+            array($this, 'display_scanner_page')
 		); // @since 0.0.5
 
 
 		add_submenu_page(
-$this->plugin_name,
-'Options avancées',
-'Options',
-'manage_options',
-$this->plugin_name . '-settings',
-array($this, 'display_options_page')
+            $this->plugin_name,
+            'Options avancées',
+            'Options',
+            'manage_options',
+            $this->plugin_name . '-settings',
+            array($this, 'display_options_page')
 		);
 	}
 
-/**
-* Register API key setting.
-*/
+	/**
+	* Register API key setting.
+	*/
 	public function register_settings()
 	{
 		register_setting('takamoa_papi_key_group', 'takamoa_papi_api_key');
-
-// URLs
+	// URLs
 		register_setting('takamoa_papi_settings_group', 'takamoa_papi_success_url');
 		register_setting('takamoa_papi_settings_group', 'takamoa_papi_failure_url');
-
-// Valid duration
+	// Valid duration
 		register_setting('takamoa_papi_settings_group', 'takamoa_papi_valid_duration');
-
-// Providers
+	// Providers
 		register_setting('takamoa_papi_settings_group', 'takamoa_papi_providers');
-
-// Champs visibles dans le formulaire
+	// Champs visibles dans le formulaire
 		register_setting('takamoa_papi_settings_group', 'takamoa_papi_optional_fields');
-
-// Mode test
+	// Mode test
 		register_setting('takamoa_papi_settings_group', 'takamoa_papi_test_mode');
 		register_setting('takamoa_papi_settings_group', 'takamoa_papi_test_reason');
 
 		add_settings_section(
-'takamoa_papi_main_section',
-'Clé API Papi.mg',
+            'takamoa_papi_main_section',
+            'Clé API Papi.mg',
 			function () {
 				echo '<p>Collez ici votre clé API Papi.mg (retrouvable dans votre espace boutique).</p>';
 			},
@@ -154,8 +146,8 @@ array($this, 'display_options_page')
 		);
 
 		add_settings_field(
-'takamoa_papi_api_key',
-'Clé API',
+            'takamoa_papi_api_key',
+            'Clé API',
 			function () {
 				$value = esc_attr(get_option('takamoa_papi_api_key', ''));
 				echo '<input type="text" name="takamoa_papi_api_key" value="' . $value . '" style="width: 400px;" />';
@@ -165,13 +157,12 @@ array($this, 'display_options_page')
 		);
 
 		add_settings_section(
-'takamoa_papi_extra_section',
-'Options supplémentaires',
+            'takamoa_papi_extra_section',
+            'Options supplémentaires',
 			null,
 			$this->plugin_name . '-settings'
 		);
-
-// Champs de redirection
+	// Champs de redirection
 		add_settings_field('takamoa_papi_success_url', 'URL après succès', function () {
 			$default = home_url('/paiementreussi');
 			$value   = esc_attr(get_option('takamoa_papi_success_url', $default));
@@ -186,12 +177,12 @@ array($this, 'display_options_page')
 			echo '<p class="description">Par défaut : <code>' . $default . '</code></p>';
 		}, $this->plugin_name . '-settings', 'takamoa_papi_extra_section');
 
-// Durée de validité
+	// Durée de validité
 		add_settings_field('takamoa_papi_valid_duration', 'Durée de validité du lien (en minutes)', function () {
 			echo '<input type="number" name="takamoa_papi_valid_duration" value="' . esc_attr(get_option('takamoa_papi_valid_duration', 60)) . '" min="1">';
 		}, $this->plugin_name . '-settings', 'takamoa_papi_extra_section');
 
-// Méthodes de paiement
+	// Méthodes de paiement
 		add_settings_field('takamoa_papi_providers', 'Méthodes de paiement disponibles', function () {
 			$active    = (array) get_option('takamoa_papi_providers', []);
 			$providers = ['MVOLA' => 'MVOLA', 'ORANGE_MONEY' => 'Orange Money', 'AIRTEL_MONEY' => 'Airtel Money', 'BRED' => 'BRED'];
@@ -201,7 +192,7 @@ array($this, 'display_options_page')
 			}
 		}, $this->plugin_name . '-settings', 'takamoa_papi_extra_section');
 
-// Champs visibles dans le formulaire
+	// Champs visibles dans le formulaire
 		add_settings_field('takamoa_papi_optional_fields', 'Champs à afficher dans le formulaire', function () {
 			$fields   = ['payerEmail' => 'Email client', 'payerPhone' => 'Téléphone client'];
 			$selected = (array) get_option('takamoa_papi_optional_fields', []);
@@ -211,7 +202,7 @@ array($this, 'display_options_page')
 			}
 		}, $this->plugin_name . '-settings', 'takamoa_papi_extra_section');
 
-// Test mode
+	// Test mode
 		add_settings_field('takamoa_papi_test_mode', 'Mode test (transactions réelles)', function () {
 			$checked = checked(get_option('takamoa_papi_test_mode', false), true, false);
 			echo '<input type="checkbox" name="takamoa_papi_test_mode" value="1" ' . $checked . '> Activer le test mode';
@@ -222,9 +213,9 @@ array($this, 'display_options_page')
 		}, $this->plugin_name . '-settings', 'takamoa_papi_extra_section');
 	}
 
-/**
-* Display admin config page.
-*/
+	/**
+	* Display admin config page.
+	*/
 	public function display_admin_page()
 	{
 		require plugin_dir_path(__FILE__) . 'partials/admin-page.php';
@@ -232,7 +223,7 @@ array($this, 'display_options_page')
 
 	public function init_admin_route()
 	{
-		// Optionnel : peut être utilisé plus tard pour des routes personnalisées
+	// Optionnel : peut être utilisé plus tard pour des routes personnalisées
 	}
 
 	public function display_payments_page()
@@ -247,11 +238,11 @@ array($this, 'display_options_page')
 		include plugin_dir_path(__FILE__) . 'partials/payments-page.php';
 	}
 
-/**
-* Export all payments as CSV with contact information.
-*
-* @since 0.0.8
-*/
+	/**
+	* Export all payments as CSV with contact information.
+	*
+	* @since 0.0.8
+	*/
 	public function handle_export_payments_csv()
 	{
 		if (!current_user_can('manage_options')) {
@@ -278,11 +269,11 @@ array($this, 'display_options_page')
 		exit;
 	}
 
-/**
-* Display the tickets management page.
-*
-* @since 0.0.3
-*/
+	/**
+	* Display the tickets management page.
+	*
+	* @since 0.0.3
+	*/
 	public function display_tickets_page()
 	{
 		global $wpdb;
@@ -292,11 +283,11 @@ array($this, 'display_options_page')
 		include plugin_dir_path(__FILE__) . 'partials/tickets-page.php';
 	}
 
-/**
-* Display the ticket designs management page.
-*
-* @since 0.0.3
-*/
+	/**
+	* Display the ticket designs management page.
+	*
+	* @since 0.0.3
+	*/
 	public function display_designs_page()
 	{
 		global $wpdb;
@@ -307,21 +298,21 @@ array($this, 'display_options_page')
 		include plugin_dir_path(__FILE__) . 'partials/designs-page.php';
 	}
 
-/**
- * Display the ticket scanner page.
- *
- * @since 0.0.5
- */
+	/**
+	* Display the ticket scanner page.
+	*
+	* @since 0.0.5
+	*/
 	public function display_scanner_page()
 	{
 		include plugin_dir_path(__FILE__) . 'partials/scanner-page.php';
 	}
 
-/**
-* Handle saving a ticket design.
-*
-* @since 0.0.3
-*/
+	/**
+	* Handle saving a ticket design.
+	*
+	* @since 0.0.3
+	*/
 	public function handle_save_design()
 	{
 		check_admin_referer('takamoa_save_design');
@@ -365,12 +356,11 @@ array($this, 'display_options_page')
 		exit;
 	}
 
-/**
-* Handle deleting a ticket design.
-*
-* @since 0.0.7
-*/
-
+	/**
+	* Handle deleting a ticket design.
+	*
+	* @since 0.0.7
+	*/
 	public function handle_delete_design()
 	{
 		$design_id = intval($_GET['design_id'] ?? 0);
@@ -403,11 +393,11 @@ array($this, 'display_options_page')
 		exit;
 	}
 
-/**
-* AJAX handler to set a ticket design as default.
-*
-* @since 0.0.7
-*/
+	/**
+	* AJAX handler to set a ticket design as default.
+	*
+	* @since 0.0.7
+	*/
 	public function handle_set_default_design_ajax()
 	{
 		check_ajax_referer('takamoa_papi_nonce', 'nonce');
