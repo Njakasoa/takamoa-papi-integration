@@ -9,19 +9,19 @@
     <section class="tk-wrap">
         <style>
             :root{
-            --bg:#0b0d12;
-            --card:#121723;
-            --muted:#8892a6;
-            --text:#e7ecf3;
-            --primary:#4f8cff;
-            --primary-press:#2f6eea;
-            --ring:rgba(79,140,255,.3);
-            --border:#283042;
-            --ok:#2ecc71;
-            --warn:#ffb020;
-            --err:#ff6b6b;
-            --radius:16px;
-            --gap:16px;
+				--bg:#0b0d12;
+				--card:#121723;
+				--muted:#8892a6;
+				--text:#e7ecf3;
+				--primary:#4f8cff;
+				--primary-press:#2f6eea;
+				--ring:rgba(79,140,255,.3);
+				--border:#283042;
+				--ok:#2ecc71;
+				--warn:#ffb020;
+				--err:#ff6b6b;
+				--radius:16px;
+				--gap:16px;
             }
             .wrap{margin:0;padding:0;}
             .tk-wrap{font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;color:var(--text);background:var(--bg);padding:24px;border-radius:var(--radius);box-shadow:0 0 0 1px #0f1320,0 10px 30px rgba(0,0,0,.35);min-height:100vh;display:flex;flex-direction:column;align-items:center;}

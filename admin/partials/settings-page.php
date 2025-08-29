@@ -51,7 +51,7 @@
             .tk-btn.primary{background:var(--primary);border-color:var(--primary);color:white;}
             .tk-btn.primary:hover{background:var(--primary-press);}
             .tk-actions{display:flex;gap:10px;flex-wrap:wrap;}
-            </style>
+		</style>
         <header class="tk-header">
             <div>
                 <div class="tk-title">Options avancées</div>
