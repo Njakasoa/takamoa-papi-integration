@@ -1,6 +1,6 @@
 <?php
 if (! defined('ABSPATH')) {
-    exit; // Exit if accessed directly
+	exit; // Exit if accessed directly
 }
 /**
  * The plugin bootstrap file
@@ -28,7 +28,7 @@ if (! defined('ABSPATH')) {
  */
 // If this file is called directly, abort.
 if (! defined('WPINC')) {
-    die;
+	die;
 }
 /**
  * Currently plugin version.
@@ -42,8 +42,8 @@ define('TAKAMOA_PAPI_INTEGRATION_VERSION', '0.0.8');
  */
 function activate_takamoa_papi_integration()
 {
-    require_once plugin_dir_path(__FILE__) . 'includes/class-takamoa-papi-integration-activator.php';
-    Takamoa_Papi_Integration_Activator::activate();
+	require_once plugin_dir_path(__FILE__) . 'includes/class-takamoa-papi-integration-activator.php';
+	Takamoa_Papi_Integration_Activator::activate();
 }
 /**
  * The code that runs during plugin deactivation.
@@ -51,8 +51,8 @@ function activate_takamoa_papi_integration()
  */
 function deactivate_takamoa_papi_integration()
 {
-    require_once plugin_dir_path(__FILE__) . 'includes/class-takamoa-papi-integration-deactivator.php';
-    Takamoa_Papi_Integration_Deactivator::deactivate();
+	require_once plugin_dir_path(__FILE__) . 'includes/class-takamoa-papi-integration-deactivator.php';
+	Takamoa_Papi_Integration_Deactivator::deactivate();
 }
 register_activation_hook(__FILE__, 'activate_takamoa_papi_integration');
 register_deactivation_hook(__FILE__, 'deactivate_takamoa_papi_integration');

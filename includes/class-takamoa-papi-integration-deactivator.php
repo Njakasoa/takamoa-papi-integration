@@ -29,8 +29,8 @@ class Takamoa_Papi_Integration_Deactivator
  *
  * @since    0.0.1
  */
-    public static function deactivate()
-    {
-        var_dump('deactivate');
-    }
+	public static function deactivate()
+	{
+		var_dump('deactivate');
+	}
 }

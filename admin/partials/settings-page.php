@@ -8,49 +8,49 @@
 <div class="wrap container-fluid">
 <section class="tk-wrap">
 <style>
-:root{
---bg:#0b0d12;
---card:#121723;
---muted:#8892a6;
---text:#e7ecf3;
---primary:#4f8cff;
---primary-press:#2f6eea;
---ring:rgba(79,140,255,.3);
---border:#283042;
---ok:#2ecc71;
---warn:#ffb020;
---err:#ff6b6b;
---radius:16px;
---gap:16px;
-}
-.tk-wrap{
-font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
-color:var(--text);
-background:var(--bg);
-padding:24px;
-border-radius:var(--radius);
-box-shadow:0 0 0 1px #0f1320,0 10px 30px rgba(0,0,0,.35);
-}
-.tk-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;}
-.tk-title{font-size:18px;font-weight:700;letter-spacing:.2px;}
-.tk-sub{color:var(--muted);font-size:13px}
-.tk-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
-.tk-fields{display:grid;gap:14px;}
-.tk-field{display:flex;flex-direction:column;gap:8px;}
-.tk-label{font-weight:600;font-size:13px;display:flex;align-items:center;gap:8px;}
-.tk-hint{color:var(--muted);font-size:12px;}
-.tk-input,.tk-number{width:100%;box-sizing:border-box;background:#0e1320;color:var(--text);border:1px solid var(--border);border-radius:12px;padding:12px 12px;outline:none;transition:.15s border-color,.15s box-shadow,.15s transform;}
-.tk-input:focus,.tk-number:focus{border-color:var(--primary);box-shadow:0 0 0 4px var(--ring);}
-.tk-number{appearance:textfield;}
-.tk-number::-webkit-outer-spin-button,.tk-number::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
-.tk-row{display:grid;gap:12px;grid-template-columns:1fr 1fr;}
-@media (max-width:680px){.tk-row{grid-template-columns:1fr;}}
-.tk-btn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;padding:10px 14px;border:1px solid var(--border);background:#0f1526;color:var(--text);cursor:pointer;transition:.15s transform,.15s background,.15s border-color;text-decoration:none;font-weight:600;}
-.tk-btn:hover{transform:translateY(-1px);border-color:#34405a;}
-.tk-btn:active{transform:translateY(0);}
-.tk-btn.primary{background:var(--primary);border-color:var(--primary);color:white;}
-.tk-btn.primary:hover{background:var(--primary-press);}
-.tk-actions{display:flex;gap:10px;flex-wrap:wrap;}
+	:root{
+	--bg:#0b0d12;
+	--card:#121723;
+	--muted:#8892a6;
+	--text:#e7ecf3;
+	--primary:#4f8cff;
+	--primary-press:#2f6eea;
+	--ring:rgba(79,140,255,.3);
+	--border:#283042;
+	--ok:#2ecc71;
+	--warn:#ffb020;
+	--err:#ff6b6b;
+	--radius:16px;
+	--gap:16px;
+	}
+	.tk-wrap{
+	font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+	color:var(--text);
+	background:var(--bg);
+	padding:24px;
+	border-radius:var(--radius);
+	box-shadow:0 0 0 1px #0f1320,0 10px 30px rgba(0,0,0,.35);
+	}
+	.tk-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;}
+	.tk-title{font-size:18px;font-weight:700;letter-spacing:.2px;}
+	.tk-sub{color:var(--muted);font-size:13px}
+	.tk-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
+	.tk-fields{display:grid;gap:14px;}
+	.tk-field{display:flex;flex-direction:column;gap:8px;}
+	.tk-label{font-weight:600;font-size:13px;display:flex;align-items:center;gap:8px;}
+	.tk-hint{color:var(--muted);font-size:12px;}
+	.tk-input,.tk-number{width:100%;box-sizing:border-box;background:#0e1320;color:var(--text);border:1px solid var(--border);border-radius:12px;padding:12px 12px;outline:none;transition:.15s border-color,.15s box-shadow,.15s transform;}
+	.tk-input:focus,.tk-number:focus{border-color:var(--primary);box-shadow:0 0 0 4px var(--ring);}
+	.tk-number{appearance:textfield;}
+	.tk-number::-webkit-outer-spin-button,.tk-number::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+	.tk-row{display:grid;gap:12px;grid-template-columns:1fr 1fr;}
+	@media (max-width:680px){.tk-row{grid-template-columns:1fr;}}
+	.tk-btn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;padding:10px 14px;border:1px solid var(--border);background:#0f1526;color:var(--text);cursor:pointer;transition:.15s transform,.15s background,.15s border-color;text-decoration:none;font-weight:600;}
+	.tk-btn:hover{transform:translateY(-1px);border-color:#34405a;}
+	.tk-btn:active{transform:translateY(0);}
+	.tk-btn.primary{background:var(--primary);border-color:var(--primary);color:white;}
+	.tk-btn.primary:hover{background:var(--primary-press);}
+	.tk-actions{display:flex;gap:10px;flex-wrap:wrap;}
 </style>
 <header class="tk-header">
 <div>

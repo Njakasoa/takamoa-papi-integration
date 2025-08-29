@@ -27,13 +27,13 @@
 
 // If uninstall not called from WordPress, then exit.
 if (! defined('WP_UNINSTALL_PLUGIN')) {
-    delete_option('takamoa_papi_api_key');
-    delete_option('takamoa_papi_success_url');
-    delete_option('takamoa_papi_failure_url');
-    delete_option('takamoa_papi_notification_url');
-    delete_option('takamoa_papi_valid_duration');
-    delete_option('takamoa_papi_providers');
-    delete_option('takamoa_papi_optional_fields');
-    delete_option('takamoa_papi_test_mode');
-    delete_option('takamoa_papi_test_reason');
+	delete_option('takamoa_papi_api_key');
+	delete_option('takamoa_papi_success_url');
+	delete_option('takamoa_papi_failure_url');
+	delete_option('takamoa_papi_notification_url');
+	delete_option('takamoa_papi_valid_duration');
+	delete_option('takamoa_papi_providers');
+	delete_option('takamoa_papi_optional_fields');
+	delete_option('takamoa_papi_test_mode');
+	delete_option('takamoa_papi_test_reason');
 }
