@@ -1,9 +1,9 @@
 <?php
-/**
- * Tickets management page with new design.
- *
- * @since 0.0.8
- */
+	/**
+	* Tickets management page with new design.
+	*
+	* @since 0.0.8
+	*/
 ?>
 <div class="wrap container-fluid">
     <section class="tk-wrap">
@@ -39,44 +39,44 @@
             .tk-btn:active{transform:translateY(0);}
             .tk-btn.danger{border-color:var(--err);color:var(--err);}
             .tk-btn.danger:hover{background:rgba(255,107,107,.1);}
-        </style>
+		</style>
         <header class="tk-header">
             <div>
                 <div class="tk-title"><?php echo esc_html(get_admin_page_title()); ?></div>
                 <div class="tk-sub">Liste des billets générés.</div>
             </div>
-        </header>
-        <div class="tk-card">
-            <table id="takamoa-tickets-table" class="tk-table">
-                <thead>
-                    <tr>
-                        <th>Référence</th>
-                        <th>Description</th>
-                        <th>QR Code</th>
-                        <th>Date création</th>
-                        <th>Date mise à jour</th>
-                        <th>Status</th>
-                        <th>Dernière notification</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($results as $row) : ?>
-                        <tr data-reference="<?= esc_attr($row->reference) ?>">
-                            <td><?= esc_html($row->reference) ?></td>
-                            <td><?= esc_html($row->description ?: '—') ?></td>
-                            <td><?= $row->qrcode_link ? '<a href="' . esc_url($row->qrcode_link) . '" target="_blank">Voir</a>' : '—'; ?></td>
-                            <td><?= esc_html($row->created_at) ?></td>
-                            <td><?= esc_html($row->updated_at ?: '—') ?></td>
-                            <td><?= esc_html($row->status) ?></td>
-                            <td><?= esc_html($row->last_notification ?: '—') ?></td>
-                            <td>
-                                <button type="button" class="tk-btn takamoa-send-ticket-email">Envoyer par email</button>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    </section>
+		</header>
+		<div class="tk-card">
+			<table id="takamoa-tickets-table" class="tk-table">
+				<thead>
+					<tr>
+						<th>Référence</th>
+						<th>Description</th>
+						<th>QR Code</th>
+						<th>Date création</th>
+						<th>Date mise à jour</th>
+						<th>Status</th>
+						<th>Dernière notification</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ($results as $row) : ?>
+						<tr data-reference="<?= esc_attr($row->reference) ?>">
+							<td><?= esc_html($row->reference) ?></td>
+							<td><?= esc_html($row->description ?: '—') ?></td>
+							<td><?= $row->qrcode_link ? '<a href="' . esc_url($row->qrcode_link) . '" target="_blank">Voir</a>' : '—'; ?></td>
+							<td><?= esc_html($row->created_at) ?></td>
+							<td><?= esc_html($row->updated_at ?: '—') ?></td>
+							<td><?= esc_html($row->status) ?></td>
+							<td><?= esc_html($row->last_notification ?: '—') ?></td>
+							<td>
+								<button type="button" class="tk-btn takamoa-send-ticket-email">Envoyer par email</button>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+	</section>
 </div>

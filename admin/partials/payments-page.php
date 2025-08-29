@@ -1,9 +1,9 @@
 <?php
-/**
- * Payments history page with unified design.
- *
- * @since 0.0.8
- */
+	/**
+	* Payments history page with unified design.
+	*
+	* @since 0.0.8
+	*/
 ?>
 <div class="wrap container-fluid">
     <section class="tk-wrap">
@@ -97,7 +97,8 @@
                             data-raw-response="<?= esc_attr($row->raw_response) ?>"
                             data-raw-notification="<?= esc_attr($row->raw_notification) ?>"
                             data-updated-at="<?= esc_attr($row->updated_at) ?>"
-                            data-id="<?= esc_attr($row->id) ?>">
+                            data-id="<?= esc_attr($row->id) ?>"
+                        >
                             <td><?= esc_html($row->reference) ?></td>
                             <td><?= esc_html($row->client_name) ?></td>
                             <td><?= esc_html($row->payer_email ?: '—') ?></td>

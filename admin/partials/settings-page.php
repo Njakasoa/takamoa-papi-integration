@@ -1,9 +1,9 @@
 <?php
-/**
- * Advanced options page.
- *
- * @since 0.0.6
- */
+	/**
+	* Advanced options page.
+	*
+	* @since 0.0.6
+	*/
 ?>
 <div class="wrap container-fluid">
     <section class="tk-wrap">
@@ -51,83 +51,83 @@
             .tk-btn.primary{background:var(--primary);border-color:var(--primary);color:white;}
             .tk-btn.primary:hover{background:var(--primary-press);}
             .tk-actions{display:flex;gap:10px;flex-wrap:wrap;}
-        </style>
+		</style>
         <header class="tk-header">
             <div>
                 <div class="tk-title">Options avancées</div>
                 <div class="tk-sub">Configurez les paramètres de l'intégration.</div>
             </div>
-        </header>
-        <form method="post" action="options.php" class="tk-card tk-fields">
-            <?php
-            settings_fields('takamoa_papi_settings_group');
-            $default_success = home_url('/paiementreussi');
-            $success_value = esc_attr(get_option('takamoa_papi_success_url', $default_success));
-            $default_failure = home_url('/paiementechoue');
-            $failure_value = esc_attr(get_option('takamoa_papi_failure_url', $default_failure));
-            $duration = esc_attr(get_option('takamoa_papi_valid_duration', 60));
-            $providers = (array) get_option('takamoa_papi_providers', []);
-            $fields = (array) get_option('takamoa_papi_optional_fields', []);
-            $test_mode = get_option('takamoa_papi_test_mode', false);
-            $test_reason = esc_attr(get_option('takamoa_papi_test_reason'));
-            ?>
-            <div class="tk-field">
-                <label class="tk-label" for="takamoa_papi_success_url">URL après succès</label>
-                <input type="url" id="takamoa_papi_success_url" name="takamoa_papi_success_url" class="tk-input" value="<?php echo $success_value; ?>" />
-                <span class="tk-hint">Par défaut : <code><?php echo esc_html($default_success); ?></code></span>
-            </div>
-            <div class="tk-field">
-                <label class="tk-label" for="takamoa_papi_failure_url">URL après échec</label>
-                <input type="url" id="takamoa_papi_failure_url" name="takamoa_papi_failure_url" class="tk-input" value="<?php echo $failure_value; ?>" />
-                <span class="tk-hint">Par défaut : <code><?php echo esc_html($default_failure); ?></code></span>
-            </div>
-            <div class="tk-field">
-                <label class="tk-label" for="takamoa_papi_valid_duration">Durée de validité du lien (en minutes)</label>
-                <input type="number" id="takamoa_papi_valid_duration" name="takamoa_papi_valid_duration" class="tk-number" min="1" value="<?php echo $duration; ?>" />
-            </div>
-            <div class="tk-field">
-                <label class="tk-label">Méthodes de paiement disponibles</label>
-                <div class="tk-row">
-                    <?php
-                    $all_providers = [
-                        'MVOLA' => 'MVOLA',
-                        'ORANGE_MONEY' => 'Orange Money',
-                        'AIRTEL_MONEY' => 'Airtel Money',
-                        'BRED' => 'BRED'
-                    ];
-                    foreach ($all_providers as $key => $label) {
-                        $checked = in_array($key, $providers) ? 'checked' : '';
-                        echo '<label class="tk-label"><input type="checkbox" name="takamoa_papi_providers[]" value="' . esc_attr($key) . '" ' . $checked . '> ' . esc_html($label) . '</label>';
-                    }
-                    ?>
-                </div>
-            </div>
-            <div class="tk-field">
-                <label class="tk-label">Champs à afficher dans le formulaire</label>
-                <div class="tk-row">
-                    <?php
-                    $all_fields = [
-                        'payerEmail' => 'Email client',
-                        'payerPhone' => 'Téléphone client'
-                    ];
-                    foreach ($all_fields as $key => $label) {
-                        $checked = in_array($key, $fields) ? 'checked' : '';
-                        echo '<label class="tk-label"><input type="checkbox" name="takamoa_papi_optional_fields[]" value="' . esc_attr($key) . '" ' . $checked . '> ' . esc_html($label) . '</label>';
-                    }
-                    ?>
-                </div>
-            </div>
-            <div class="tk-field">
-                <label class="tk-label" for="takamoa_papi_test_mode">Mode test (transactions réelles)</label>
-                <input type="checkbox" id="takamoa_papi_test_mode" name="takamoa_papi_test_mode" value="1" <?php checked($test_mode, true); ?> />
-            </div>
-            <div class="tk-field">
-                <label class="tk-label" for="takamoa_papi_test_reason">Raison du test</label>
-                <input type="text" id="takamoa_papi_test_reason" name="takamoa_papi_test_reason" class="tk-input" value="<?php echo $test_reason; ?>" />
-            </div>
-            <div class="tk-field tk-actions">
-                <button type="submit" class="tk-btn primary">Enregistrer</button>
-            </div>
-        </form>
-    </section>
+		</header>
+		<form method="post" action="options.php" class="tk-card tk-fields">
+			<?php
+				settings_fields('takamoa_papi_settings_group');
+				$default_success = home_url('/paiementreussi');
+				$success_value = esc_attr(get_option('takamoa_papi_success_url', $default_success));
+				$default_failure = home_url('/paiementechoue');
+				$failure_value = esc_attr(get_option('takamoa_papi_failure_url', $default_failure));
+				$duration = esc_attr(get_option('takamoa_papi_valid_duration', 60));
+				$providers = (array) get_option('takamoa_papi_providers', []);
+				$fields = (array) get_option('takamoa_papi_optional_fields', []);
+				$test_mode = get_option('takamoa_papi_test_mode', false);
+				$test_reason = esc_attr(get_option('takamoa_papi_test_reason'));
+			?>
+			<div class="tk-field">
+				<label class="tk-label" for="takamoa_papi_success_url">URL après succès</label>
+				<input type="url" id="takamoa_papi_success_url" name="takamoa_papi_success_url" class="tk-input" value="<?php echo $success_value; ?>" />
+				<span class="tk-hint">Par défaut : <code><?php echo esc_html($default_success); ?></code></span>
+			</div>
+			<div class="tk-field">
+				<label class="tk-label" for="takamoa_papi_failure_url">URL après échec</label>
+				<input type="url" id="takamoa_papi_failure_url" name="takamoa_papi_failure_url" class="tk-input" value="<?php echo $failure_value; ?>" />
+				<span class="tk-hint">Par défaut : <code><?php echo esc_html($default_failure); ?></code></span>
+			</div>
+			<div class="tk-field">
+				<label class="tk-label" for="takamoa_papi_valid_duration">Durée de validité du lien (en minutes)</label>
+				<input type="number" id="takamoa_papi_valid_duration" name="takamoa_papi_valid_duration" class="tk-number" min="1" value="<?php echo $duration; ?>" />
+			</div>
+			<div class="tk-field">
+				<label class="tk-label">Méthodes de paiement disponibles</label>
+				<div class="tk-row">
+					<?php
+						$all_providers = [
+							'MVOLA' => 'MVOLA',
+							'ORANGE_MONEY' => 'Orange Money',
+							'AIRTEL_MONEY' => 'Airtel Money',
+							'BRED' => 'BRED'
+						];
+						foreach ($all_providers as $key => $label) {
+							$checked = in_array($key, $providers) ? 'checked' : '';
+							echo '<label class="tk-label"><input type="checkbox" name="takamoa_papi_providers[]" value="' . esc_attr($key) . '" ' . $checked . '> ' . esc_html($label) . '</label>';
+						}
+					?>
+				</div>
+			</div>
+			<div class="tk-field">
+				<label class="tk-label">Champs à afficher dans le formulaire</label>
+				<div class="tk-row">
+					<?php
+						$all_fields = [
+							'payerEmail' => 'Email client',
+							'payerPhone' => 'Téléphone client'
+						];
+						foreach ($all_fields as $key => $label) {
+							$checked = in_array($key, $fields) ? 'checked' : '';
+							echo '<label class="tk-label"><input type="checkbox" name="takamoa_papi_optional_fields[]" value="' . esc_attr($key) . '" ' . $checked . '> ' . esc_html($label) . '</label>';
+						}
+					?>
+				</div>
+			</div>
+			<div class="tk-field">
+				<label class="tk-label" for="takamoa_papi_test_mode">Mode test (transactions réelles)</label>
+				<input type="checkbox" id="takamoa_papi_test_mode" name="takamoa_papi_test_mode" value="1" <?php checked($test_mode, true); ?> />
+			</div>
+			<div class="tk-field">
+				<label class="tk-label" for="takamoa_papi_test_reason">Raison du test</label>
+				<input type="text" id="takamoa_papi_test_reason" name="takamoa_papi_test_reason" class="tk-input" value="<?php echo $test_reason; ?>" />
+			</div>
+			<div class="tk-field tk-actions">
+				<button type="submit" class="tk-btn primary">Enregistrer</button>
+			</div>
+		</form>
+	</section>
 </div>

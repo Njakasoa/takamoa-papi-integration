@@ -4,10 +4,10 @@ document.querySelectorAll('.takamoa-papi-app').forEach((el) => {
 		data: {
 			clientFirstName: '',
 			clientLastName: '',
-                        amount: el.dataset.amount || '',
-                        reference: el.dataset.reference || '',
-                        payment: el.dataset.payment === 'no' ? 'no' : 'yes',
-                        ticket: el.dataset.ticket || '',
+			amount: el.dataset.amount || '',
+			reference: el.dataset.reference || '',
+			payment: el.dataset.payment === 'no' ? 'no' : 'yes',
+			ticket: el.dataset.ticket || '',
 			payerEmail: '',
 			payerPhone: '',
 			description: '',
@@ -51,9 +51,9 @@ document.querySelectorAll('.takamoa-papi-app').forEach((el) => {
 					reference: this.reference,
 					payerEmail: this.payerEmail,
 					payerPhone: this.payerPhone,
-                                        description: this.description,
-                                        design_id: this.ticket,
-                                };
+					description: this.description,
+					design_id: this.ticket,
+				};
 
 				if (this.provider) {
 					data.provider = this.provider;
@@ -107,8 +107,7 @@ document.querySelectorAll('.takamoa-papi-app').forEach((el) => {
 							if (status === 'SUCCESS') {
 								clearInterval(this.polling);
 								this.status = 'SUCCESS';
-								this.success =
-									'Paiement confirmé. Merci pour votre inscription.';
+								this.success = 'Paiement confirmé. Merci pour votre inscription.';
 								this.loading = false;
 							} else if (status === 'FAILED') {
 								clearInterval(this.polling);
@@ -128,7 +127,7 @@ document.querySelectorAll('.takamoa-papi-app').forEach((el) => {
 		},
 		template: `
 			<div class="takamoa-papi-form" :class="{ 'is-loading': loading }">
-								<div class="takamoa-papi-loading-overlay" v-if="loading && payment === 'yes'">
+				<div class="takamoa-papi-loading-overlay" v-if="loading && payment === 'yes'">
 					<div class="spinner"></div>
 					<p v-if="link" class="takamoa-papi-message">
 						Félicitations ! Vous êtes inscrit.<br>
@@ -138,57 +137,15 @@ document.querySelectorAll('.takamoa-papi-app').forEach((el) => {
 					</p>
 				</div>
 
-
 				<form @submit.prevent="submitForm" class="takamoa-papi-form-box">
-					<input
-						id="clientLastName"
-						name="clientLastName"
-						v-model="clientLastName"
-						required
-						placeholder="NOM"
-						class="takamoa-papi-input"
-					/>
-					<input
-						id="clientFirstName"
-						name="clientFirstName"
-						v-model="clientFirstName"
-						required
-						placeholder="PRÉNOM"
-						class="takamoa-papi-input"
-					/>
-					<input
-						id="payerPhone"
-						name="payerPhone"
-						v-model="payerPhone"
-						required
-						placeholder="TÉLÉPHONE"
-						class="takamoa-papi-input"
-					/>
-					<input
-						id="payerEmail"
-						name="payerEmail"
-						v-model="payerEmail"
-						required
-						placeholder="EMAIL"
-						class="takamoa-papi-input"
-					/>
-					<input
-						id="description"
-						name="description"
-						v-model="description"
-						required
-						placeholder="ENTREPRISE"
-						class="takamoa-papi-input"
-					/>
-
+					<input id="clientLastName" name="clientLastName" v-model="clientLastName" required placeholder="NOM" class="takamoa-papi-input" />
+					<input id="clientFirstName" name="clientFirstName" v-model="clientFirstName" required placeholder="PRÉNOM" class="takamoa-papi-input" />
+					<input id="payerPhone" name="payerPhone" v-model="payerPhone" required placeholder="TÉLÉPHONE" class="takamoa-papi-input" />
+					<input id="payerEmail" name="payerEmail" v-model="payerEmail" required placeholder="EMAIL" class="takamoa-papi-input" />
+					<input id="description" name="description" v-model="description" required placeholder="ENTREPRISE" class="takamoa-papi-input" />
 
 					<div v-if="providers.length > 1">
-						<select
-							id="provider"
-							name="provider"
-							v-model="provider"
-							class="takamoa-papi-input"
-						>
+						<select id="provider" name="provider" v-model="provider" class="takamoa-papi-input">
 							<option disabled value="">Choisir une méthode de paiement</option>
 							<option v-for="p in providers" :value="p">{{ p }}</option>
 						</select>
