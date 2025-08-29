@@ -1,25 +1,25 @@
 /* General Styles for the Admin Page */
 .wrap {
-padding: 0;
-background-color: transparent;
+	padding: 0;
+	background-color: transparent;
 }
 
 /* Title Responsive */
 @media (max-width: 768px) {
 .wrap h1 {
-font-size: 1.5rem;
-text-align: center;
-width: 100%;
+	font-size: 1.5rem;
+	text-align: center;
+	width: 100%;
 }
 .wrap .add-button-container {
-text-align: center;
-width: 100%;
+	text-align: center;
+	width: 100%;
 }
 }
 
 /* Payments table */
 .payment-row {
-cursor: default;
+	cursor: default;
 }
 
 /* DataTables custom styling */
@@ -27,119 +27,119 @@ cursor: default;
 .datatable-header .dataTables_filter,
 .datatable-footer .dataTables_info,
 .datatable-footer .dt-paging {
-margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 .dataTables_filter input {
-width: auto;
+	width: auto;
 }
 
 .dt-paging {
-display: flex;
-flex-wrap: wrap;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .dt-paging .dt-paging-button {
-margin-right: 0.25rem;
-padding: 0.25rem 0.5rem;
-border: 1px solid #dee2e6;
-background-color: #f8f9fa;
-color: #212529;
-border-radius: 0.25rem;
+	margin-right: 0.25rem;
+	padding: 0.25rem 0.5rem;
+	border: 1px solid #dee2e6;
+	background-color: #f8f9fa;
+	color: #212529;
+	border-radius: 0.25rem;
 }
 
 .dt-paging .dt-paging-button.current {
-background-color: #0073aa;
-border-color: #0073aa;
-color: #fff;
+	background-color: #0073aa;
+	border-color: #0073aa;
+	color: #fff;
 }
 .dt-paging .dt-paging-button:not(.disabled):hover {
-background-color: #e9ecef;
+	background-color: #e9ecef;
 }
 
 .dt-paging .dt-paging-button.disabled {
-opacity: 0.65;
-cursor: default;
+	opacity: 0.65;
+	cursor: default;
 }
 
 /* Payment and ticket modals */
 .tk-modal {
-position: fixed;
-inset: 0;
-background: rgba(0, 0, 0, 0.6);
-display: none;
-align-items: center;
-justify-content: center;
-z-index: 1000;
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.6);
+	display: none;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
 }
 
 .tk-modal.show {
-display: flex;
+	display: flex;
 }
 
 .tk-modal-content {
-background: var(--card);
-border: 1px solid var(--border);
-border-radius: var(--radius);
-max-width: 800px;
-width: 100%;
-max-height: 90vh;
-display: flex;
-flex-direction: column;
-box-shadow: 0 0 0 1px #0f1320, 0 10px 30px rgba(0, 0, 0, 0.35);
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	max-width: 800px;
+	width: 100%;
+	max-height: 90vh;
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 0 0 1px #0f1320, 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 .tk-modal-header,
 .tk-modal-footer {
-padding: 16px 20px;
-border-bottom: 1px solid var(--border);
-display: flex;
-align-items: center;
-justify-content: space-between;
+	padding: 16px 20px;
+	border-bottom: 1px solid var(--border);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .tk-modal-footer {
-border-top: 1px solid var(--border);
-border-bottom: 0;
-justify-content: flex-end;
-gap: 8px;
+	border-top: 1px solid var(--border);
+	border-bottom: 0;
+	justify-content: flex-end;
+	gap: 8px;
 }
 
 .tk-modal-body {
-padding: 20px;
-overflow-y: auto;
+	padding: 20px;
+	overflow-y: auto;
 }
 
 .tk-modal .tk-table th {
-width: 40%;
-white-space: nowrap;
+	width: 40%;
+	white-space: nowrap;
 }
 
 .tk-modal pre {
-white-space: pre-wrap;
-word-break: break-word;
-font-size: 0.875rem;
+	white-space: pre-wrap;
+	word-break: break-word;
+	font-size: 0.875rem;
 }
 
 .tk-close {
-background: none;
-border: none;
-color: var(--text);
-cursor: pointer;
-font-size: 20px;
-line-height: 1;
+	background: none;
+	border: none;
+	color: var(--text);
+	cursor: pointer;
+	font-size: 20px;
+	line-height: 1;
 }
 
 .tk-modal select {
-background: var(--bg);
-border: 1px solid var(--border);
-color: var(--text);
-padding: 10px 14px;
-border-radius: 12px;
-width: 100%;
+	background: var(--bg);
+	border: 1px solid var(--border);
+	color: var(--text);
+	padding: 10px 14px;
+	border-radius: 12px;
+	width: 100%;
 }
 
 /* Utilities */
 .d-none {
-display: none !important;
+	display: none !important;
 }
