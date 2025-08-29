@@ -74,16 +74,16 @@
 				true
 			);
 			wp_localize_script($this->plugin_name . '-form', 'TakamoaPapiVars', [
-				'ajax_url'        => admin_url('admin-ajax.php'),
-				'api_nonce'       => wp_create_nonce('takamoa_papi_nonce'),
-				'isTestMode'      => (bool) get_option('takamoa_papi_test_mode'),
-				'testReason'      => get_option('takamoa_papi_test_reason', ''),
-				'validDuration'   => (int) get_option('takamoa_papi_valid_duration', 60),
-				'providers'       => get_option('takamoa_papi_providers', ['MVOLA']),
-				'optionalFields'  => get_option('takamoa_papi_optional_fields', ['payerPhone', 'description']),
-				'successUrl'      => get_option('takamoa_papi_success_url', home_url('/paiementreussi')),
-				'failureUrl'      => get_option('takamoa_papi_failure_url', home_url('/paiementechoue')),
-				'notificationUrl' => home_url('/papi-notify'),
+					'ajax_url'        => admin_url('admin-ajax.php'),
+					'api_nonce'       => wp_create_nonce('takamoa_papi_nonce'),
+					'isTestMode'      => (bool) get_option('takamoa_papi_test_mode'),
+					'testReason'      => get_option('takamoa_papi_test_reason', ''),
+					'validDuration'   => (int) get_option('takamoa_papi_valid_duration', 60),
+					'providers'       => get_option('takamoa_papi_providers', ['MVOLA']),
+					'optionalFields'  => get_option('takamoa_papi_optional_fields', ['payerPhone', 'description']),
+					'successUrl'      => get_option('takamoa_papi_success_url', home_url('/paiementreussi')),
+					'failureUrl'      => get_option('takamoa_papi_failure_url', home_url('/paiementechoue')),
+					'notificationUrl' => home_url('/papi-notify'),
 			]);
 		}
 		/**
@@ -92,16 +92,16 @@
 		public function render_vue_form_shortcode($atts)
 		{
 			$atts = shortcode_atts([
-				'amount'    => '',
-				'reference' => '',
-				'payment'   => 'yes',
-				'ticket'    => '',
-			], $atts);
+					'amount'    => '',
+					'reference' => '',
+					'payment'   => 'yes',
+					'ticket'    => '',
+				], $atts);
 
 			$default_design = intval(get_option('takamoa_papi_default_design'));
-		// Assure que le paramètre payment n'accepte que 'yes' ou 'no'
+			// Assure que le paramètre payment n'accepte que 'yes' ou 'no'
 			$atts['payment'] = in_array($atts['payment'], ['yes', 'no'], true) ? $atts['payment'] : 'yes';
-		// Assure que ticket est un entier valide
+			// Assure que ticket est un entier valide
 			$atts['ticket'] = is_numeric($atts['ticket']) ? intval($atts['ticket']) : '';
 			if ($atts['ticket'] === '' && $default_design) {
 				$atts['ticket'] = $default_design;
@@ -118,17 +118,17 @@
 					$atts['reference'] .= '-' . $timestamp;
 				}
 			}
-		// Générer un ID HTML unique
+			// Générer un ID HTML unique
 			$uid = 'takamoa-papi-app-' . uniqid();
 
 			ob_start();
 			?>
 			<div id="<?php echo esc_attr($uid); ?>"
-				class="takamoa-papi-app"
-				data-amount="<?php echo esc_attr($atts['amount']); ?>"
-				data-reference="<?php echo esc_attr($atts['reference']); ?>"
-				data-payment="<?php echo esc_attr($atts['payment']); ?>"
-				data-ticket="<?php echo esc_attr($atts['ticket']); ?>">
+			class="takamoa-papi-app"
+			data-amount="<?php echo esc_attr($atts['amount']); ?>"
+			data-reference="<?php echo esc_attr($atts['reference']); ?>"
+			data-payment="<?php echo esc_attr($atts['payment']); ?>"
+			data-ticket="<?php echo esc_attr($atts['ticket']); ?>">
 			</div>
 			<?php
 			return ob_get_clean();

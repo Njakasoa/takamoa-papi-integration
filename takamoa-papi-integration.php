@@ -1,7 +1,7 @@
 <?php
-if (! defined('ABSPATH')) {
-	exit; // Exit if accessed directly
-}
+	if (! defined('ABSPATH')) {
+		exit; // Exit if accessed directly
+	}
 	/**
 	* The plugin bootstrap file
 	*
@@ -27,40 +27,45 @@ if (! defined('ABSPATH')) {
 	* Domain Path:       /languages
 	*/
 	// If this file is called directly, abort.
-if (! defined('WPINC')) {
-	die;
-}
+	if (! defined('WPINC')) {
+		die;
+	}
+
 	/**
 	* Currently plugin version.
 	* Start at version 0.0.1 and use SemVer - https://semver.org
 	* Rename this for your plugin and update it as you release new versions.
 	*/
-define('TAKAMOA_PAPI_INTEGRATION_VERSION', '0.0.8');
+	define('TAKAMOA_PAPI_INTEGRATION_VERSION', '0.0.8');
+
 	/**
 	* The code that runs during plugin activation.
 	* This action is documented in includes/class-takamoa-papi-integration-activator.php
 	*/
-function activate_takamoa_papi_integration()
-{
-	require_once plugin_dir_path(__FILE__) . 'includes/class-takamoa-papi-integration-activator.php';
-	Takamoa_Papi_Integration_Activator::activate();
-}
+	function activate_takamoa_papi_integration()
+	{
+		require_once plugin_dir_path(__FILE__) . 'includes/class-takamoa-papi-integration-activator.php';
+		Takamoa_Papi_Integration_Activator::activate();
+	}
+
 	/**
 	* The code that runs during plugin deactivation.
 	* This action is documented in includes/class-takamoa-papi-integration-deactivator.php
 	*/
-function deactivate_takamoa_papi_integration()
-{
-	require_once plugin_dir_path(__FILE__) . 'includes/class-takamoa-papi-integration-deactivator.php';
-	Takamoa_Papi_Integration_Deactivator::deactivate();
-}
-register_activation_hook(__FILE__, 'activate_takamoa_papi_integration');
-register_deactivation_hook(__FILE__, 'deactivate_takamoa_papi_integration');
+	function deactivate_takamoa_papi_integration()
+	{
+		require_once plugin_dir_path(__FILE__) . 'includes/class-takamoa-papi-integration-deactivator.php';
+		Takamoa_Papi_Integration_Deactivator::deactivate();
+	}
+	register_activation_hook(__FILE__, 'activate_takamoa_papi_integration');
+	register_deactivation_hook(__FILE__, 'deactivate_takamoa_papi_integration');
+
 	/**
 	* The core plugin class that is used to define internationalization,
 	* admin-specific hooks, and public-facing site hooks.
 	*/
-require plugin_dir_path(__FILE__) . 'includes/class-takamoa-papi-integration.php';
+	require plugin_dir_path(__FILE__) . 'includes/class-takamoa-papi-integration.php';
+
 	/**
 	* Begins execution of the plugin.
 	*
@@ -70,6 +75,5 @@ require plugin_dir_path(__FILE__) . 'includes/class-takamoa-papi-integration.php
 	*
 	* @since    0.0.1
 	*/
-
-$plugin = new Takamoa_Papi_Integration();
-$plugin->run();
+	$plugin = new Takamoa_Papi_Integration();
+	$plugin->run();

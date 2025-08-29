@@ -93,29 +93,29 @@
 
 		private function load_dependencies()
 		{
-		/**
-		* The class responsible for providing functions of the
-		* core plugin.
-		*/	
+			/**
+			* The class responsible for providing functions of the
+			* core plugin.
+			*/	
 			require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-takamoa-papi-integration-functions.php';
-		/**
-		* The class responsible for orchestrating the actions and filters of the
-		* core plugin.
-		*/		
+			/**
+			* The class responsible for orchestrating the actions and filters of the
+			* core plugin.
+			*/		
 			require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-takamoa-papi-integration-loader.php';
-		/**
-		* The class responsible for defining internationalization functionality
-		* of the plugin.
-		*/
+			/**
+			* The class responsible for defining internationalization functionality
+			* of the plugin.
+			*/
 			require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-takamoa-papi-integration-i18n.php';
-		/**
-		* The class responsible for defining all actions that occur in the admin area.
-		*/
+			/**
+			* The class responsible for defining all actions that occur in the admin area.
+			*/
 			require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-takamoa-papi-integration-admin.php';
-		/**
-		* The class responsible for defining all actions that occur in the public-facing
-		* side of the site.
-		*/		
+			/**
+			* The class responsible for defining all actions that occur in the public-facing
+			* side of the site.
+			*/		
 			require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-takamoa-papi-integration-public.php';
 
 			$this->loader    = new Takamoa_Papi_Integration_Loader();
