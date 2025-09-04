@@ -43,7 +43,9 @@
             .tk-modal,
             .tk-modal .tk-btn,
             .tk-modal .tk-close,
-            .tk-modal select{color:#fff;}
+            .tk-modal select,
+            .tk-modal input{color:#fff;}
+            .tk-modal input{width:100%;padding:8px;border:1px solid var(--border);border-radius:8px;background:#0f1526;}
         </style>
         <header class="tk-header">
             <div>
@@ -77,6 +79,7 @@
                             data-email="<?= esc_attr($row->payer_email) ?>"
                             data-phone="<?= esc_attr($row->payer_phone) ?>"
                             data-amount="<?= esc_attr(number_format($row->amount, 0, '', ' ') . ' MGA') ?>"
+                            data-amount-value="<?= esc_attr($row->amount) ?>"
                             data-status="<?= esc_attr($row->payment_status) ?>"
                             data-method="<?= esc_attr($row->payment_method ?: '—') ?>"
                             data-date="<?= esc_attr($row->created_at) ?>"
@@ -186,6 +189,22 @@
             <div class="tk-modal-footer">
                 <button type="button" class="tk-btn" data-close="ticketModal">Fermer</button>
                 <button type="button" id="generate-ticket-btn" class="tk-btn">Générer</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="tk-modal" id="regenerateModal" aria-hidden="true">
+        <div class="tk-modal-content tk-card">
+            <div class="tk-modal-header">
+                <h3 class="tk-title">Regénérer le lien</h3>
+                <button type="button" class="tk-close" data-close="regenerateModal">&times;</button>
+            </div>
+            <div class="tk-modal-body">
+                <input type="number" id="regen-amount" />
+            </div>
+            <div class="tk-modal-footer">
+                <button type="button" class="tk-btn" data-close="regenerateModal">Fermer</button>
+                <button type="button" id="confirm-regenerate-link" class="tk-btn">Regénérer</button>
             </div>
         </div>
     </div>

@@ -572,12 +572,17 @@ wp_mail($email, $subject, $message, $headers);
                        wp_send_json_error(['message' => 'Paiement introuvable.']);
                }
 
+               $amount = isset($_POST['amount']) ? floatval($_POST['amount']) : floatval($payment->amount);
+               if ($amount <= 0) {
+                       wp_send_json_error(['message' => 'Montant invalide.']);
+               }
+
                $api_key = get_option('takamoa_papi_api_key');
                $validDuration = intval(get_option('takamoa_papi_valid_duration', 60));
 
                $request = [
                        'clientName' => $payment->client_name,
-                       'amount' => floatval($payment->amount),
+                       'amount' => $amount,
                        'reference' => $payment->reference,
                        'description' => $payment->description ?: 'Paiement via Papi',
                        'payerEmail' => $payment->payer_email,
@@ -637,6 +642,7 @@ wp_mail($email, $subject, $message, $headers);
                                'notification_token' => $notification_token,
                                'payment_status' => 'PENDING',
                                'payment_method' => $payment_method,
+                               'amount' => $amount,
                                'raw_request' => json_encode($request),
                                'raw_response' => json_encode($body),
                                'updated_at' => $now,
@@ -654,6 +660,7 @@ wp_mail($email, $subject, $message, $headers);
                        'payment_method' => $payment_method,
                        'updated_at' => $now,
                        'status' => 'PENDING',
+                       'amount' => $amount,
                ]);
        }
 
