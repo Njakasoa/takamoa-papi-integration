@@ -34,7 +34,7 @@
             .tk-table tbody tr:nth-child(even){background:#0e1320;}
             .tk-table tbody tr:last-child td{border-bottom:none;}
             .tk-table tbody tr:hover{background:#0f1526;}
-            .tk-btn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;padding:10px 14px;border:1px solid var(--border);background:#0f1526;color:var(--text);cursor:pointer;transition:.15s transform,.15s background,.15s border-color;text-decoration:none;font-weight:600;}
+            .tk-btn{display:inline-flex;align-items:center;gap:8px;border-radius:12px;padding:10px 14px;border:1px solid var(--border);background:#0f1526;color:var(--text);cursor:pointer;transition:.15s transform,.15s background,.15s border-color;text-decoration:none;font-weight:600;white-space:nowrap;}
             .tk-btn:hover{transform:translateY(-1px);border-color:#34405a;}
             .tk-btn:active{transform:translateY(0);}
             .tk-btn.danger{border-color:var(--err);color:var(--err);}
