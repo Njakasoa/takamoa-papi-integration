@@ -40,6 +40,10 @@
             .tk-btn.danger{border-color:var(--err);color:var(--err);}
             .tk-btn.danger:hover{background:rgba(255,107,107,.1);}
             .tk-actions{display:flex;gap:8px;flex-wrap:wrap;}
+            .tk-action-menu{position:relative;}
+            .tk-action-menu .tk-action-list{display:none;position:absolute;top:100%;right:0;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:8px;flex-direction:column;gap:8px;z-index:100;}
+            .tk-action-menu .tk-action-list.show{display:flex;}
+            .tk-action-menu .tk-action-list .tk-btn{width:100%;justify-content:flex-start;}
             .tk-modal,
             .tk-modal .tk-btn,
             .tk-modal .tk-close,
@@ -110,11 +114,14 @@
                             <td><?= esc_html($row->payment_method ?: '—') ?></td>
                             <td><?= esc_html($row->created_at) ?></td>
                             <td>
-                                <div class="tk-actions">
-                                    <button type="button" class="tk-btn takamoa-notify">Notifier</button>
-                                    <button type="button" class="tk-btn takamoa-regenerate-link" data-reference="<?= esc_attr($row->reference) ?>">Regénérer le lien</button>
-                                    <button type="button" class="tk-btn takamoa-generate-ticket">Générer un billet</button>
-                                    <button type="button" class="tk-btn takamoa-details">Détails</button>
+                                <div class="tk-action-menu">
+                                    <button type="button" class="tk-btn tk-action-toggle">Actions</button>
+                                    <div class="tk-action-list">
+                                        <button type="button" class="tk-btn takamoa-notify">Notifier</button>
+                                        <button type="button" class="tk-btn takamoa-regenerate-link" data-reference="<?= esc_attr($row->reference) ?>">Regénérer le lien</button>
+                                        <button type="button" class="tk-btn takamoa-generate-ticket">Générer un billet</button>
+                                        <button type="button" class="tk-btn takamoa-details">Détails</button>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
