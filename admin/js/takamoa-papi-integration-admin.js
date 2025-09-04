@@ -42,11 +42,22 @@ jQuery(document).ready(function ($) {
 		.find('.dataTables_filter input')
 		.addClass('form-control form-control-sm')
 		.attr('placeholder', 'Search…');
-		wrapper
-		.find('.dataTables_length label, .dataTables_filter label')
-		.addClass('d-flex align-items-center gap-2 mb-0');
-		
-		$('#takamoa-payments-table').on('click', '.takamoa-details', function (e) {
+                wrapper
+                .find('.dataTables_length label, .dataTables_filter label')
+                .addClass('d-flex align-items-center gap-2 mb-0');
+
+                $('#takamoa-payments-table').on('click', '.tk-action-toggle', function (e) {
+                        e.stopPropagation();
+                        var list = $(this).siblings('.tk-action-list');
+                        $('.tk-action-list').not(list).removeClass('show');
+                        list.toggleClass('show');
+                });
+
+                $(document).on('click', function () {
+                        $('.tk-action-list').removeClass('show');
+                });
+
+                $('#takamoa-payments-table').on('click', '.takamoa-details', function (e) {
 			e.stopPropagation();
 			var row = $(this).closest('tr');
 			$('#modal-reference').text(row.data('reference'));
