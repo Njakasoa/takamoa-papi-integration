@@ -239,7 +239,7 @@ class Takamoa_Papi_Integration_Admin
         {
                 global $wpdb;
                 $table         = $wpdb->prefix . 'takamoa_papi_payments';
-                $results       = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC LIMIT 100');
+                $results       = $wpdb->get_results('SELECT * FROM ' . $table . ' ORDER BY created_at DESC');
                 $design_table  = $wpdb->prefix . 'takamoa_papi_designs';
                 $designs       = $wpdb->get_results('SELECT id, title FROM ' . $design_table . ' ORDER BY created_at DESC');
                 $default_design = intval(get_option('takamoa_papi_default_design'));
