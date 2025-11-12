@@ -262,13 +262,13 @@ class Takamoa_Papi_Integration_Admin
 
                 global $wpdb;
                 $table = $wpdb->prefix . 'takamoa_papi_payments';
-                $rows  = $wpdb->get_results("SELECT reference, client_name, payer_email, payer_phone, amount, payment_status, payment_method, created_at FROM $table ORDER BY created_at DESC", ARRAY_A);
+                $rows  = $wpdb->get_results("SELECT reference, client_name, payer_email, payer_phone, description, amount, payment_status, payment_method, created_at FROM $table ORDER BY created_at DESC", ARRAY_A);
 
                 header('Content-Type: text/csv; charset=utf-8');
                 header('Content-Disposition: attachment; filename=takamoa-payments.csv');
 
                 $output = fopen('php://output', 'w');
-                fputcsv($output, ['Reference', 'Client Name', 'Email', 'Phone', 'Amount', 'Status', 'Method', 'Date']);
+                fputcsv($output, ['Reference', 'Client Name', 'Email', 'Phone', 'Description', 'Amount', 'Status', 'Method', 'Date']);
 
                 foreach ($rows as $row) {
                         fputcsv($output, $row);
